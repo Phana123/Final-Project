@@ -18,11 +18,10 @@ const createJwtToken = (_id) => {
 router.post("/signup", validateSignUp, userAlreadyExists, async (req, res) => {
   const body = _.pick(req.body, "username", "email", "password");
 
-  //12 rounds takes more
   body.password = await bcrypt.hash(body.password, 12);
-  //save the password hash to db:
-  const { username, email, password } = req.body;
-  const user = new User(username, email, password);
+  const user = new User(body);
+
+  //before saving the user:
 
   try {
     user.roles = [await (await Role.findOne({ name: "user" }))._id];
@@ -38,9 +37,9 @@ router.post("/signup", validateSignUp, userAlreadyExists, async (req, res) => {
 router.post("/signin", validateSignIn, async (req, res) => {
   //email and password:
   try {
-    const user = await User.findOne({ username: req.body.username }).populate(
-      "roles"
-    );
+    const user = await User.findOne({ username: req.body.username }).populate<{
+      roles: Array<typeof Role>;
+    }>("roles");
 
     if (!user) {
       return res.status(401).json({ message: "No Such User" });
