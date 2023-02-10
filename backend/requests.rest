@@ -9,8 +9,15 @@ GET http://localhost:3001/api/login
 
 
 ###
+GET http://localhost:3001/api/books/all
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTI0ZThiY2M4MmU5YjRiOWQ4ODhhOSIsImlhdCI6MTY3NTc3NTcyOCwiZXhwIjoxNjc4MzY3NzI4fQ.QLMLLY1_upVsULKO6FYnVCnHWqlNElKzPfxtU88j5x0
+###
 GET http://localhost:3001/api/books/fantasy
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTFmZWZhMDM4ZWFjNDhkY2Q1ODg5NCIsImlhdCI6MTY3NTc3NTczNCwiZXhwIjoxNjc4MzY3NzM0fQ.HQ1fv7zVfFhvgK6LgO4ojdV4cVnXrIsEiOzv_4mmBbA
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTI0ZThiY2M4MmU5YjRiOWQ4ODhhOSIsImlhdCI6MTY3NTc3NTcyOCwiZXhwIjoxNjc4MzY3NzI4fQ.QLMLLY1_upVsULKO6FYnVCnHWqlNElKzPfxtU88j5x0
+
+###
+GET http://localhost:3001/api/books/mod
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTI0ZThiY2M4MmU5YjRiOWQ4ODhhOSIsImlhdCI6MTY3NTc3NTcyOCwiZXhwIjoxNjc4MzY3NzI4fQ.QLMLLY1_upVsULKO6FYnVCnHWqlNElKzPfxtU88j5x0
 
 
 ### POST to add a card:
@@ -21,7 +28,7 @@ Content-Type: application/json
     "name": "Pizza Dominos",
     "description": "Best Pizza in some place",
     "address": "some place",
-    "phone": "050-5050022JJ",
+    "phone": "050-5050022",
     "image":"http://abc.com/image.png",
     "bizNumber":1233123123
 }
@@ -44,19 +51,14 @@ Content-Type: application/json
 }
 
 
-###GET ALL Users
-GET http://localhost:3001/api/auth/
-
-
-
 ###POST to add user:
 POST http://localhost:3001/api/auth/signup
 Content-Type: application/json
 
 {
-    "username":"Matan3", 
-    "email":"Matan1@gmail.com",
-    "password":"aaAA22@@"
+    "username":"Batman", 
+    "email":"Batman@gmail.com",
+    "password":"123456aA!"
 }
 
 
@@ -65,12 +67,6 @@ POST http://localhost:3001/api/auth/signin
 Content-Type: application/json
 
 {
-    "username":"Matan3",
-    "password":"aaAA22@@"
+    "email":"Batman@gmail.com",
+    "password":"123456aA!"
 }
-
-
-
-### DELETE **All** users:
-DELETE http://localhost:3001/api/auth/delete
-

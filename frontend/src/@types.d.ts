@@ -29,3 +29,11 @@ export type LoginFormType = {
   email: string;
   password: string;
 };
+
+export type HomeType = {
+  h1:string;
+  h2:string;
+  description:string;
+  image:string;
+  
+}

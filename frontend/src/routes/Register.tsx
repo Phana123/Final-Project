@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { ColorRing } from "react-loader-spinner";
 import authService from "../services/auth.service";
+import axios from "axios";
 
 const Register = () => {
   const nav = useNavigate();

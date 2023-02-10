@@ -1,17 +1,49 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
+import { Button } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 
 const NavBar = () => {
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, logout } = useContext(AuthContext);
   return (
-    <nav>
-      {isLoggedIn && <NavLink to="/about">About</NavLink>}
-      <NavLink to="/">Home</NavLink>
+    <>
+      <Container>
+        <nav>
+          <img src="./images/logo.png" className="navbar_img" alt="" />
+        </nav>
+        <nav>
+          {""}
 
-      {!isLoggedIn && <NavLink to="/register">Register</NavLink>}
-      {!isLoggedIn && <NavLink to="/login">Login</NavLink>}
-    </nav>
+          <NavLink to="/">
+            <Button variant="outline-light"> Home</Button>
+          </NavLink>
+
+          <NavLink to="/about">
+            {" "}
+            <Button variant="outline-light">About</Button>
+          </NavLink>
+
+          {!isLoggedIn && (
+            <NavLink to="/register">
+              {" "}
+              <Button variant="outline-light">Register</Button>
+            </NavLink>
+          )}
+          {!isLoggedIn && (
+            <NavLink to="/login">
+              {" "}
+              <Button variant="outline-light">Login</Button>
+            </NavLink>
+          )}
+          {isLoggedIn && (
+            <Button onClick={logout} variant="outline-light">
+              Logout
+            </Button>
+          )}
+        </nav>
+      </Container>
+    </>
   );
 };
 
