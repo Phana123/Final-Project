@@ -1,5 +1,5 @@
+import { Role } from "./../../@types.d.js";
 import { Schema } from "mongoose";
-import { Role } from "../../validators/@types.js";
 
 //role has a role name: (user/admin/moderator)
 const roleSchema = new Schema<Role>({

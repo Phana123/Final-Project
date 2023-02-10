@@ -13,6 +13,8 @@ const connect = async () => {
 };
 
 const initDB = () => {
+  
+  //save without joi
   //create the User/Admin/Mod roles
   //if Role collection is Empty:
   Role.estimatedDocumentCount((err, count) => {

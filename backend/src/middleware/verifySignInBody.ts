@@ -3,7 +3,7 @@ import _ from "underscore";
 import { userSignInSchema } from "../validators/users.js";
 
 const validateSignIn: RequestHandler = (req, res, next) => {
-  const body = _.pick(req.body, "username", "password");
+  const body = _.pick(req.body, "email", "password");
 
   const { error } = userSignInSchema.validate(body);
 

@@ -3,14 +3,14 @@ import { User } from "../db/models/user.js";
 const userAlreadyExists: RequestHandler = async (req, res, next) => {
   try {
     //find ({email})
-    let found = await User.findOne({ username: req.body.username });
-    if (found) {
-      return res.status(400).json({ message: "Username already exists" });
-    }
-
-    found = await User.findOne({ email: req.body.email });
+    let found = await User.findOne({ email: req.body.email });
     if (found) {
       return res.status(400).json({ message: "Email already exists" });
+    }
+
+    found = await User.findOne({ username: req.body.username });
+    if (found) {
+      return res.status(400).json({ message: "username already exists" });
     }
 
     next();
@@ -19,4 +19,6 @@ const userAlreadyExists: RequestHandler = async (req, res, next) => {
   }
 };
 
-export { userAlreadyExists };
+export {
+  userAlreadyExists
+}

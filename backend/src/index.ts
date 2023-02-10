@@ -10,10 +10,12 @@ import { authRouter } from "./routes/users.js";
 
 const app = express();
 
+
 //once app starts: connect to db: and fill the roles collection
 connect().catch((e) => {
   console.log(e);
 });
+
 
 //middlewares:
 app.use(
@@ -22,9 +24,9 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-
 app.use(express.json());
 app.use(morgan("dev"));
+
 
 //routes:
 app.use("/api/books", booksRouter);

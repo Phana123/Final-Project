@@ -1,4 +1,4 @@
-import { Car } from "../../validators/@types.js";
+import { Car } from "../../@types.js";
 import { Schema } from "mongoose";
 const carSchema = new Schema<Car>({
   vandor: {

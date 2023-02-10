@@ -68,3 +68,9 @@ Content-Type: application/json
     "username":"Matan3",
     "password":"aaAA22@@"
 }
+
+
+
+### DELETE **All** users:
+DELETE http://localhost:3001/api/auth/delete
+
