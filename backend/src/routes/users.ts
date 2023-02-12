@@ -3,13 +3,22 @@ import jwt from "jsonwebtoken";
 import authConfig from "../db/config/auth.config.js";
 import _ from "underscore";
 import { User } from "../db/models/user.js";
-import { validateSignUp } from "../middleware/verifySignupBody.js";
-import { userAlreadyExists } from "../middleware/userAlreadyExists.js";
+import { validateSignUp } from "../middleware/user/verifySignupBody.js";
+import { userAlreadyExists } from "../middleware/user/userAlreadyExists.js";
 
 import bcrypt from "bcryptjs";
-import { validateSignIn } from "../middleware/verifySignInBody.js";
+import { validateSignIn } from "../middleware/user/verifySignInBody.js";
 import { Role } from "../db/models/role.js";
 const router = Router();
+
+router.delete("/deleteAll", async (req, res) => {
+  try {
+    await User.deleteMany({});
+    await res.json({ message: `All gathers are deleted!` });
+  } catch (error) {
+    console.log(error.message);
+  }
+});
 
 //api/auth/signup
 router.post("/signup", validateSignUp, userAlreadyExists, async (req, res) => {
@@ -22,7 +31,7 @@ router.post("/signup", validateSignUp, userAlreadyExists, async (req, res) => {
 
   try {
     //for each user -> save the role id of user
-    user.roles = [await (await Role.findOne({ name: "user" }))._id];
+    user.roles = [(await Role.findOne({ name: "user" }))._id];
     await user.save();
     return res.json({ message: "user saved", id: user._id });
   } catch (e) {

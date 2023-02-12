@@ -8,6 +8,8 @@ export type DarkModeContextType = {
 // think data structure and actions:
 export type AuthContextType = {
   isLoggedIn: boolean;
+  isAdminState?: boolean;
+  isModerator?: boolean;
   username?: string;
   email?: string;
   token?: string;
@@ -31,9 +33,43 @@ export type LoginFormType = {
 };
 
 export type HomeType = {
-  h1:string;
-  h2:string;
-  description:string;
-  image:string;
-  
-}
+  h1: string;
+  h2: string;
+  description: string;
+  image: string;
+};
+
+export type GatherListType = {
+  _id: string;
+  map: string;
+  maxPlayers: number;
+  __v: number;
+  date: string;
+  onGoing?: boolean;
+  players?: string[];
+};
+
+export type UserLocalStorageType = {
+  email: string;
+  username: string;
+  token: string;
+  roles: string[];
+};
+
+export type OnGoingGatherType = {
+  id?: string;
+  players: string[];
+  maxplayers: number;
+  map: () => void;
+  add: () => void;
+  remove: () => void;
+};
+
+export type CreateGatherType = {
+  map: string;
+  maxplayers: number;
+};
+export type GatherAddFormType = {
+  map: string;
+  maxPlayers: number;
+};

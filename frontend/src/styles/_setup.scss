@@ -1,2 +1,24 @@
-$white: white;
-$dark-gray: darkgrey;
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@700&family=Orbitron:wght@600&display=swap");
+
+body {
+  font-family: "Orbitron", sans-serif;
+}
+
+$color1: rgb(214, 79, 6);
+$color2: rgb(0, 94, 255);
+
+.app-container {
+  font-size: 1.4rem;
+  label {
+    color: $color2;
+    padding: 6px;
+  }
+  button {
+    width: 100%;
+    padding: 7px;
+    margin-top: 10px;
+  }
+}
+.hide_class {
+  display: none;
+}

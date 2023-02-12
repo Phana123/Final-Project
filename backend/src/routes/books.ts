@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { isAdmin } from "../middleware/isAdmin.js";
-import { isModerator } from "../middleware/isModerator.js";
-import { validateToken } from "../middleware/validateToken.js";
+import { isAdmin } from "../middleware/roles/isAdmin.js";
+import { isModerator } from "../middleware/roles/isModerator.js";
+import { validateToken } from "../middleware/user/validateToken.js";
 
 const router = Router();
 
@@ -11,12 +11,12 @@ router.get("/all", validateToken, (req, res) => {
 });
 
 // רק אדמין יכול לראות את ספרי פנטסיה
-router.get("/fantasy",validateToken, isAdmin, (req, res) => {
+router.get("/fantasy", validateToken, isAdmin, (req, res) => {
   res.json([{ title: "Harry Potter" }]);
 });
 
 // רק מודרטור יכול לראות את ספרי פנטסיה
-router.get("/mod",validateToken, isModerator, (req, res) => {
+router.get("/mod", validateToken, isModerator, (req, res) => {
   res.json([{ title: "Harry Potter" }]);
 });
 

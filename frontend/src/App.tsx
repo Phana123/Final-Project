@@ -20,9 +20,9 @@ function App() {
         style={{ backgroundColor: "rgb(251, 251, 251)" }}
         className="container-fluid"
       >
-        <Container className="w-100 text-center">
+        <Container fluid className="w-100 text-center">
           <Header />
-          <div className="container bg-secondary mt-1 p-4 text-white">
+          <div className="app-container mb-1 card bg-dark mt-1 p-4 ">
             {/* Routes */}
             <Routes>
               <Route path="/" element={<Home />} />

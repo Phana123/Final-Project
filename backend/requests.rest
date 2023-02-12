@@ -17,7 +17,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTI0ZThiY2M4MmU5
 
 ###
 GET http://localhost:3001/api/books/mod
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTI0ZThiY2M4MmU5YjRiOWQ4ODhhOSIsImlhdCI6MTY3NTc3NTcyOCwiZXhwIjoxNjc4MzY3NzI4fQ.QLMLLY1_upVsULKO6FYnVCnHWqlNElKzPfxtU88j5x0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTcxMDI5NDZiNjk0MDEyM2U4YTIzZSIsImlhdCI6MTY3NjExNDg5MSwiZXhwIjoxNjc4NzA2ODkxfQ.hoA67CRrhb08fe-5LdxzNGSMwE_teCPA1SiDyR4pgjU
 
 
 ### POST to add a card:
@@ -67,6 +67,41 @@ POST http://localhost:3001/api/auth/signin
 Content-Type: application/json
 
 {
-    "email":"Batman@gmail.com",
-    "password":"123456aA!"
+    "email":"inviteserv@gmail.com",
+    "password":"123123ssSS@@"
+}
+
+
+###DELETE ALL Users :
+DELETE http://localhost:3001/api/auth/deleteAll
+
+
+
+###POST to Create Gather :
+POST http://localhost:3001/api/gather/create
+Content-Type: application/json
+
+{
+    "map":"Ascent",
+    "maxPlayers":"5",
+    "date":"21-05-1995"
+}
+
+
+###GET ALL Gather :
+GET http://localhost:3001/api/gather
+
+
+###DELETE ALL Gather :
+DELETE http://localhost:3001/api/gather/deleteAll
+
+
+###POST to Add Role :
+POST http://localhost:3001/api/role/add
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTcxMDI5NDZiNjk0MDEyM2U4YTIzZSIsImlhdCI6MTY3NjExNDg5MSwiZXhwIjoxNjc4NzA2ODkxfQ.hoA67CRrhb08fe-5LdxzNGSMwE_teCPA1SiDyR4pgjU
+
+{
+    "username":"matan1",
+    "role":"moderator"
 }

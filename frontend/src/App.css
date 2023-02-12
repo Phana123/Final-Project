@@ -1,8 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Cabin:ital@1&display=swap");
 .App {
   text-align: center;
 }
 body {
-  font-family: Georgia, "Times New Roman", Times, serif;
+  font-family: "Cabin", sans-serif;
 }
 
 .App-logo {

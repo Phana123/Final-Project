@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { User } from "../db/models/user.js";
+import { User } from "../../db/models/user.js";
 const userAlreadyExists: RequestHandler = async (req, res, next) => {
   try {
     //find ({email})
@@ -19,6 +19,4 @@ const userAlreadyExists: RequestHandler = async (req, res, next) => {
   }
 };
 
-export {
-  userAlreadyExists
-}
+export { userAlreadyExists };

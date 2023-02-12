@@ -11,9 +11,13 @@ const login = (email: string, password: string) => {
     const token = res.data.accessToken;
     const email = res.data.email;
     const username = res.data.username;
+    const roles = res.data.roles;
     if (token) {
       localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify({ email, username, token }));
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ email, username, token, roles })
+      );
     }
     return res.data;
   });

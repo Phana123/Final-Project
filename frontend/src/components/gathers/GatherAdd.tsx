@@ -1,53 +1,71 @@
 import { useContext, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import { LoginFormType } from "../@types";
-import AuthContext from "../context/AuthContext";
+import { GatherAddFormType } from "../../@types";
 import * as Yup from "yup";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { ColorRing } from "react-loader-spinner";
-import authService from "../services/auth.service";
+import gatherService from "../../services/gather.service";
+import isMapValid from "../../functions/isMapValid";
+import AuthContext from "../../context/AuthContext";
 
-const Login = () => {
+const maps = [
+  "Ascent",
+  "Split",
+  "Haven",
+  "Bind",
+  "Icebox",
+  "Breeze",
+  "Fracture",
+  "Pearl",
+  "Lotus",
+];
+const GatherAdd = () => {
   const nav = useNavigate();
   //prevent double submit:
   const [isLoading, setIsLoading] = useState(false);
   const [errMessage, setErrMessage] = useState<string | undefined>(undefined);
-  const { isLoggedIn, login } = useContext(AuthContext);
+  const { isLoggedIn, isAdminState, isModerator } = useContext(AuthContext);
+  const [isMapValidTest, setIsMapValidTest] = useState(false);
 
   const initialValues = {
-    email: "",
-    password: "",
+    map: "",
+    maxPlayers: 10,
   };
 
   //Validations:
   const validationSchema = Yup.object({
-    email: Yup.string().email("Must be a valid email").required(),
-    password: Yup.string().min(3, "Password is too short").required(),
+    map: Yup.string().required(),
+    maxPlayers: Yup.number().min(4).max(10),
   });
 
   //if all is valid=> this method is invoked
-  const handleLogin = (formValues: LoginFormType) => {
+  const handleGatherAdd = (formValues: GatherAddFormType) => {
     setIsLoading(true);
 
-    const { email, password } = formValues;
-    authService
-      .login(email, password)
-      .then((res) => {
-        const token = res.accessToken;
-        const email = res.email;
-        const username = res.username;
-        //update the context...
-        login(username, email, token);
-        nav("/");
-      })
-      .catch((e) => {
-        console.log(e);
-        alert(e); //swal //modal
-        setErrMessage(JSON.stringify(e.response.data));
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    const { map, maxPlayers } = formValues;
+
+    let MapValidTest: boolean = isMapValid(map, maps);
+
+    if (MapValidTest) {
+      setIsMapValidTest(true);
+    } else {
+      setIsMapValidTest(false);
+    }
+    if (isMapValidTest && (isAdminState || isModerator) === true) {
+      gatherService
+        .create(map, maxPlayers)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((e) => {
+          console.log(e);
+
+          setErrMessage(JSON.stringify(e.response.data));
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   };
   if (isLoggedIn) {
     return <Navigate to="/" />;
@@ -70,49 +88,45 @@ const Login = () => {
       )}
       <Formik
         initialValues={initialValues}
-        onSubmit={handleLogin}
+        onSubmit={handleGatherAdd}
         validationSchema={validationSchema}
       >
-        <Form className=" w-50 mx-auto ">
+        <Form className="w-50 mx-auto">
           <div>
-            <label htmlFor="email" className="form-label">
-              Email
+            <label htmlFor="map" className="form-label">
+              Map
             </label>
-            <Field
-              name="email"
-              type="email"
-              className="form-control"
-              id="email"
-            />
+            <Field name="map" type="text" className="form-control" id="map" />
             <ErrorMessage
-              name="email"
+              name="map"
               component="div"
               className="alert alert-danger"
             />
           </div>
           <div>
-            <label htmlFor="password" className="form-label">
-              Password
+            <label htmlFor="maxPlayers" className="form-label">
+              Max Players
             </label>
             <Field
-              name="password"
-              type="password"
+              name="maxPlayers"
+              type="maxPlayers"
               className="form-control"
-              id="password"
+              id="maxPlayers"
             />
             <ErrorMessage
-              name="password"
+              name="maxPlayers"
               component="div"
               className="alert alert-danger"
             />
           </div>
+
           <div className="col-12">
             <button
               disabled={isLoading}
               className="btn btn-primary"
               type="submit"
             >
-              Login
+              Gather Add
             </button>
           </div>
         </Form>
@@ -121,4 +135,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default GatherAdd;

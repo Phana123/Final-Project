@@ -7,15 +7,15 @@ import { booksRouter } from "./routes/books.js";
 import { cardsRouter } from "./routes/cards.js";
 import { studentsRouter } from "./routes/students.js";
 import { authRouter } from "./routes/users.js";
+import { gatherRouter } from "./routes/gathers.js";
+import { roleRouter } from "./routes/roles.js";
 
 const app = express();
-
 
 //once app starts: connect to db: and fill the roles collection
 connect().catch((e) => {
   console.log(e);
 });
-
 
 //middlewares:
 app.use(
@@ -27,12 +27,13 @@ app.use(
 app.use(express.json());
 app.use(morgan("dev"));
 
-
 //routes:
 app.use("/api/books", booksRouter);
 app.use("/api/cards", cardsRouter);
 app.use("/api/students", studentsRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/gather", gatherRouter);
+app.use("/api/role", roleRouter);
 
 //404:
 app.use(notFound);

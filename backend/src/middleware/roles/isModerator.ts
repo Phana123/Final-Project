@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
-import { Role } from "../db/models/role.js";
-import { User } from "../db/models/user.js";
+import { Role } from "../../db/models/role.js";
+import { User } from "../../db/models/user.js";
 const isModerator: RequestHandler = async (req, res, next) => {
   const userId = req.userId;
 

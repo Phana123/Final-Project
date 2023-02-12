@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import _ from "underscore";
-import { userSignInSchema } from "../validators/users.js";
+import { userSignInSchema } from "../../validators/users.js";
 
 const validateSignIn: RequestHandler = (req, res, next) => {
   const body = _.pick(req.body, "email", "password");
