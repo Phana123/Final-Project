@@ -11,6 +11,13 @@ const initialState: AuthContextType = {
 const AuthContext = createContext<AuthContextType>(initialState);
 
 const AuthContextProvider = ({ children }: ChildProps) => {
+  const [isAdminState, setIsAdminState] = useState(false);
+  const [isModerator, setIsModerator] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState<string | undefined>(undefined);
+  const [email, setEmail] = useState<string | undefined>(undefined);
+  const [token, setToken] = useState<string | undefined>(undefined);
+
   useEffect(() => {
     const userData = localStorage.getItem("user");
     if (userData) {
@@ -20,26 +27,22 @@ const AuthContextProvider = ({ children }: ChildProps) => {
       const username = user.username;
       const roles = user.roles;
 
+      login(username, email, token);
       //isAdminTest = false/true
       let isAdminTest: boolean = isAdmin("ROLE_ADMIN", roles);
+
       if (isAdminTest) {
         setIsAdminState(true);
-        console.log(`Your'e admin!`);
+        console.log(`Your'e admin!`, isAdminState);
       }
       let isModeratorTest: boolean = isAdmin("ROLE_MODERATOR", roles);
+
       if (isModeratorTest) {
         setIsModerator(true);
-        console.log(`Your'e moderator!`);
+        console.log(`Your'e moderator!`, isModerator);
       }
-      login(username, email, token);
     }
   }, []);
-  const [isAdminState, setIsAdminState] = useState(false);
-  const [isModerator, setIsModerator] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState<string | undefined>(undefined);
-  const [email, setEmail] = useState<string | undefined>(undefined);
-  const [token, setToken] = useState<string | undefined>(undefined);
 
   const login = (username: string, email: string, token: string) => {
     setIsLoggedIn(true);
@@ -49,6 +52,7 @@ const AuthContextProvider = ({ children }: ChildProps) => {
   };
 
   const logout = () => {
+    localStorage.removeItem("user");
     setIsLoggedIn(false);
     setToken(undefined);
     setEmail(undefined);

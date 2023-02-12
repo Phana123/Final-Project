@@ -1,15 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import GatherItem from "./GatherItem";
-import {
-  CreateGatherType,
-  GatherListType,
-  OnGoingGatherType,
-} from "../../@types";
+import { GatherListType } from "../../@types";
 import { Button } from "react-bootstrap";
 import { ColorRing } from "react-loader-spinner";
-import gatherService from "../../services/gather.service";
-import GatherAdd from "./GatherAdd";
+import { NavLink } from "react-router-dom";
 
 const GatherList = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -55,12 +50,14 @@ const GatherList = () => {
       <div className="row">
         <div className="col">
           {" "}
-          <Button onClick={handleCreateButton} className={`p-1 mb-2`}>
-            Create a gather
-          </Button>
-          <div className={`card ${isButtonClicked ? "" : "hide_class"}`}>
-            <GatherAdd />
-          </div>
+          <NavLink
+            style={{ textDecoration: "none", color: "whitesmoke" }}
+            to="/gather/create"
+          >
+            <Button onClick={handleCreateButton} className={`p-1 mb-2`}>
+              Create a gather
+            </Button>{" "}
+          </NavLink>
         </div>
       </div>
       {lastGathers.map((item) => (

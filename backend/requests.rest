@@ -92,8 +92,15 @@ Content-Type: application/json
 GET http://localhost:3001/api/gather
 
 
+###GET Single Gather :
+GET http://localhost:3001/api/gather/63e963a9af9a14425b95551f
+
+
 ###DELETE ALL Gather :
 DELETE http://localhost:3001/api/gather/deleteAll
+
+###DELETE Single Gather :
+DELETE http://localhost:3001/api/gather/delete/63e94c5d47196f2273f5de07
 
 
 ###POST to Add Role :
@@ -102,6 +109,6 @@ Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTcxMDI5NDZiNjk0MDEyM2U4YTIzZSIsImlhdCI6MTY3NjExNDg5MSwiZXhwIjoxNjc4NzA2ODkxfQ.hoA67CRrhb08fe-5LdxzNGSMwE_teCPA1SiDyR4pgjU
 
 {
-    "username":"matan1",
+    "username":"matan2",
     "role":"moderator"
 }

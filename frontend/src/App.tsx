@@ -11,9 +11,10 @@ import Header from "./components/Header";
 import { Container } from "react-bootstrap";
 import Footer from "./components/Footer";
 import Profile from "./routes/Profile";
+import GatherAdd from "./components/gathers/GatherAdd";
 
 function App() {
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, isAdminState, isModerator } = useContext(AuthContext);
   return (
     <>
       <div
@@ -27,6 +28,9 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
+              {isLoggedIn && (isAdminState || isModerator) && (
+                <Route path="/gather/create" element={<GatherAdd />} />
+              )}
               {!isLoggedIn && <Route path="/login" element={<Login />} />}
               {!isLoggedIn && <Route path="/register" element={<Register />} />}
 

@@ -17,12 +17,40 @@ const maps = [
   "Lotus",
 ];
 
+// GET all gathers
 router.get("/", (req, res) => {
   Gather.find()
-    .then((students) => {
-      res.json(students);
+    .then((gathers) => {
+      res.json(gathers);
     })
     .catch((e) => res.status(500).json({ message: "Error", error: e }));
+});
+
+// GET single gathers
+router.get("/:id", (req, res) => {
+  const id = req.params.id;
+  Gather.findOne({ _id: id })
+    .then((gather) => {
+      res.json(gather);
+    })
+    .catch((e) => res.status(500).json({ message: "Error", error: e }));
+});
+
+// DELETE single gathers
+router.delete("/delete/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    await Gather.findByIdAndDelete(id);
+    res.status(200).json({
+      success: true,
+      message: `Successfully deleted`,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: `Failed to delete`,
+    });
+  }
 });
 
 //api/auth/signup

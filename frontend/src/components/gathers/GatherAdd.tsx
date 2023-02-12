@@ -46,30 +46,28 @@ const GatherAdd = () => {
 
     let MapValidTest: boolean = isMapValid(map, maps);
 
-    if (MapValidTest) {
-      setIsMapValidTest(true);
-    } else {
-      setIsMapValidTest(false);
-    }
-    if (isMapValidTest && (isAdminState || isModerator) === true) {
-      gatherService
-        .create(map, maxPlayers)
-        .then((res) => {
-          console.log(res.data);
-        })
-        .catch((e) => {
-          console.log(e);
+    // if (MapValidTest) {
+    //   setIsMapValidTest(true);
+    // } else {
+    //   setIsMapValidTest(false);
+    // }
+    // if (isMapValidTest && (isAdminState || isModerator) === true) {
+    gatherService
+      .create(map, maxPlayers)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
 
-          setErrMessage(JSON.stringify(e.response.data));
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
+        setErrMessage(JSON.stringify(e.response.data));
+      })
+      .finally(() => {
+        setIsLoading(false);
+        nav("/");
+      });
+    // }
   };
-  if (isLoggedIn) {
-    return <Navigate to="/" />;
-  }
   return (
     <div>
       {errMessage && <div>${errMessage}</div>}
