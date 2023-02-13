@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { ColorRing } from "react-loader-spinner";
 import gatherService from "../../services/gather.service";
-import isMapValid from "../../functions/isMapValid";
+import isMapValid from "../../functions/checkIfStringOnArray";
 import AuthContext from "../../context/AuthContext";
 
 const maps = [

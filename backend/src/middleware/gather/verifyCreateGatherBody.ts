@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import _ from "underscore";
-import { createGatherSchema } from "../validators/gathers.js";
+import { createGatherSchema } from "../../validators/gathers.js";
 
 const validateCreateGather: RequestHandler = (req, res, next) => {
   const body = _.pick(req.body, "date", "map", "maxPlayers");

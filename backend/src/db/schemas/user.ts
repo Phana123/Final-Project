@@ -1,5 +1,5 @@
 import { Schema } from "mongoose";
- 
+
 const userSchema = new Schema({
   username: String,
   email: String,
@@ -8,11 +8,12 @@ const userSchema = new Schema({
         user has roles:
     */
   roles: [
+ 
     {
       type: Schema.Types.ObjectId,
-      ref:"Role"
+      ref: "Role",
     },
   ],
 });
 
-export {userSchema}
+export { userSchema };

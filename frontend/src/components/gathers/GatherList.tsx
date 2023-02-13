@@ -13,14 +13,13 @@ const GatherList = () => {
 
   const url = `http://localhost:3001/api/gather`;
   const getAllGathers = async () => {
-    await axios
-      .get(url)
-      .then((res) => {
-        setLstGathers(res.data);
-      })
-      .catch((error) => console.log(error));
+    try {
+      const data = await axios(url);
+      setLstGathers(data.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
-
   const handleCreateButton = () => {
     setIsButtonClicked((state) => !state);
   };
@@ -61,7 +60,10 @@ const GatherList = () => {
         </div>
       </div>
       {lastGathers.map((item) => (
-        <GatherItem {...item} key={item._id} />
+        <>
+         
+          <GatherItem {...item} key={item._id} />
+        </>
       ))}
     </>
   );

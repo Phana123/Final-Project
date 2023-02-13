@@ -1,15 +1,15 @@
- // to make the file a module and avoid the TypeScript error
-export {}
+// to make the file a module and avoid the TypeScript error
+export {};
 
 export type Role = {
-  name: string
-}
+  name: string;
+};
 export type Car = {
-  vandor:string,
-  model: string,
-  color:string,
-  image?:string
-}
+  vandor: string;
+  model: string;
+  color: string;
+  image?: string;
+};
 
 declare global {
   namespace Express {
@@ -20,3 +20,14 @@ declare global {
 }
 //extend the request with a new property userId
 //google: add prop to request in typescript
+
+export type checkIfExistPlayerType = {
+  
+  string: string;
+  arr: [
+    {
+      userName: string;
+      userId: string;
+    }
+  ];
+};

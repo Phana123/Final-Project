@@ -14,10 +14,20 @@ const router = Router();
 router.delete("/deleteAll", async (req, res) => {
   try {
     await User.deleteMany({});
-    await res.json({ message: `All gathers are deleted!` });
+    await res.json({ message: `All users are deleted!` });
   } catch (error) {
     console.log(error.message);
   }
+});
+
+// GET single USERS
+router.get("/:id", (req, res) => {
+  const id = req.params.id;
+  User.findOne({ _id: id })
+    .then((user) => {
+      res.json(user);
+    })
+    .catch((e) => res.status(500).json({ message: "Error", error: e }));
 });
 
 //api/auth/signup
@@ -32,6 +42,7 @@ router.post("/signup", validateSignUp, userAlreadyExists, async (req, res) => {
   try {
     //for each user -> save the role id of user
     user.roles = [(await Role.findOne({ name: "user" }))._id];
+
     await user.save();
     return res.json({ message: "user saved", id: user._id });
   } catch (e) {

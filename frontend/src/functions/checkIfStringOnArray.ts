@@ -1,4 +1,7 @@
-const isMapValid = (string: string, arr: Array<string>) => {
+const checkIfStringOnArray = (
+  string: string | undefined,
+  arr: Array<string>
+) => {
   let isTrue: boolean = false;
   arr.forEach((value, index) => {
     if (string === value) {
@@ -7,4 +10,4 @@ const isMapValid = (string: string, arr: Array<string>) => {
   });
   return isTrue;
 };
-export default isMapValid;
+export default checkIfStringOnArray;

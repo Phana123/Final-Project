@@ -73,3 +73,7 @@ export type GatherAddFormType = {
   map: string;
   maxPlayers: number;
 };
+
+export type playersFrontType = {
+  string: undefined;
+};

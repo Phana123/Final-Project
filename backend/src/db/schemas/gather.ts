@@ -6,6 +6,7 @@ const gatherSchema = new Schema({
   date: String,
   maxPlayers: Number,
   onGoing: Boolean,
+  players: Array, 
 });
 
 export { gatherSchema };

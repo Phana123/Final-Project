@@ -1,9 +1,12 @@
-import { Router } from "express";
+import { Router, json } from "express";
 import _ from "underscore";
 import { Gather } from "../db/models/gather.js";
 
-import { validateCreateGather } from "../middleware/verifyCreateGatherBody.js";
+import { validateCreateGather } from "../middleware/gather/verifyCreateGatherBody.js";
 import isMapValid from "../functions/isMapValid.js";
+import { User } from "../db/models/user.js";
+import { validateToken } from "../middleware/user/validateToken.js";
+// import checkIfExistPlayer from "../../dist/functions/checkIfExistPlayer.js";
 const router = Router();
 const maps = [
   "Ascent",
@@ -53,7 +56,7 @@ router.delete("/delete/:id", async (req, res) => {
   }
 });
 
-//api/auth/signup
+//api/gather/create
 router.post("/create", validateCreateGather, async (req, res) => {
   const body = _.pick(req.body, "map", "maxPlayers");
   let MapValidTest: boolean = isMapValid(body.map, maps);
@@ -65,6 +68,7 @@ router.post("/create", validateCreateGather, async (req, res) => {
     maxPlayers: body.maxPlayers,
     date: newDate,
     onGoing: true,
+    players: [],
   });
 
   try {
@@ -80,7 +84,8 @@ router.post("/create", validateCreateGather, async (req, res) => {
         "date",
         "maxPlayers",
         "onGoing",
-        "_id"
+        "_id",
+        "players"
       );
       return res.json({
         message: "Gather created!",
@@ -96,6 +101,79 @@ router.delete("/deleteAll", async (req, res) => {
   try {
     await Gather.deleteMany({});
     res.json({ message: `All gathers are deleted!` });
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+const checkIfExistPlayer = (string, arr) => {
+  let isTrue = false;
+  arr.forEach((value, index) => {
+    if (string === value.userId.toString()) {
+      isTrue = true;
+    }
+  });
+  return isTrue;
+};
+//api/gather/add
+router.post("/add/:gatherId", validateToken, async (req, res) => {
+  try {
+    const gatherId = req.params.gatherId;
+    const userId = req.userId;
+
+    const user = await User.findById(userId);
+
+    const gather = await Gather.findById(gatherId);
+
+    const checkExistPlayer = checkIfExistPlayer(
+      user._id.toString(),
+      gather.players
+    );
+
+    if (checkExistPlayer === true)
+      return res.json({ error: `User already joined` });
+
+    await Gather.updateOne(
+      { _id: gatherId },
+      {
+        $push: {
+          players: { userName: user.username, userId: user._id.toString() },
+        },
+      }
+    );
+
+    return res.json({ message: `Success!`, userName: user.username });
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+//api/gather/add
+router.delete("/leavequeue/:gatherId", validateToken, async (req, res) => {
+  try {
+    const gatherId = req.params.gatherId;
+    const userId = req.userId;
+
+    const user = await User.findById(userId);
+
+    const gather = await Gather.findById(gatherId);
+
+    const checkExistPlayer = checkIfExistPlayer(
+      user._id.toString(),
+      gather.players
+    );
+
+    if (checkExistPlayer === false)
+      return res.json({ error: `User is not in the queue !` });
+
+    await Gather.updateOne(
+      { _id: gatherId },
+      {
+        $pull: {
+          players: { userName: user.username, userId: user._id.toString() },
+        },
+      }
+    );
+
+    return res.json({ message: `Success!`, userName: user.username });
   } catch (error) {
     console.log(error.message);
   }
