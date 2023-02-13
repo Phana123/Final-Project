@@ -4,6 +4,10 @@ export {};
 export type Role = {
   name: string;
 };
+export type PlayerInQueue = {
+  name: string;
+  id:string;
+};
 export type Car = {
   vandor: string;
   model: string;

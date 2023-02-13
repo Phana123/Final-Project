@@ -42,31 +42,6 @@ Content-Type: application/json
 }
 
 
-###POST to add user:
-POST http://localhost:3001/api/auth/signup
-Content-Type: application/json
-
-{
-    "username":"matan", 
-    "email":"inviteserv@gmail.com",
-    "password":"123123ssSS@@"
-}
-
-
-###POST to sign in user:
-POST http://localhost:3001/api/auth/signin
-Content-Type: application/json
-
-{
-    "email":"inviteserv@gmail.com",
-    "password":"123123ssSS@@"
-}
-
-###GET Single User :
-GET http://localhost:3001/api/auth/63e97353633100bb1d89efe6
-
-
-
 ###DELETE ALL Users :
 DELETE http://localhost:3001/api/auth/deleteAll
 
@@ -83,24 +58,26 @@ Content-Type: application/json
 }
 
 
-###GET ALL Gather :
-GET http://localhost:3001/api/gather
-
-
-###GET Single Gather :
-GET http://localhost:3001/api/gather/63e99a05a088e67380f1b88d
-
-
 ###DELETE ALL Gather :
-DELETE http://localhost:3001/api/gather/deleteAll
+DELETE http://localhost:3001/api/moderator/gather/deleteAll
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI5MzcwNywiZXhwIjoxNjc4ODg1NzA3fQ.MMu4eWEpgsC71Rh6AkglkGbPK9TNBwQQbsB55cdbZ98
 
 ###DELETE Single Gather :
 DELETE http://localhost:3001/api/gather/delete/63e94c5d47196f2273f5de07
 
 
-### POST Add to Gather :
-POST http://localhost:3001/api/gather/add/63e9c126ce1414ddfe65787d
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTk3MzUzNjMzMTAwYmIxZDg5ZWZlNiIsImlhdCI6MTY3NjI2NTE2NCwiZXhwIjoxNjc4ODU3MTY0fQ.i0SRsCk1EJOtxNvAcL-j4u51OfvVcVRtk9so19k1AlA
+### POST Edit Gather :
+POST http://localhost:3001/api/gather/edit/63e9f07caa5eaa0e76ef863f
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI3NTgxNywiZXhwIjoxNjc4ODY3ODE3fQ.W0Gc1co9uEFMclmyCauLZGWkcLyQSYFAGnD83VfFcx0
+
+{
+"map":"Icebox",
+"maxPlayers": 8,
+"status":false,
+"players": []
+}
+
 
 
 ###POST to Add Role :
@@ -112,3 +89,10 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTk2YWJkNjczMDk4
     "username":"matan",
     "role":"moderator"
 }
+
+
+###POST Admin to DELETE Player from Queue :
+## host/api/player/delete/gatherid/userid
+POST http://localhost:3001/api/player/delete/63ea2578c2af8bd9e9913907/63e9d4d83bc24fc5d36ed50a
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI4ODI2OSwiZXhwIjoxNjc4ODgwMjY5fQ.dsIBdlYWn-CZB7R7i7RuVJ_aoMpDMbN3SwLau0hGCTo
+

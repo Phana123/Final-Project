@@ -77,3 +77,21 @@ export type GatherAddFormType = {
 export type playersFrontType = {
   string: undefined;
 };
+
+export interface EditGatherModalType {
+  children: React.ReactNode;
+}
+
+export type EditGatherModalFormType = {
+  map: string;
+  maxPlayers: number;
+  status: boolean | undefined;
+  players: string[] | undefined;
+};
+
+export type handleEditMapType = {
+  map: string;
+};
+export type handleEditMaxPlayersType = {
+  maxPlayers: number;
+};

@@ -46,12 +46,6 @@ const GatherAdd = () => {
 
     let MapValidTest: boolean = isMapValid(map, maps);
 
-    // if (MapValidTest) {
-    //   setIsMapValidTest(true);
-    // } else {
-    //   setIsMapValidTest(false);
-    // }
-    // if (isMapValidTest && (isAdminState || isModerator) === true) {
     gatherService
       .create(map, maxPlayers)
       .then((res) => {
@@ -64,9 +58,8 @@ const GatherAdd = () => {
       })
       .finally(() => {
         setIsLoading(false);
-        nav("/");
+        nav(-1);
       });
-    // }
   };
   return (
     <div>

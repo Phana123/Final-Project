@@ -9,6 +9,10 @@ import { studentsRouter } from "./routes/students.js";
 import { authRouter } from "./routes/users.js";
 import { gatherRouter } from "./routes/gathers.js";
 import { roleRouter } from "./routes/roles.js";
+import { adminRouter } from "./routes/admin.js";
+import { moderatorRouter } from "./routes/moderator.js";
+
+
 
 const app = express();
 
@@ -34,6 +38,9 @@ app.use("/api/students", studentsRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/gather", gatherRouter);
 app.use("/api/role", roleRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/moderator", moderatorRouter);
+
 
 //404:
 app.use(notFound);

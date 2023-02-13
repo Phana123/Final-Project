@@ -1,0 +1,21 @@
+
+###GET ALL Gather :
+GET http://localhost:3001/api/gather
+
+
+###GET Single Gather :
+GET http://localhost:3001/api/gather/63e99a05a088e67380f1b88d
+
+
+### POST Add to Gather :
+## host/api/gather/add/gatherId
+POST http://localhost:3001/api/gather/add/63ea2578c2af8bd9e9913907
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI5MjQ0NSwiZXhwIjoxNjc4ODg0NDQ1fQ.QApYG_NK22GRLjWAwh8Vq0KUMWz4-X3Wpyw7VRAs_aA
+
+### POST Leave the Gather :
+## host/api/gather/leaveQueue/userId
+DELETE http://localhost:3001/api/gather/leaveQueue/63ea2578c2af8bd9e9913907
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI5MjQ0NSwiZXhwIjoxNjc4ODg0NDQ1fQ.QApYG_NK22GRLjWAwh8Vq0KUMWz4-X3Wpyw7VRAs_aA
+
+
+

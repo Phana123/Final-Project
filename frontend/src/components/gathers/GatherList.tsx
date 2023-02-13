@@ -61,7 +61,6 @@ const GatherList = () => {
       </div>
       {lastGathers.map((item) => (
         <>
-         
           <GatherItem {...item} key={item._id} />
         </>
       ))}

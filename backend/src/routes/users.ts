@@ -29,6 +29,15 @@ router.get("/:id", (req, res) => {
     })
     .catch((e) => res.status(500).json({ message: "Error", error: e }));
 });
+// GET All USERS
+router.get("/", (req, res) => {
+
+  User.findOne()
+    .then((user) => {
+      res.json(user);
+    })
+    .catch((e) => res.status(500).json({ message: "Error", error: e }));
+});
 
 //api/auth/signup
 router.post("/signup", validateSignUp, userAlreadyExists, async (req, res) => {
