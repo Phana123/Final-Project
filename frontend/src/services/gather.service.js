@@ -1,19 +1,29 @@
 import axios from "axios";
-import isAdmin from "../functions/isAdmin.model";
 import { toast } from "react-toastify";
 
 const baseUrl = "http://localhost:3001/api/admin/gather";
 
-const create = async (map: string, maxPlayers: number) => {
-  // let isAdminTest: boolean = isAdmin("ROLE_ADMIN", maps);
-
-  return axios.post(baseUrl + "/create", { map, maxPlayers });
+const create = async (map, maxPlayers) => {
+  try {
+    const response = await axios(`${baseUrl}/create`, {
+      method: "POST",
+      headers: { Authorization: localStorage.getItem("token") },
+      data: {
+        map: map,
+        maxPlayers: maxPlayers,
+      },
+    });
+    console.log(response)
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-const editMaxPlayers = async (
-  maxPlayers?: number | undefined,
-  gatherId?: string
-) => {
+const startGather = async (id, teamA, teamB) => {
+  return axios.post(baseUrl + `/startGather/${id}`, { teamA, teamB });
+};
+
+const editMaxPlayers = async (maxPlayers, gatherId) => {
   //gatherId
   try {
     const response = await axios(`${baseUrl}/updateMaxPlayers/${gatherId}`, {
@@ -33,7 +43,7 @@ const editMaxPlayers = async (
     console.log(error);
   }
 };
-const editMap = async (map?: string | undefined, gatherId?: string) => {
+const editMap = async (map, gatherId) => {
   //gatherId
   try {
     const response = await axios(`${baseUrl}/updateMap/${gatherId}`, {
@@ -53,7 +63,7 @@ const editMap = async (map?: string | undefined, gatherId?: string) => {
     console.log(error);
   }
 };
-const handleStatus = async (status?: boolean | undefined, gatherId?: string) => {
+const handleStatus = async (status, gatherId) => {
   //gatherId
   try {
     const response = await axios(`${baseUrl}/updateStatus/${gatherId}`, {
@@ -74,7 +84,13 @@ const handleStatus = async (status?: boolean | undefined, gatherId?: string) => 
   }
 };
 
-export { create, editMap, editMaxPlayers, handleStatus };
+export { startGather, create, editMap, editMaxPlayers, handleStatus };
 
-const gatherService = { handleStatus, create, editMap, editMaxPlayers };
+const gatherService = {
+  startGather,
+  handleStatus,
+  create,
+  editMap,
+  editMaxPlayers,
+};
 export default gatherService;

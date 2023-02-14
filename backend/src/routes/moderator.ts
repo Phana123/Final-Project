@@ -1,15 +1,14 @@
-import { Router, json } from "express";
+import { Router } from "express";
 import _ from "underscore";
 import { Gather } from "../db/models/gather.js";
 
-import { validateCreateGather } from "../middleware/gather/verifyCreateGatherBody.js";
 import isMapValid from "../functions/isMapValid.js";
-import { User } from "../db/models/user.js";
+
 import { validateToken } from "../middleware/user/validateToken.js";
 import { isModerator } from "../middleware/roles/isModerator.js";
 import { verifyEditGather } from "../middleware/gather/verifyEditGather.js";
 import { isManager } from "../middleware/roles/isManager.js";
-// import checkIfExistPlayer from "../../dist/functions/checkIfExistPlayer.js";
+
 const router = Router();
 const maps = [
   "Ascent",
@@ -24,21 +23,26 @@ const maps = [
 ];
 
 // DELETE single gathers
-router.delete("/gather/delete/:id", validateToken,isManager ,async (req, res) => {
-  const id = req.params.id;
-  try {
-    await Gather.findByIdAndDelete(id);
-    res.status(200).json({
-      success: true,
-      message: `Successfully deleted`,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: `Failed to delete`,
-    });
+router.delete(
+  "/gather/delete/:id",
+  validateToken,
+  isManager,
+  async (req, res) => {
+    const id = req.params.id;
+    try {
+      await Gather.findByIdAndDelete(id);
+      res.status(200).json({
+        success: true,
+        message: `Successfully deleted`,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: `Failed to delete`,
+      });
+    }
   }
-});
+);
 
 //api/gather/edit
 router.post(
@@ -83,14 +87,19 @@ router.post(
   }
 );
 
-router.delete("/gather/deleteAll",validateToken,isModerator, async (req, res) => {
-  try {
-    await Gather.deleteMany({});
-    res.json({ message: `All gathers are deleted!` });
-  } catch (error) {
-    console.log(error.message);
+router.delete(
+  "/gather/deleteAll",
+  validateToken,
+  isModerator,
+  async (req, res) => {
+    try {
+      await Gather.deleteMany({});
+      res.json({ message: `All gathers are deleted!` });
+    } catch (error) {
+      console.log(error.message);
+    }
   }
-});
+);
 const checkIfExistPlayer = (string, arr) => {
   let isTrue = false;
   arr.forEach((value, index) => {

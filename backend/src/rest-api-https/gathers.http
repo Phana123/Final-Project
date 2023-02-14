@@ -4,7 +4,7 @@ GET http://localhost:3001/api/gather
 
 
 ###GET Single Gather :
-GET http://localhost:3001/api/gather/63e99a05a088e67380f1b88d
+GET http://localhost:3001/api/gather/63eb140ce87ee161d0805323
 
 
 ### POST Add to Gather :
@@ -16,6 +16,48 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRm
 ## host/api/gather/leaveQueue/userId
 DELETE http://localhost:3001/api/gather/leaveQueue/63ea2578c2af8bd9e9913907
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI5MjQ0NSwiZXhwIjoxNjc4ODg0NDQ1fQ.QApYG_NK22GRLjWAwh8Vq0KUMWz4-X3Wpyw7VRAs_aA
+
+###POST when gather is started:
+POST http://localhost:3001/api/gather/startGather/63ec1406551a48ccf455cf0b
+
+
+### POST When gather is start :
+## host/api/gather/startGather/gatherId
+POST http://localhost:3001/api/gather/startGather/63eb7e74d46259543edb802b
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjM3OTA3NSwiZXhwIjoxNjc4OTcxMDc1fQ.MbviqyjtsVfnnyTE2hQkzMVPNuYetfsMv-5YPC7nW8Y
+
+{
+    "teamA": [{"userId": "asdasdas"},
+    {"userId": "asdasdas"},
+    {"userId": "asdasdas"},
+    {"userId": "asdasdas"},
+    {"userId": "asdasdas"}],
+
+    "teamB": [{"userId": "asdasdas"},
+    {"userId": "asdasdas"},
+    {"userId": "asdasdas"},
+    {"userId": "asdasdas"},
+    {"userId": "asdasdas"}]
+}
+
+### POST Push test players for testing :
+## host/api/gather/pushTestPlayers/gatherId
+POST http://localhost:3001/api/gather/pushTestPlayers/63ec1406551a48ccf455cf0b
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjM3OTA3NSwiZXhwIjoxNjc4OTcxMDc1fQ.MbviqyjtsVfnnyTE2hQkzMVPNuYetfsMv-5YPC7nW8Y
+
+{
+ "body":
+[
+  {"userName":"asdas"},
+  {"userName":"asdas"},
+   {"userName":"asdas"},
+    {"userName":"asdas"},
+       {"userName":"asdas"}
+   ]
+}
+
 
 
 

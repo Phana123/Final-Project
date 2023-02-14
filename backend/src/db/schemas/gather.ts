@@ -1,4 +1,4 @@
-import { string } from "joi";
+
 import { Schema } from "mongoose";
 
 const gatherSchema = new Schema({
@@ -6,7 +6,8 @@ const gatherSchema = new Schema({
   date: String,
   maxPlayers: Number,
   onGoing: Boolean,
-  players: Array, 
+  players: Array,
+  teams: Array,
 });
 
 export { gatherSchema };

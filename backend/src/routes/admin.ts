@@ -7,6 +7,7 @@ import isMapValid from "../functions/isMapValid.js";
 import { isAdmin } from "../middleware/roles/isAdmin.js";
 import { isModerator } from "../middleware/roles/isModerator.js";
 import { validateToken } from "../middleware/user/validateToken.js";
+import { isManager } from "../middleware/roles/isManager.js";
 
 // import checkIfExistPlayer from "../../dist/functions/checkIfExistPlayer.js";
 const router = Router();
@@ -27,7 +28,7 @@ router.post(
   "/gather/create",
   validateCreateGather,
   validateToken,
-  isModerator,
+  isManager,
   async (req, res) => {
     const body = _.pick(req.body, "map", "maxPlayers");
     let MapValidTest: boolean = isMapValid(body.map, maps);
@@ -40,6 +41,7 @@ router.post(
       date: newDate,
       onGoing: true,
       players: [],
+      teams: [],
     });
 
     try {
@@ -58,7 +60,8 @@ router.post(
           "maxPlayers",
           "onGoing",
           "_id",
-          "players"
+          "players",
+          "teams"
         );
         return res.json({
           message: "Gather created!",

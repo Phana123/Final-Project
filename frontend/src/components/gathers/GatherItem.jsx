@@ -10,24 +10,32 @@ import { AiFillDelete } from "react-icons/ai";
 import gatherService from "../../services/gather.service";
 import EditGatherModal from "../EditGatherModal";
 import { LocalStorageContext } from "../../context/LocalStorageContext";
+import GatherDetails from "./GatherDetails";
 
 const GatherItem = ({ players, onGoing, _id, map, maxPlayers }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errMessage, setErrMessage] = useState(undefined);
   const [maxPlayersInput, setMaxPlayersInput] = useState(10);
   const [mapInput, setMapInput] = useState("");
+  const [playersArray, setPlayersArray] = useState(players);
   const formInitialValues = [10, "Ascent"];
   const { isAdminState, isModerator } = useContext(AuthContext);
   // Local Storage Context HERE->>
-  const { LShideAdminOptionsState, toggleLShideAdminOptionsState } =
+  const { adminOptionState, toggleAdminOptionState } =
     useContext(LocalStorageContext);
 
-  useEffect(() => {
-    toggleLShideAdminOptionsState === true
-      ? toggleLShideAdminOptionsState(true)
-      : toggleLShideAdminOptionsState(false);
-    console.log(LShideAdminOptionsState);
-  }, [LShideAdminOptionsState]);
+  if (playersArray.length >= maxPlayers) {
+    let newArr = players
+      .map((value) => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value);
+    console.log(newArr);
+    let splitIndex = Math.ceil(newArr.length / 2);
+    const teamA = newArr.slice(0, splitIndex);
+    const teamB = newArr.slice(splitIndex);
+    console.log(`teamA`, teamA, "teamB", teamB);
+    // gatherService.startGather(_id,)
+  }
 
   // Add to queue Function is here ///
   const handleJoinButton = async () => {
@@ -178,7 +186,7 @@ const GatherItem = ({ players, onGoing, _id, map, maxPlayers }) => {
 
   // Button Of Hide Admin/Moderator Options HERE -->>
   const handleHideAdminOptions = () => {
-    toggleLShideAdminOptionsState(state=>!state)
+    toggleAdminOptionState();
   };
 
   return (
@@ -203,7 +211,7 @@ const GatherItem = ({ players, onGoing, _id, map, maxPlayers }) => {
         {/* Hide / Show admin options --> */}
         {(isAdminState || isModerator) && (
           <Button onClick={handleHideAdminOptions}>
-            {LShideAdminOptionsState === true
+            {adminOptionState === true
               ? `Hide admin options`
               : `Show admin options`}
           </Button>
@@ -214,16 +222,15 @@ const GatherItem = ({ players, onGoing, _id, map, maxPlayers }) => {
           <>
             <span className="card bg-dark" key={item.userId}>
               {item.userName}
-              {(isAdminState || isModerator) &&
-                LShideAdminOptionsState === true && (
-                  <span>
-                    <AiFillDelete
-                      size={27}
-                      style={{ color: "white" }}
-                      onClick={handleDeletePlayerButton}
-                    />
-                  </span>
-                )}
+              {(isAdminState || isModerator) && adminOptionState === true && (
+                <span>
+                  <AiFillDelete
+                    size={27}
+                    style={{ color: "white" }}
+                    onClick={handleDeletePlayerButton}
+                  />
+                </span>
+              )}
             </span>
           </>
         ))}
@@ -231,7 +238,7 @@ const GatherItem = ({ players, onGoing, _id, map, maxPlayers }) => {
         {/* Map IS here  */}
         <span className="card bg-dark">
           Map: {map}{" "}
-          {(isModerator || isAdminState) && LShideAdminOptionsState === true && (
+          {(isModerator || isAdminState) && adminOptionState === true && (
             <EditGatherModal titleOpen="Edit map">
               <Formik
                 initialValues={formInitialValues[1]}
@@ -256,29 +263,28 @@ const GatherItem = ({ players, onGoing, _id, map, maxPlayers }) => {
         <span className="card bg-dark">
           Max Players: {maxPlayers}{" "}
           <p>
-            {(isModerator || isAdminState) &&
-              LShideAdminOptionsState === true && (
-                <EditGatherModal titleOpen="Edit max players">
-                  <Formik
-                    initialValues={formInitialValues[0]}
-                    onSubmit={handleEditMaxPlayersButton}
-                  >
-                    <Form>
-                      <input
-                        onChange={(e) =>
-                          setMaxPlayersInput(e.currentTarget.value)
-                        }
-                        type="number"
-                        required
-                        placeholder="2-10 players"
-                      />
-                      <Button className="btn btn-warning" type="submit">
-                        Finish click here
-                      </Button>
-                    </Form>
-                  </Formik>
-                </EditGatherModal>
-              )}
+            {(isModerator || isAdminState) && adminOptionState === true && (
+              <EditGatherModal titleOpen="Edit max players">
+                <Formik
+                  initialValues={formInitialValues[0]}
+                  onSubmit={handleEditMaxPlayersButton}
+                >
+                  <Form>
+                    <input
+                      onChange={(e) =>
+                        setMaxPlayersInput(e.currentTarget.value)
+                      }
+                      type="number"
+                      required
+                      placeholder="2-10 players"
+                    />
+                    <Button className="btn btn-warning" type="submit">
+                      Finish click here
+                    </Button>
+                  </Form>
+                </Formik>
+              </EditGatherModal>
+            )}
           </p>
         </span>
         <br />
@@ -288,20 +294,18 @@ const GatherItem = ({ players, onGoing, _id, map, maxPlayers }) => {
           <>
             <span className="bg-success p-1" style={{ color: "white" }}>
               On{" "}
-              {(isModerator || isAdminState) &&
-                LShideAdminOptionsState === true && (
-                  <Button onClick={handleTurnOffGather}> Turn off </Button>
-                )}
+              {(isModerator || isAdminState) && adminOptionState === true && (
+                <Button onClick={handleTurnOffGather}> Turn off </Button>
+              )}
             </span>
           </>
         ) : (
           <>
             <span className="bg-dark" style={{ color: "red" }}>
               Off{" "}
-              {(isModerator || isAdminState) &&
-                LShideAdminOptionsState === true && (
-                  <Button onClick={handleTurnOnGather}> Turn on </Button>
-                )}
+              {(isModerator || isAdminState) && adminOptionState === true && (
+                <Button onClick={handleTurnOnGather}> Turn on </Button>
+              )}
             </span>
           </>
         )}
@@ -313,15 +317,15 @@ const GatherItem = ({ players, onGoing, _id, map, maxPlayers }) => {
           Leave Queue
         </Button>
         {/* Delete Gather is HERE -- ONly for admin/moderator  */}
-        {(isAdminState || isModerator) && LShideAdminOptionsState === true && (
+        {(isAdminState || isModerator) && adminOptionState === true && (
           <Button onClick={handleDeleteButton} variant="danger">
             Delete Gather
           </Button>
         )}
+        <GatherDetails />
         <ToastContainer className="toast__gather" />
       </div>
     </>
   );
 };
-
 export default GatherItem;

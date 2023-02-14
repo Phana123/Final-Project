@@ -33,13 +33,13 @@ const AuthContextProvider = ({ children }: ChildProps) => {
 
       if (isAdminTest) {
         setIsAdminState(true);
-        console.log(`Your'e admin!`, isAdminState);
+       
       }
       let isModeratorTest: boolean = isAdmin("ROLE_MODERATOR", roles);
 
       if (isModeratorTest) {
         setIsModerator(true);
-        console.log(`Your'e moderator!`, isModerator);
+        
       }
     }
   }, []);

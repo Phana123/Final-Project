@@ -29,6 +29,56 @@ const maps = [
   "Lotus",
 ];
 
+// POST Start gather
+router.post("/startGather/:gatherId", async (req, res) => {
+  try {
+    const gatherId = req.params.gatherId;
+    const { teamA, teamB } = await req.body;
+    console.log(req.body)
+    const gather = await Gather.findOneAndUpdate(
+      { _id: gatherId },
+      {
+        $push: {
+          teams: {
+            teamA,
+            teamB,
+          },
+        },
+      }
+    );
+
+    console.log(gather);
+    return res.json({ message: `Gather started!`, gather: gather });
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+// POST Push some random players to teams for testing
+router.post("/pushTestPlayers/:gatherId", async (req, res) => {
+  try {
+    const gatherId = req.params.gatherId;
+    const playersArray = [];
+    req.body.body.forEach((value) => {
+      playersArray.push(value);
+    });
+    Gather.findByIdAndUpdate(
+      gatherId,
+      { $push: { players: { $each: playersArray } } },
+      (err, doc) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(doc);
+        }
+      }
+    );
+
+    return res.json({ message: `Gather started!` });
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
 // GET all gathers
 router.get("/", (req, res) => {
   Gather.find()
@@ -38,13 +88,15 @@ router.get("/", (req, res) => {
     .catch((e) => res.status(500).json({ message: "Error", error: e }));
 });
 
+// Example usage
 // GET single gathers
-router.get("/:id", (req, res) => {
+router.get("/:id", async (req, res) => {
   const id = req.params.id;
   Gather.findOne({ _id: id })
     .then((gather) => {
       res.json(gather);
     })
+
     .catch((e) => res.status(500).json({ message: "Error", error: e }));
 });
 

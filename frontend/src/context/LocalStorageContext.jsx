@@ -1,36 +1,42 @@
-import React, { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
-export const LocalStorageContext = createContext({
-  LShideAdminOptionsState: false,
-  toggleLShideAdminOptionsState: () => {},
+//create the context:
+const LocalStorageContext = createContext({
+  adminOptionState: true,
+  toggleAdminOptionState: () => {},
 });
 
-export const LocalStorageProvider = ({ children }) => {
-  const [LShideAdminOptionsState, setLSHideAdminOptionsState] = useState(false);
-
-  const hideAdminOptions = LShideAdminOptionsState === true ? "true" : "false";
-
-  const toggleLShideAdminOptionsState = () => {
-    setLSHideAdminOptionsState((state) => !state);
-  };
-  useEffect(() => {
-    if (localStorage.getItem("hideAdminOptions") !== null) {
-      return;
+const LocalStorageProvider = ({ children }) => {
+  //state: shared with all the app:
+  const [adminOptionState, setAdminOptionState] = useState(false);
+  const adminOptionStateLocalStorage = localStorage.getItem("hideAdminOptions");
+  //action: changes the state:
+  const toggleAdminOptionState = () => {
+    if (adminOptionStateLocalStorage === "true") {
+      localStorage.setItem("hideAdminOptions", "false");
+      setAdminOptionState(false);
     } else {
-      localStorage.setItem("hideAdminOptions", hideAdminOptions);
+      localStorage.setItem("hideAdminOptions", "true");
+      setAdminOptionState(true);
+    }
+  };
+
+  useEffect(() => {
+    if (adminOptionStateLocalStorage === "true") {
+      setAdminOptionState(true);
+    } else {
+      setAdminOptionState(false);
     }
   }, []);
-
-  useEffect(() => {
-    LShideAdminOptionsState === true
-      ? localStorage.setItem("hideAdminOptions", "true")
-      : localStorage.setItem("hideAdminOptions", "false");
-  }, [LShideAdminOptionsState]);
   return (
-    <LocalStorageContext.Provider
-      value={{ LShideAdminOptionsState, toggleLShideAdminOptionsState }}
-    >
-      {children}
-    </LocalStorageContext.Provider>
+    <>
+      <LocalStorageContext.Provider
+        value={{ adminOptionState, toggleAdminOptionState }}
+      >
+        {children}
+      </LocalStorageContext.Provider>
+    </>
   );
 };
+
+export { LocalStorageContext, LocalStorageProvider };
