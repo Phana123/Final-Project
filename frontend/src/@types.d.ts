@@ -80,6 +80,8 @@ export type playersFrontType = {
 
 export interface EditGatherModalType {
   children: React.ReactNode;
+  titleOpen: string;
+  titleClose?: string;
 }
 
 export type EditGatherModalFormType = {

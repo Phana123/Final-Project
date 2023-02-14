@@ -1,7 +1,7 @@
 
 
 ###POST to Create Gather :
-POST http://localhost:3001/api/admin/create
+POST http://localhost:3001/api/admin/gather/create
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI5MzcwNywiZXhwIjoxNjc4ODg1NzA3fQ.MMu4eWEpgsC71Rh6AkglkGbPK9TNBwQQbsB55cdbZ98
 
@@ -15,13 +15,13 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRm
 
 ###POST Admin to DELETE Player from Queue :
 ## host/api/admin/delete/gatherid
-DELETE http://localhost:3001/api/admin/deletePlayerFromQueue/63ea2578c2af8bd9e9913907
+DELETE http://localhost:3001/api/admin/gather/deletePlayerFromQueue/63ea2578c2af8bd9e9913907
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI5MzcwNywiZXhwIjoxNjc4ODg1NzA3fQ.MMu4eWEpgsC71Rh6AkglkGbPK9TNBwQQbsB55cdbZ98
 
 
 ###POST Admin to EDIT The map OF Gather :
 ## host/api/admin/updateMap/gatherid
-POST http://localhost:3001/api/admin/updateMap/63ea2578c2af8bd9e9913907
+POST http://localhost:3001/api/admin/gather/updateMap/63ea2578c2af8bd9e9913907
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI5MzcwNywiZXhwIjoxNjc4ODg1NzA3fQ.MMu4eWEpgsC71Rh6AkglkGbPK9TNBwQQbsB55cdbZ98
 
@@ -31,7 +31,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRm
 
 ###POST Admin to EDIT The Max Players Of Gather :
 ## host/api/admin/updateMap/gatherid
-POST http://localhost:3001/api/admin/updateMaxPlayers/63ea2578c2af8bd9e9913907
+POST http://localhost:3001/api/admin/gather/updateMaxPlayers/63ea2578c2af8bd9e9913907
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI5MzcwNywiZXhwIjoxNjc4ODg1NzA3fQ.MMu4eWEpgsC71Rh6AkglkGbPK9TNBwQQbsB55cdbZ98
 
@@ -42,7 +42,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRm
 
 ###POST Admin to EDIT The Status Of Gather :
 ## host/api/admin/updateMap/gatherid
-POST http://localhost:3001/api/admin/updateStatus/63ea3dd11b9115773c9b019e
+POST http://localhost:3001/api/admin/gather/updateStatus/63ea3dd11b9115773c9b019e
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI5MzcwNywiZXhwIjoxNjc4ODg1NzA3fQ.MMu4eWEpgsC71Rh6AkglkGbPK9TNBwQQbsB55cdbZ98
 

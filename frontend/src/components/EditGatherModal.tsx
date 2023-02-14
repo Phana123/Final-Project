@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { EditGatherModalType } from "../@types";
 
-const EditGatherModal = ({ children }: EditGatherModalType) => {
+const EditGatherModal = ({
+  children,
+  titleOpen,
+  titleClose,
+}: EditGatherModalType) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleModal = () => {
@@ -10,11 +14,13 @@ const EditGatherModal = ({ children }: EditGatherModalType) => {
 
   return (
     <>
-      <button onClick={toggleModal}>Open Modal</button>
+      <button onClick={toggleModal}> {titleOpen} </button>
       {isOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <button onClick={toggleModal}>Close</button>
+            <button className="btn btn-light " onClick={toggleModal}>
+              Close edit
+            </button>
             {children}
           </div>
         </div>

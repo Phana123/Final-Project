@@ -24,10 +24,10 @@ const maps = [
 
 //api/admin/create
 router.post(
-  "/create",
+  "/gather/create",
   validateCreateGather,
   validateToken,
-   isModerator,
+  isModerator,
   async (req, res) => {
     const body = _.pick(req.body, "map", "maxPlayers");
     let MapValidTest: boolean = isMapValid(body.map, maps);
@@ -72,7 +72,7 @@ router.post(
 );
 //api/admin/deletePlayerFromQueue
 router.delete(
-  "/deletePlayerFromQueue/:gatherId",
+  "/gather/deletePlayerFromQueue/:gatherId",
   validateToken,
   isModerator,
   async (req, res) => {
@@ -94,7 +94,7 @@ router.delete(
 );
 //api/admin/updateMap
 router.post(
-  "/updateMap/:gatherId",
+  "/gather/updateMap/:gatherId",
   validateToken,
   isModerator,
   async (req, res) => {
@@ -118,7 +118,7 @@ router.post(
 );
 //api/admin/updateMaxPlayers
 router.post(
-  "/updateMaxPlayers/:gatherId",
+  "/gather/updateMaxPlayers/:gatherId",
   validateToken,
   isModerator,
   async (req, res) => {
@@ -140,7 +140,7 @@ router.post(
 );
 //api/admin/updateStatus
 router.post(
-  "/updateStatus/:gatherId",
+  "/gather/updateStatus/:gatherId",
   validateToken,
   isModerator,
   async (req, res) => {
