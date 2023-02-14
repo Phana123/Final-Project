@@ -13,19 +13,22 @@ import "./styles/main.scss";
 import { BrowserRouter } from "react-router-dom";
 import { AuthContextProvider } from "./context/AuthContext";
 import "bootstrap/dist/css/bootstrap.css";
+import { LocalStorageProvider } from "./context/LocalStorageContext";
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <AuthContextProvider>
-        <DarkModeContextProvider>
-          <Provider store={store}>
-            <App />
-          </Provider>
-        </DarkModeContextProvider>
-      </AuthContextProvider>
+      <LocalStorageProvider>
+        <AuthContextProvider>
+          <DarkModeContextProvider>
+            <Provider store={store}>
+              <App />
+            </Provider>
+          </DarkModeContextProvider>
+        </AuthContextProvider>
+      </LocalStorageProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

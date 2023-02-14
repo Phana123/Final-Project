@@ -8,6 +8,7 @@ import { User } from "../db/models/user.js";
 import { validateToken } from "../middleware/user/validateToken.js";
 import { isModerator } from "../middleware/roles/isModerator.js";
 import { verifyEditGather } from "../middleware/gather/verifyEditGather.js";
+import { isManager } from "../middleware/roles/isManager.js";
 // import checkIfExistPlayer from "../../dist/functions/checkIfExistPlayer.js";
 const router = Router();
 const maps = [
@@ -23,7 +24,7 @@ const maps = [
 ];
 
 // DELETE single gathers
-router.delete("/gather/delete/:id", validateToken, isModerator, async (req, res) => {
+router.delete("/gather/delete/:id", validateToken,isManager ,async (req, res) => {
   const id = req.params.id;
   try {
     await Gather.findByIdAndDelete(id);

@@ -1,9 +1,5 @@
 import { Button } from "react-bootstrap";
-import {
-  GatherListType,
-  handleEditMapType,
-  handleEditMaxPlayersType,
-} from "../../@types";
+
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 import axios from "axios";
@@ -13,24 +9,25 @@ import { ColorRing } from "react-loader-spinner";
 import { AiFillDelete } from "react-icons/ai";
 import gatherService from "../../services/gather.service";
 import EditGatherModal from "../EditGatherModal";
+import { LocalStorageContext } from "../../context/LocalStorageContext";
 
-const GatherItem = ({
-  players,
-  onGoing,
-  _id,
-  map,
-  maxPlayers,
-}: GatherListType) => {
+const GatherItem = ({ players, onGoing, _id, map, maxPlayers }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [errMessage, setErrMessage] = useState<string | undefined>(undefined);
-  const [maxPlayersInput, setMaxPlayersInput] = useState<any>(10);
-  const [mapInput, setMapInput] = useState<any>("");
+  const [errMessage, setErrMessage] = useState(undefined);
+  const [maxPlayersInput, setMaxPlayersInput] = useState(10);
+  const [mapInput, setMapInput] = useState("");
+  const formInitialValues = [10, "Ascent"];
+  const { isAdminState, isModerator } = useContext(AuthContext);
+  // Local Storage Context HERE->>
+  const { LShideAdminOptionsState, toggleLShideAdminOptionsState } =
+    useContext(LocalStorageContext);
 
-  const formInitialValues: any = [10, "Ascent"];
-
-  const { username, isAdminState, isModerator } = useContext(AuthContext);
-  const [showEditGatherModalState, setShowEditGatherModalState] =
-    useState<Boolean>();
+  useEffect(() => {
+    toggleLShideAdminOptionsState === true
+      ? toggleLShideAdminOptionsState(true)
+      : toggleLShideAdminOptionsState(false);
+    console.log(LShideAdminOptionsState);
+  }, [LShideAdminOptionsState]);
 
   // Add to queue Function is here ///
   const handleJoinButton = async () => {
@@ -71,7 +68,7 @@ const GatherItem = ({
   // Delete single gather is here // -- Only For Mod/Admin
   const handleDeleteButton = async () => {
     try {
-      const url = `http://localhost:3001/api/gather/delete`;
+      const url = `http://localhost:3001/api/moderator/gather/delete`;
       const response = await axios(`${url}/${_id}`, {
         method: "DELETE",
         headers: { Authorization: localStorage.getItem("token") },
@@ -89,7 +86,7 @@ const GatherItem = ({
   // Delete player from queue function // Only for Mod/Admin
   const handleDeletePlayerButton = async () => {
     try {
-      const url = `http://localhost:3001/api/admin/deletePlayerFromQueue`;
+      const url = `http://localhost:3001/api/admin/gather/deletePlayerFromQueue`;
       const response = await axios(`${url}/${_id}`, {
         method: "DELETE",
         headers: { Authorization: localStorage.getItem("token") },
@@ -142,8 +139,51 @@ const GatherItem = ({
       });
   };
 
+  // Turn Off Gather Status Function // Only for Mod/Admin
+  const handleTurnOffGather = async () => {
+    setIsLoading(true);
+
+    gatherService
+      .handleStatus(false, _id)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+        alert(e); //swal //modal
+        setErrMessage(JSON.stringify(e.response.data));
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+  // Turn Off Gather Status Function // Only for Mod/Admin
+  const handleTurnOnGather = async () => {
+    setIsLoading(true);
+
+    gatherService
+      .handleStatus(true, _id)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+        alert(e); //swal //modal
+        setErrMessage(JSON.stringify(e.response.data));
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  // Button Of Hide Admin/Moderator Options HERE -->>
+  const handleHideAdminOptions = () => {
+    toggleLShideAdminOptionsState(state=>!state)
+  };
+
   return (
     <>
+      {" "}
       <div className="btn card mb-1 bg-secondary gatherlist-item">
         {/* Error && IsLoading Components HERE */}
         {errMessage && <div>${errMessage}</div>}
@@ -160,21 +200,30 @@ const GatherItem = ({
             />
           </div>
         )}
+        {/* Hide / Show admin options --> */}
+        {(isAdminState || isModerator) && (
+          <Button onClick={handleHideAdminOptions}>
+            {LShideAdminOptionsState === true
+              ? `Hide admin options`
+              : `Show admin options`}
+          </Button>
+        )}
         {/* Players list Here */}
         Players:{" "}
-        {players?.map((item: any) => (
+        {players?.map((item) => (
           <>
             <span className="card bg-dark" key={item.userId}>
               {item.userName}
-              {(isAdminState || isModerator) && (
-                <span>
-                  <AiFillDelete
-                    size={27}
-                    style={{ color: "white" }}
-                    onClick={handleDeletePlayerButton}
-                  />
-                </span>
-              )}
+              {(isAdminState || isModerator) &&
+                LShideAdminOptionsState === true && (
+                  <span>
+                    <AiFillDelete
+                      size={27}
+                      style={{ color: "white" }}
+                      onClick={handleDeletePlayerButton}
+                    />
+                  </span>
+                )}
             </span>
           </>
         ))}
@@ -182,7 +231,7 @@ const GatherItem = ({
         {/* Map IS here  */}
         <span className="card bg-dark">
           Map: {map}{" "}
-          {(isModerator || isAdminState) && (
+          {(isModerator || isAdminState) && LShideAdminOptionsState === true && (
             <EditGatherModal titleOpen="Edit map">
               <Formik
                 initialValues={formInitialValues[1]}
@@ -207,43 +256,52 @@ const GatherItem = ({
         <span className="card bg-dark">
           Max Players: {maxPlayers}{" "}
           <p>
-            {(isModerator || isAdminState) && (
-              <EditGatherModal titleOpen="Edit max players">
-                <Formik
-                  initialValues={formInitialValues[0]}
-                  onSubmit={handleEditMaxPlayersButton}
-                >
-                  <Form>
-                    <input
-                      onChange={(e) =>
-                        setMaxPlayersInput(e.currentTarget.value)
-                      }
-                      type="number"
-                      required
-                      placeholder="2-10 players"
-                    />
-                    <Button className="btn btn-warning" type="submit">
-                      Finish click here
-                    </Button>
-                  </Form>
-                </Formik>
-              </EditGatherModal>
-            )}
+            {(isModerator || isAdminState) &&
+              LShideAdminOptionsState === true && (
+                <EditGatherModal titleOpen="Edit max players">
+                  <Formik
+                    initialValues={formInitialValues[0]}
+                    onSubmit={handleEditMaxPlayersButton}
+                  >
+                    <Form>
+                      <input
+                        onChange={(e) =>
+                          setMaxPlayersInput(e.currentTarget.value)
+                        }
+                        type="number"
+                        required
+                        placeholder="2-10 players"
+                      />
+                      <Button className="btn btn-warning" type="submit">
+                        Finish click here
+                      </Button>
+                    </Form>
+                  </Formik>
+                </EditGatherModal>
+              )}
           </p>
         </span>
         <br />
-        {/* Status of Gather IS here  */}
+        {/* Status of Gather IS HERE-->  */}
         Status:
         {onGoing ? (
           <>
             <span className="bg-success p-1" style={{ color: "white" }}>
-              On <Button onClick={handleTurnOffGather}> Turn Off </Button>
+              On{" "}
+              {(isModerator || isAdminState) &&
+                LShideAdminOptionsState === true && (
+                  <Button onClick={handleTurnOffGather}> Turn off </Button>
+                )}
             </span>
           </>
         ) : (
           <>
             <span className="bg-dark" style={{ color: "red" }}>
-              Off
+              Off{" "}
+              {(isModerator || isAdminState) &&
+                LShideAdminOptionsState === true && (
+                  <Button onClick={handleTurnOnGather}> Turn on </Button>
+                )}
             </span>
           </>
         )}
@@ -255,18 +313,12 @@ const GatherItem = ({
           Leave Queue
         </Button>
         {/* Delete Gather is HERE -- ONly for admin/moderator  */}
-        {(isAdminState || isModerator) && (
+        {(isAdminState || isModerator) && LShideAdminOptionsState === true && (
           <Button onClick={handleDeleteButton} variant="danger">
             Delete Gather
           </Button>
         )}
-        <Button
-          onClick={() => setShowEditGatherModalState((state) => !state)}
-          variant="danger"
-        >
-          Edit Gather
-        </Button>
-        <ToastContainer />
+        <ToastContainer className="toast__gather" />
       </div>
     </>
   );

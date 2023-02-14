@@ -53,14 +53,28 @@ const editMap = async (map?: string | undefined, gatherId?: string) => {
     console.log(error);
   }
 };
+const handleStatus = async (status?: boolean | undefined, gatherId?: string) => {
+  //gatherId
+  try {
+    const response = await axios(`${baseUrl}/updateStatus/${gatherId}`, {
+      method: "POST",
+      headers: { Authorization: localStorage.getItem("token") },
+      data: {
+        status: status,
+      },
+    });
 
-const editStatus = async (map?: string) => {
-  return axios.post(baseUrl + "/status/:id", {
-    map,
-  });
+    if (response.data.message) {
+      toast.success(response.data.message);
+    } else {
+      toast.error(response.data.error);
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-export { create, editMap, editMaxPlayers, editStatus };
+export { create, editMap, editMaxPlayers, handleStatus };
 
-const gatherService = { create, editMap, editMaxPlayers };
+const gatherService = { handleStatus, create, editMap, editMaxPlayers };
 export default gatherService;

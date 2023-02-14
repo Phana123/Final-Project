@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import GatherItem from "./GatherItem";
-import { GatherListType } from "../../@types";
+
 import { Button } from "react-bootstrap";
 import { ColorRing } from "react-loader-spinner";
 import { NavLink } from "react-router-dom";
 
 const GatherList = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [lastGathers, setLstGathers] = useState<GatherListType[]>([]);
+  const [lastGathers, setLstGathers] = useState([]);
   const [isButtonClicked, setIsButtonClicked] = useState(false);
 
   const url = `http://localhost:3001/api/gather`;

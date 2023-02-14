@@ -16,6 +16,7 @@ export type AuthContextType = {
   login: (username: string, email: string, token: string) => void;
   logout: () => void;
 };
+// think data structure and actions:
 
 export type ChildProps = {
   children?: React.ReactNode;
