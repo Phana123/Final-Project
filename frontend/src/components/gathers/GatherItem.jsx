@@ -1,10 +1,10 @@
 import { Button } from "react-bootstrap";
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import AuthContext from "../../context/AuthContext";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import { ColorRing } from "react-loader-spinner";
 import { AiFillDelete } from "react-icons/ai";
 import gatherService from "../../services/gather.service";
@@ -12,7 +12,7 @@ import EditGatherModal from "../EditGatherModal";
 import { LocalStorageContext } from "../../context/LocalStorageContext";
 import GatherDetails from "./GatherDetails";
 
-const GatherItem = ({ players, onGoing, _id, map, maxPlayers }) => {
+const GatherItem = ({ teams, players, onGoing, _id, map, maxPlayers }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errMessage, setErrMessage] = useState(undefined);
   const [maxPlayersInput, setMaxPlayersInput] = useState(10);
@@ -23,6 +23,13 @@ const GatherItem = ({ players, onGoing, _id, map, maxPlayers }) => {
   // Local Storage Context HERE->>
   const { adminOptionState, toggleAdminOptionState } =
     useContext(LocalStorageContext);
+
+  // const newArray = teams[0][0];
+  // let newArray2 = [];
+  // for (let key of Object.keys(newArray)) {
+  //   const userName = newArray[key];
+  //   newArray2.push(userName);
+  // }
 
   // Add to queue Function is here ///
   const handleJoinButton = async () => {
@@ -176,6 +183,8 @@ const GatherItem = ({ players, onGoing, _id, map, maxPlayers }) => {
     toggleAdminOptionState();
   };
 
+  console.log(`teams:`, Object.keys(teams).length);
+
   return (
     <>
       {" "}
@@ -222,9 +231,37 @@ const GatherItem = ({ players, onGoing, _id, map, maxPlayers }) => {
           </>
         ))}
         <br />
+        {/* Teams [Team A , Team B] Are HERE --- >>> */}
+        {Object.keys(teams).length !== 0 && (
+          <>
+            <span className="card text-black bg-success">
+              <p className="h4"> Team A:</p> <br />
+              {teams[0][0].TeamA.map((item) => (
+                <>
+                  {" "}
+                  <p className="card bg-dark h5"> {item.userName}</p>{" "}
+                </>
+              ))}
+            </span>{" "}
+            <span className="card  text-black bg-success">
+              <p className="h4"> Team A:</p> <br />
+              {teams[0][0].TeamB.map((item) => (
+                <>
+                  {" "}
+                  <p className="card bg-dark h5"> {item.userName}</p>{" "}
+                </>
+              ))}
+            </span>
+            <br />
+          </>
+        )}
         {/* Map IS here  */}
-        <span className="card bg-dark">
-          Map: {map}{" "}
+        <span className="card mb-1 bg-dark">
+          <p className="h4">
+            {" "}
+            Map:
+            {map}{" "}
+          </p>
           {(isModerator || isAdminState) && adminOptionState === true && (
             <EditGatherModal titleOpen="Edit map">
               <Formik
@@ -247,8 +284,8 @@ const GatherItem = ({ players, onGoing, _id, map, maxPlayers }) => {
           )}{" "}
         </span>
         {/* Max Players IS here  */}
-        <span className="card bg-dark">
-          Max Players: {maxPlayers}{" "}
+        <span className="card bg-dark mt-1 text-center ">
+          <p className="h4"> Max Players: {maxPlayers} </p>
           <p>
             {(isModerator || isAdminState) && adminOptionState === true && (
               <EditGatherModal titleOpen="Edit max players">

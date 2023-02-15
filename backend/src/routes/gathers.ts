@@ -5,7 +5,6 @@ import { Gather } from "../db/models/gather.js";
 import { User } from "../db/models/user.js";
 import { validateToken } from "../middleware/user/validateToken.js";
 import nodeEvents from "../nodeEvents/nodeEvents.js";
-import shouldGameStart from "../../dist/functions/checkIfExistPlayer.js";
 
 const checkIfExistPlayerFunction = (string, arr) => {
   let isTrue = false;

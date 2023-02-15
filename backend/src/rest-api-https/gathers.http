@@ -24,7 +24,7 @@ POST http://localhost:3001/api/gather/startGather/63ec2012c8eb5ac8fc6b1d4f
 
 ### POST Push test players for testing :
 ## host/api/gather/pushTestPlayers/gatherId
-POST http://localhost:3001/api/gather/pushTestPlayers/63ec33e592bfd4c728c00c19
+POST http://localhost:3001/api/gather/pushTestPlayers/63e963a9af9a14425b95551f
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWMxYjIwMTJiYzRmMTg3ZTFlODFlYiIsImlhdCI6MTY3NjQxNzg5MywiZXhwIjoxNjc5MDA5ODkzfQ.9YJDbXDbzvN-H8IRIKiwDgK1kvaQFeUnuWEAB-Jb8tE
 

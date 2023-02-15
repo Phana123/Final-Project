@@ -8,7 +8,6 @@ import { validateToken } from "../middleware/user/validateToken.js";
 import { isManager } from "../middleware/roles/isManager.js";
 import nodeEvents from "../nodeEvents/nodeEvents.js";
 
-// import checkIfExistPlayer from "../../dist/functions/checkIfExistPlayer.js";
 const router = Router();
 const maps = [
   "ascent",
