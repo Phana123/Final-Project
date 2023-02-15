@@ -11,8 +11,8 @@ import { gatherRouter } from "./routes/gathers.js";
 import { roleRouter } from "./routes/roles.js";
 import { adminRouter } from "./routes/admin.js";
 import { moderatorRouter } from "./routes/moderator.js";
-
-
+import { Server } from "socket.io";
+import nodeEvents from "./nodeEvents/nodeEvents.js";
 
 const app = express();
 
@@ -41,9 +41,22 @@ app.use("/api/role", roleRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/moderator", moderatorRouter);
 
-
 //404:
 app.use(notFound);
 
 const PORT = 3001;
-app.listen(PORT, () => console.log(`Server is running on ${PORT}`));
+const server = app.listen(PORT, () =>
+  console.log(`HTTP server running on port ${PORT}`)
+);
+
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
+nodeEvents.on("update", () => {
+  io.emit("update");
+});

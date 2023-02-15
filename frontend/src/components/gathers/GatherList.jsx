@@ -6,6 +6,11 @@ import { Button } from "react-bootstrap";
 import { ColorRing } from "react-loader-spinner";
 import { NavLink } from "react-router-dom";
 
+import { io } from "socket.io-client";
+const socket = io("http://localhost:3001", {
+  withCredentials: true,
+});
+
 const GatherList = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [lastGathers, setLstGathers] = useState([]);
@@ -26,6 +31,12 @@ const GatherList = () => {
 
   useEffect(() => {
     getAllGathers();
+    socket.on("update", () => {
+      getAllGathers();
+    });
+    return () => {
+      socket.off("update");
+    };
   }, []);
 
   return (

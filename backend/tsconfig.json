@@ -3,7 +3,9 @@
     "target": "es2016",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "outDir": "dist"
+    "outDir": "dist",
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*"
+  ]
 }

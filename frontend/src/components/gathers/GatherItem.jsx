@@ -24,19 +24,6 @@ const GatherItem = ({ players, onGoing, _id, map, maxPlayers }) => {
   const { adminOptionState, toggleAdminOptionState } =
     useContext(LocalStorageContext);
 
-  if (playersArray.length >= maxPlayers) {
-    let newArr = players
-      .map((value) => ({ value, sort: Math.random() }))
-      .sort((a, b) => a.sort - b.sort)
-      .map(({ value }) => value);
-    console.log(newArr);
-    let splitIndex = Math.ceil(newArr.length / 2);
-    const teamA = newArr.slice(0, splitIndex);
-    const teamB = newArr.slice(splitIndex);
-    console.log(`teamA`, teamA, "teamB", teamB);
-    // gatherService.startGather(_id,)
-  }
-
   // Add to queue Function is here ///
   const handleJoinButton = async () => {
     const url = `http://localhost:3001/api/gather/add`;
@@ -92,10 +79,10 @@ const GatherItem = ({ players, onGoing, _id, map, maxPlayers }) => {
   };
 
   // Delete player from queue function // Only for Mod/Admin
-  const handleDeletePlayerButton = async () => {
+  const handleDeletePlayerButton = async (userId, id) => {
     try {
       const url = `http://localhost:3001/api/admin/gather/deletePlayerFromQueue`;
-      const response = await axios(`${url}/${_id}`, {
+      const response = await axios(`${url}/${id}/${userId}`, {
         method: "DELETE",
         headers: { Authorization: localStorage.getItem("token") },
       });
@@ -227,7 +214,7 @@ const GatherItem = ({ players, onGoing, _id, map, maxPlayers }) => {
                   <AiFillDelete
                     size={27}
                     style={{ color: "white" }}
-                    onClick={handleDeletePlayerButton}
+                    onClick={() => handleDeletePlayerButton(item.userId, _id)}
                   />
                 </span>
               )}

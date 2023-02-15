@@ -50,7 +50,7 @@ DELETE http://localhost:3001/api/auth/deleteAll
 ###POST to Create Gather :
 POST http://localhost:3001/api/admin/gather/create
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjM3NzM5MiwiZXhwIjoxNjc4OTY5MzkyfQ.LEhBmXwq_HKoFZDXi0xjvgRUvHVb4UCPW0MI19Hgjt0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWMxYjIwMTJiYzRmMTg3ZTFlODFlYiIsImlhdCI6MTY3NjQxODIwMSwiZXhwIjoxNjc5MDEwMjAxfQ.A_VnRcqxjHVFavqNfbqBMSZl7xI0JnRdcVvOIuiTwnk
 
 {
     "map":"Ascent",

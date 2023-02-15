@@ -19,8 +19,8 @@ const create = async (map, maxPlayers) => {
   }
 };
 
-const startGather = async (id, teamA, teamB) => {
-  return axios.post(baseUrl + `/startGather/${id}`, { teamA, teamB });
+const startGather = async (id) => {
+  return axios.post(`http://localhost:3001/api/gather/startGather/${id}`);
 };
 
 const editMaxPlayers = async (maxPlayers, gatherId) => {

@@ -9,7 +9,7 @@ const isManager: RequestHandler = async (req, res, next) => {
     const roles = await Role.find({ _id: { $in: user.roles } });
 
     for (let role of roles) {
-      if (role.name === "moderator" || "admin" ) {
+      if (role.name === "moderator" && "admin" ) {
         return next();
       }
     }

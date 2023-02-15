@@ -1,26 +1,25 @@
-import { Router, json } from "express";
+import { Router } from "express";
 import _ from "underscore";
 import { Gather } from "../db/models/gather.js";
-import { User } from "../db/models/user.js";
 import { validateCreateGather } from "../middleware/gather/verifyCreateGatherBody.js";
 import isMapValid from "../functions/isMapValid.js";
-import { isAdmin } from "../middleware/roles/isAdmin.js";
 import { isModerator } from "../middleware/roles/isModerator.js";
 import { validateToken } from "../middleware/user/validateToken.js";
 import { isManager } from "../middleware/roles/isManager.js";
+import nodeEvents from "../nodeEvents/nodeEvents.js";
 
 // import checkIfExistPlayer from "../../dist/functions/checkIfExistPlayer.js";
 const router = Router();
 const maps = [
-  "Ascent",
-  "Split",
-  "Haven",
-  "Bind",
-  "Icebox",
-  "Breeze",
-  "Fracture",
-  "Pearl",
-  "Lotus",
+  "ascent",
+  "split",
+  "haven",
+  "bind",
+  "icebox",
+  "breeze",
+  "fracture",
+  "pearl",
+  "lotus",
 ];
 
 //api/admin/create
@@ -31,12 +30,12 @@ router.post(
   isManager,
   async (req, res) => {
     const body = _.pick(req.body, "map", "maxPlayers");
-    let MapValidTest: boolean = isMapValid(body.map, maps);
+    let MapValidTest: boolean = isMapValid(body.map.toLowerCase(), maps);
 
     const newDate = new Date();
     //before saving the gather:
     const gather = new Gather({
-      map: body.map,
+      map: body.map.toLowerCase(),
       maxPlayers: body.maxPlayers,
       date: newDate,
       onGoing: true,
@@ -63,33 +62,33 @@ router.post(
           "players",
           "teams"
         );
-        return res.json({
+        res.json({
           message: "Gather created!",
           ...gatherDetails,
         });
+        return nodeEvents.emit("update");
       }
     } catch (e) {
       return res.status(500).json({ message: "Server DB Error", error: e });
     }
   }
 );
+
 //api/admin/deletePlayerFromQueue
 router.delete(
-  "/gather/deletePlayerFromQueue/:gatherId",
-  validateToken,
-  isModerator,
+  "/gather/deletePlayerFromQueue/:gatherId/:userId",
   async (req, res) => {
     try {
-      const userId = await req.userId;
-      const gatherId = await req.params.gatherId;
-      const user = await User.findOne({ _id: userId });
-
+      const userId = req.params.userId;
+      const gatherId = req.params.gatherId;
+      console.log(gatherId, userId);
       const gather = await Gather.updateOne(
         { _id: gatherId },
         { $pull: { players: { userId: userId } } }
       );
 
-      return res.json({ message: `Success!` });
+      res.json({ message: `Success!` });
+      return nodeEvents.emit("update");
     } catch (e) {
       return res.status(500).json({ message: "Server DB Error", error: e });
     }
@@ -104,15 +103,16 @@ router.post(
     try {
       const body = _.pick(req.body, "map");
 
-      const gatherId = await req.params.gatherId;
-      let checkMapValid = isMapValid(body.map, maps);
+      const gatherId = req.params.gatherId;
+      let checkMapValid = isMapValid(body.map.toLowerCase(), maps);
       if (checkMapValid === true) {
         const gather = await Gather.updateOne(
           { _id: gatherId },
-          { map: body.map }
+          { map: body.map.toLowerCase() }
         );
 
-        return res.json({ message: `Success!` });
+        res.json({ message: `Success!` });
+        return nodeEvents.emit("update");
       }
     } catch (e) {
       return res.status(500).json({ message: "Server DB Error", error: e });
@@ -128,14 +128,15 @@ router.post(
     try {
       const body = _.pick(req.body, "maxPlayers");
 
-      const gatherId = await req.params.gatherId;
+      const gatherId = req.params.gatherId;
 
       const gather = await Gather.updateOne(
         { _id: gatherId },
         { maxPlayers: body.maxPlayers }
       );
 
-      return res.json({ message: `Success!` });
+      res.json({ message: `Success!` });
+      return nodeEvents.emit("update");
     } catch (e) {
       return res.status(500).json({ message: "Server DB Error", error: e });
     }
@@ -150,14 +151,15 @@ router.post(
     try {
       const body = _.pick(req.body, "status");
 
-      const gatherId = await req.params.gatherId;
+      const gatherId = req.params.gatherId;
 
       const gather = await Gather.updateOne(
         { _id: gatherId },
         { onGoing: body.status }
       );
 
-      return res.json({ message: `Success!` });
+      res.json({ message: `Success!` });
+      return nodeEvents.emit("update");
     } catch (e) {
       return res.status(500).json({ message: "Server DB Error", error: e });
     }
