@@ -17,6 +17,7 @@ const GatherItem = ({ teams, players, onGoing, _id, map, maxPlayers }) => {
   const [errMessage, setErrMessage] = useState(undefined);
   const [maxPlayersInput, setMaxPlayersInput] = useState(10);
   const [mapInput, setMapInput] = useState("");
+  const [scorePicture, setScorePicture] = useState(null);
   const [playersArray, setPlayersArray] = useState(players);
   const formInitialValues = [10, "Ascent"];
   const { isAdminState, isModerator } = useContext(AuthContext);
@@ -24,12 +25,13 @@ const GatherItem = ({ teams, players, onGoing, _id, map, maxPlayers }) => {
   const { adminOptionState, toggleAdminOptionState } =
     useContext(LocalStorageContext);
 
-  // const newArray = teams[0][0];
-  // let newArray2 = [];
-  // for (let key of Object.keys(newArray)) {
-  //   const userName = newArray[key];
-  //   newArray2.push(userName);
-  // }
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await axios.post("/upload", formData);
+    console.log(response.data);
+  };
 
   // Add to queue Function is here ///
   const handleJoinButton = async () => {
@@ -253,6 +255,13 @@ const GatherItem = ({ teams, players, onGoing, _id, map, maxPlayers }) => {
               ))}
             </span>
             <br />
+            <form onSubmit="{handleFormSubmit}">
+              <input
+                type="file"
+                onChange={(e) => setScorePicture(e.target.files[0])}
+              />
+              <button type="submit">Submit</button>
+            </form>
           </>
         )}
         {/* Map IS here  */}

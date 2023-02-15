@@ -49,3 +49,13 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRm
 {
     "status":false
 }
+
+###POST Admin when gather is finished :
+## host/api/admin/finishGather/gatherid
+POST http://localhost:3001/api/admin/gather/updateStatus/63ed0158172282d284bd15b4
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWQwMTFkMTcyMjgyZDI4NGJkMTVhZCIsImlhdCI6MTY3NjQ3NjczOCwiZXhwIjoxNjc5MDY4NzM4fQ.bzvU9zJREfGtwg3WJEUQp_rjMyu_FPhD5MXmcURzEsY
+
+{
+    "status":false
+}

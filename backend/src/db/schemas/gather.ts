@@ -1,4 +1,3 @@
-
 import { Schema } from "mongoose";
 
 const gatherSchema = new Schema({
@@ -8,6 +7,7 @@ const gatherSchema = new Schema({
   onGoing: Boolean,
   players: Array,
   teams: Array,
+  finished: Boolean,
 });
 
 export { gatherSchema };

@@ -30,43 +30,8 @@ const maps = [
   "Lotus",
 ];
 
-// // POST Start gather
-// router.post("/startGather/:gatherId", async (req, res) => {
-//   function shuffleArray(array) {
-//     for (let i = array.length - 1; i > 0; i--) {
-//       const j = Math.floor(Math.random() * (i + 1));
-//       [array[i], array[j]] = [array[j], array[i]];
-//     }
-//     return array;
-//   }
 
-//   try {
-//     const gatherId = req.params.gatherId;
 
-//     const gather = await Gather.findOne({ _id: gatherId });
-
-//     const shuffeledArray = await shuffleArray(gather.players);
-
-//     const middleIndex = Math.ceil(shuffeledArray.length / 2);
-
-//     const teamA = await shuffeledArray.splice(0, middleIndex);
-//     const teamB = await shuffeledArray.splice(-middleIndex);
-//     const teams = [{ TeamA: teamA, TeamB: teamB }];
-
-//     const updatedGather = await Gather.findOneAndUpdate(
-//       { _id: gatherId },
-//       { $push: { teams: teams } }
-//     );
-//     console.log(updatedGather);
-
-//     res.json({ message: `Gather started!`, gather: gather });
-
-//     return nodeEvents.emit("update");
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// });
-// POST Push some random players to teams for testing
 router.post("/pushTestPlayers/:gatherId", async (req, res) => {
   try {
     const gatherId = req.params.gatherId;

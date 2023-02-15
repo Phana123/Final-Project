@@ -40,6 +40,7 @@ router.post(
       onGoing: true,
       players: [],
       teams: [],
+      finished: false,
     });
 
     try {
@@ -164,5 +165,19 @@ router.post(
     }
   }
 );
+
+//When gather is finished
+router.post("/finishGather/:gatherId", async (req, res) => {
+  try {
+    const gatherId = req.params.gatherId;
+    const body = _.pick(req.body, "matchPicture");
+    const gather = await Gather.findOneAndUpdate(
+      { _id: gatherId },
+      { finished: true }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 export { router as adminRouter };
