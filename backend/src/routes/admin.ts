@@ -7,6 +7,18 @@ import { isModerator } from "../middleware/roles/isModerator.js";
 import { validateToken } from "../middleware/user/validateToken.js";
 import { isManager } from "../middleware/roles/isManager.js";
 import nodeEvents from "../nodeEvents/nodeEvents.js";
+import multer from "multer";
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 const router = Router();
 const maps = [
@@ -167,17 +179,28 @@ router.post(
 );
 
 //When gather is finished
-router.post("/finishGather/:gatherId", async (req, res) => {
-  try {
-    const gatherId = req.params.gatherId;
-    const body = _.pick(req.body, "matchPicture");
-    const gather = await Gather.findOneAndUpdate(
-      { _id: gatherId },
-      { finished: true }
-    );
-  } catch (error) {
-    console.log(error);
-  }
+
+router.post("/upload", upload.single("image"), (req, res) => {
+  console.log(req.file);
+  res.send("Image uploaded successfully!");
 });
+
+// router.post(
+//   "/gather/finishGather/:gatherId",
+//   upload.single("image"),
+//   async (req, res) => {
+//     try {
+//       console.log(req.file);
+//       const gatherId = req.params.gatherId;
+//       const body = _.pick(req.body, "matchPicture");
+//       const gather = await Gather.findOneAndUpdate(
+//         { _id: gatherId },
+//         { finished: true }
+//       );
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+// );
 
 export { router as adminRouter };
