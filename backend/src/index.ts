@@ -16,6 +16,7 @@ import nodeEvents from "./nodeEvents/nodeEvents.js";
 
 const app = express();
 
+
 //once app starts: connect to db: and fill the roles collection
 connect().catch((e) => {
   console.log(e);

@@ -8,6 +8,7 @@ const gatherSchema = new Schema({
   players: Array,
   teams: Array,
   finished: Boolean,
+  score: Array
 });
 
 export { gatherSchema };

@@ -42,53 +42,10 @@ router.delete(
   }
 );
 
-// //api/gather/edit
-// router.post(
-//   "/gather/edit/:id",
-//   verifyEditGather,
-//   validateToken,
-//   isModerator,
-//   async (req, res) => {
-//     const body = _.pick(req.body, "map", "maxPlayers", "status", "players");
-//     const id = req.params.id;
-//     let MapValidTest: boolean = isMapValid(body.map, maps);
-//     async function updateGather() {
-//       const filter = { _id: id };
-//       const update = {
-//         map: body.map,
-//         maxPlayers: body.maxPlayers,
-//         status: body.status,
-//         players: body.players,
-//       };
-//       const options = { new: true };
-//       // map, maxplayers, players, status;
-//       const result = await Gather.findOneAndUpdate(filter, update, options);
-//       await result.save();
-//     }
-
-//     try {
-//       if (!MapValidTest) {
-//         res.json({
-//           message: "Invalid map! you need to choose one of real map",
-//         });
-//       } else {
-//         //for each gather -> save the role id of gather
-
-//         updateGather();
-//         return res.json({
-//           message: "Gather edited!",
-//         });
-//       }
-//     } catch (e) {
-//       return res.status(500).json({ message: "Server DB Error", error: e });
-//     }
-//   }
-// );
-
 router.delete(
   "/gather/deleteAll",
   validateToken,
-  isModerator,
+  isManager,
   async (req, res) => {
     try {
       await Gather.deleteMany({});
@@ -108,5 +65,32 @@ const checkIfExistPlayer = (string, arr) => {
   });
   return isTrue;
 };
+
+router.post("/gather/pushTestPlayers/:gatherId",validateToken,isManager, async (req, res) => {
+  try {
+    const gatherId = req.params.gatherId;
+    const playersArray = [];
+    req.body?.body.forEach((value) => {
+      playersArray.push(value);
+    });
+    Gather.findByIdAndUpdate(
+      gatherId,
+      { $push: { players: { $each: playersArray } } },
+      (err, doc) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(doc);
+        }
+      }
+    );
+
+    res.json({ message: `Gather started!` });
+    return nodeEvents.emit("update");
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
 
 export { router as moderatorRouter };

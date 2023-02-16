@@ -30,34 +30,6 @@ const maps = [
   "Lotus",
 ];
 
-
-
-router.post("/pushTestPlayers/:gatherId", async (req, res) => {
-  try {
-    const gatherId = req.params.gatherId;
-    const playersArray = [];
-    req.body?.body.forEach((value) => {
-      playersArray.push(value);
-    });
-    Gather.findByIdAndUpdate(
-      gatherId,
-      { $push: { players: { $each: playersArray } } },
-      (err, doc) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log(doc);
-        }
-      }
-    );
-
-    res.json({ message: `Gather started!` });
-    return nodeEvents.emit("update");
-  } catch (error) {
-    console.log(error.message);
-  }
-});
-
 // GET all gathers
 router.get("/", async (req, res) => {
   try {
@@ -92,21 +64,21 @@ const shouldGameStart = async (id) => {
   }
 
   const gather = await Gather.findOne({ _id: id });
-  console.log(gather);
   if (gather.players.length === gather.maxPlayers) {
     try {
       const shuffeledArray = await shuffleArray(gather.players);
-      console.log(`shuffeledArray`, shuffeledArray);
       const middleIndex = Math.ceil(shuffeledArray.length / 2);
       const teamA = await shuffeledArray.splice(0, middleIndex);
       const teamB = await shuffeledArray.splice(-middleIndex);
       const teams = [{ TeamA: teamA, TeamB: teamB }];
-      console.log(teams);
       const updatedGather = await Gather.findOneAndUpdate(
         { _id: id },
         { $push: { teams: teams } }
       );
-      console.log(updatedGather);
+      const updateOnGoing = await Gather.findByIdAndUpdate(
+        { _id: id },
+        { onGoing: true }
+      );
       return nodeEvents.emit("update");
     } catch (error) {
       console.log(error);

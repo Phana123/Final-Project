@@ -1,4 +1,64 @@
 
+### POST insertScore :
+POST http://localhost:3001/api/admin/gather/insertScore/63ee2ad573a9bb747a2ab292
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI3NTgxNywiZXhwIjoxNjc4ODY3ODE3fQ.W0Gc1co9uEFMclmyCauLZGWkcLyQSYFAGnD83VfFcx0
+
+[
+{"userId": "63edab9039e11579790e658a",
+"kill": "20","death":"10","assist": "5"},
+{"userId": "63ee351d635aa0da8d617d9c",
+"kill": "20","death":"10","assist": "5"}
+]
+
+
+
+###GET ALL Gather :
+GET http://localhost:3001/api/gather
+
+
+###GET Single Gather :
+GET http://localhost:3001/api/gather/63eb140ce87ee161d0805323
+
+
+### POST Add to Gather :
+## host/api/gather/add/gatherId
+POST http://localhost:3001/api/gather/add/63ea2578c2af8bd9e9913907
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI5MjQ0NSwiZXhwIjoxNjc4ODg0NDQ1fQ.QApYG_NK22GRLjWAwh8Vq0KUMWz4-X3Wpyw7VRAs_aA
+
+### POST Leave the Gather :
+## host/api/gather/leaveQueue/userId
+DELETE http://localhost:3001/api/gather/leaveQueue/63ea2578c2af8bd9e9913907
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI5MjQ0NSwiZXhwIjoxNjc4ODg0NDQ1fQ.QApYG_NK22GRLjWAwh8Vq0KUMWz4-X3Wpyw7VRAs_aA
+
+###POST when gather is started:
+POST http://localhost:3001/api/gather/startGather/63ec2012c8eb5ac8fc6b1d4f
+
+###POST to add user:
+POST http://localhost:3001/api/auth/signup
+Content-Type: application/json
+
+{
+    "username":"matan", 
+    "email":"daneles2711@gmail.com",
+    "password":"123123ssSS@@"
+}
+
+
+###POST to sign in user:
+POST http://localhost:3001/api/auth/signin
+Content-Type: application/json
+
+{
+    "email":"inviteserv@gmail.com",
+    "password":"123123ssSS@@"
+}
+
+###GET All Users :
+GET http://localhost:3001/api/auth/
+
+
+
 ###
 GET http://localhost:3001/api/books/all
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTI0ZThiY2M4MmU5YjRiOWQ4ODhhOSIsImlhdCI6MTY3NTc3NTcyOCwiZXhwIjoxNjc4MzY3NzI4fQ.QLMLLY1_upVsULKO6FYnVCnHWqlNElKzPfxtU88j5x0
@@ -50,18 +110,18 @@ DELETE http://localhost:3001/api/auth/deleteAll
 ###POST to Create Gather :
 POST http://localhost:3001/api/admin/gather/create
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWQwMTFkMTcyMjgyZDI4NGJkMTVhZCIsImlhdCI6MTY3NjQ3NjczOCwiZXhwIjoxNjc5MDY4NzM4fQ.bzvU9zJREfGtwg3WJEUQp_rjMyu_FPhD5MXmcURzEsY
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWRhYjkwMzllMTE1Nzk3OTBlNjU4YSIsImlhdCI6MTY3NjUyMTE1NCwiZXhwIjoxNjc5MTEzMTU0fQ.VQO7kAn7xvVaZzXT8a_2w26mblbWWFVs-3RpybCphqc
 
 {
     "map":"Ascent",
-    "maxPlayers":"5",
+    "maxPlayers":"10",
     "date":"21-05-1995"
 }
 
 
 ###DELETE ALL Gather :
 DELETE http://localhost:3001/api/moderator/gather/deleteAll
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI5MzcwNywiZXhwIjoxNjc4ODg1NzA3fQ.MMu4eWEpgsC71Rh6AkglkGbPK9TNBwQQbsB55cdbZ98
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWRhYjkwMzllMTE1Nzk3OTBlNjU4YSIsImlhdCI6MTY3NjUyMTE1NCwiZXhwIjoxNjc5MTEzMTU0fQ.VQO7kAn7xvVaZzXT8a_2w26mblbWWFVs-3RpybCphqc
 
 ###DELETE Single Gather :
 DELETE http://localhost:3001/api/gather/delete/63e94c5d47196f2273f5de07
@@ -97,3 +157,26 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTk2YWJkNjczMDk4
 POST http://localhost:3001/api/player/delete/63ea2578c2af8bd9e9913907/63e9d4d83bc24fc5d36ed50a
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI4ODI2OSwiZXhwIjoxNjc4ODgwMjY5fQ.dsIBdlYWn-CZB7R7i7RuVJ_aoMpDMbN3SwLau0hGCTo
 
+
+
+### POST Push test players for testing :
+## host/api/gather/pushTestPlayers/gatherId
+POST http://localhost:3001/api/moderator/gather/pushTestPlayers/63eddba3852611403ff9e331
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWRhYjkwMzllMTE1Nzk3OTBlNjU4YSIsImlhdCI6MTY3NjUyMzAzNCwiZXhwIjoxNjc5MTE1MDM0fQ.OCvIK40zV8TpVMmDmQJIDzzxhj2kQy-DNhPtIubGpsA
+
+{
+ "body":
+[
+   {"userId": "sadasdasdas534das56y6hdas","userName":"Bang0"},
+   {"userId": "sadasdasdasdus114erIdasdas","userName":"Bulbul"},
+   {"userId": "sadasdas634534dasd2asxczxzsdas","userName":"Mpabe"},
+   {"userId": "sadasda11s534543dasduserIdasdas","userName":"Ronaldo"},
+   {"userId": "sadasdasda3434634sd11asdas","userName":"Jacky Chan"},
+   {"userId": "sadasdauserIvcbcvd2sdasdasdas","userName":"Hole Nefesh"},
+   {"userId": "sadasdasdaete4353ruserIdsdasdas","userName":"Benzema"},
+   {"userId": "sadasdasd44askkdasdas","userName":"Caravaliho"},
+   {"userId": "sadasdas11fghfdagfmtysdasdas","userName":"Bulbul2"},
+   {"userId": "sadasdasdcver444asdasdas","userName":"Homo"}
+   ]
+}

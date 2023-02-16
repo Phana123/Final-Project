@@ -14,12 +14,17 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthContextProvider } from "./context/AuthContext";
 import "bootstrap/dist/css/bootstrap.css";
 import { LocalStorageProvider } from "./context/LocalStorageContext";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-bootstrap";
+
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
+   <ToastContainer/>
     <BrowserRouter>
+    
       <LocalStorageProvider>
         <AuthContextProvider>
           <DarkModeContextProvider>

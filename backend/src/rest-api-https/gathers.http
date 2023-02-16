@@ -22,27 +22,6 @@ POST http://localhost:3001/api/gather/startGather/63ec2012c8eb5ac8fc6b1d4f
 
 
 
-### POST Push test players for testing :
-## host/api/gather/pushTestPlayers/gatherId
-POST http://localhost:3001/api/gather/pushTestPlayers/63ed0158172282d284bd15b4
-Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWQwMTFkMTcyMjgyZDI4NGJkMTVhZCIsImlhdCI6MTY3NjQ3NjczOCwiZXhwIjoxNjc5MDY4NzM4fQ.bzvU9zJREfGtwg3WJEUQp_rjMyu_FPhD5MXmcURzEsY
-
-{
- "body":
-[
-   {"userId": "sadasdasdasdasdas","userName":"Bang0"},
-   {"userId": "sadasdasdasduserIdasdas","userName":"Bulbul"},
-   {"userId": "sadasdasdasd2asdas","userName":"Mpabe"},
-   {"userId": "sadasda11sdasduserIdasdas","userName":"Ronaldo"},
-   {"userId": "sadasdasdasd11asdas","userName":"Jacky Chan"},
-   {"userId": "sadasdauserId2sdasdasdas","userName":"Hole Nefesh"},
-   {"userId": "sadasdasdauserIdsdasdas","userName":"Benzema"},
-   {"userId": "sadasdasd44asdasdas","userName":"Caravaliho"},
-   {"userId": "sadasdas11dasdasdas","userName":"Bulbul2"},
-   {"userId": "sadasdasd444asdasdas","userName":"Homo"}
-   ]
-}
 
 
 

@@ -1,0 +1,23 @@
+/* Custom styles for toast container */
+.Toastify__toast-container {
+  width: 400px;
+  z-index: 9999;
+}
+
+/* Custom styles for toast message */
+.Toastify__toast--success {
+  background-color: #2ecc71;
+}
+.Toastify__toast--error {
+  background-color: #e74c3c;
+}
+.Toastify__toast--warning {
+  background-color: #f39c12;
+}
+.Toastify__toast--info {
+  background-color: #3498db;
+}
+.Toastify__toast-body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+}

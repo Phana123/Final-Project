@@ -5,22 +5,26 @@ import { validateCreateGather } from "../middleware/gather/verifyCreateGatherBod
 import isMapValid from "../functions/isMapValid.js";
 import { isModerator } from "../middleware/roles/isModerator.js";
 import { validateToken } from "../middleware/user/validateToken.js";
-import { isManager } from "../middleware/roles/isManager.js";
 import nodeEvents from "../nodeEvents/nodeEvents.js";
 import multer from "multer";
+import { isAdmin } from "../middleware/roles/isAdmin.js";
+import { isManager } from "../middleware/roles/isManager.js";
+import { User } from "../db/models/user.js";
 
+// Create a multer object with some options
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
 const upload = multer({ storage: storage });
 
 const router = Router();
+
 const maps = [
   "ascent",
   "split",
@@ -38,7 +42,7 @@ router.post(
   "/gather/create",
   validateCreateGather,
   validateToken,
-  isManager,
+  isAdmin,
   async (req, res) => {
     const body = _.pick(req.body, "map", "maxPlayers");
     let MapValidTest: boolean = isMapValid(body.map.toLowerCase(), maps);
@@ -49,7 +53,7 @@ router.post(
       map: body.map.toLowerCase(),
       maxPlayers: body.maxPlayers,
       date: newDate,
-      onGoing: true,
+      onGoing: false,
       players: [],
       teams: [],
       finished: false,
@@ -89,6 +93,8 @@ router.post(
 //api/admin/deletePlayerFromQueue
 router.delete(
   "/gather/deletePlayerFromQueue/:gatherId/:userId",
+  validateToken,
+  isAdmin,
   async (req, res) => {
     try {
       const userId = req.params.userId;
@@ -179,28 +185,48 @@ router.post(
 );
 
 //When gather is finished
+router.post(
+  "/gather/finishGather/:gatherId",
+  upload.single("image"),
+  validateToken,
+  isAdmin,
+  async (req, res, next) => {
+    try {
+      const gatherId = req.params.gatherId;
+      const gather = await Gather.findOneAndUpdate(
+        { _id: gatherId },
+        { finished: true }
+      );
+    } catch (error) {
+      console.log(`something wrong here`);
+    }
+  }
+);
 
-router.post("/upload", upload.single("image"), (req, res) => {
-  console.log(req.file);
-  res.send("Image uploaded successfully!");
-});
+//When admin update score after finish
+router.post(
+  //moderator/insertScore/gatherId
+  "/gather/insertScore/:gatherId/",
+  validateToken,
 
-// router.post(
-//   "/gather/finishGather/:gatherId",
-//   upload.single("image"),
-//   async (req, res) => {
-//     try {
-//       console.log(req.file);
-//       const gatherId = req.params.gatherId;
-//       const body = _.pick(req.body, "matchPicture");
-//       const gather = await Gather.findOneAndUpdate(
-//         { _id: gatherId },
-//         { finished: true }
-//       );
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
-// );
+  async (req, res, next) => {
+    try {
+      const usersArray = [];
+      for (let user of req.body) {
+        usersArray.push(user);
+        let scoreArray = [];
+        const foundUser = await User.findOne({ _id: user.userId });
+        scoreArray.push(foundUser.score);
+        for (let [key, value] of Object.entries(scoreArray)) {
+          console.log(`${key}: ${value}`);
+        }
+      }
+
+      // console.log(usersArray[0].assist)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 
 export { router as adminRouter };

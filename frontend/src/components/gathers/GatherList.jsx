@@ -13,14 +13,14 @@ const socket = io("http://localhost:3001", {
 
 const GatherList = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [lastGathers, setLstGathers] = useState([]);
+  const [gatherList, setGatherList] = useState([]);
   const [isButtonClicked, setIsButtonClicked] = useState(false);
 
   const url = `http://localhost:3001/api/gather`;
   const getAllGathers = async () => {
     try {
       const data = await axios(url);
-      setLstGathers(data.data);
+      setGatherList(data.data);
     } catch (error) {
       console.log(error);
     }
@@ -70,7 +70,7 @@ const GatherList = () => {
           </NavLink>
         </div>
       </div>
-      {lastGathers.map((item) => (
+      {gatherList.map((item) => (
         <>
           <GatherItem {...item} key={item._id} />
         </>

@@ -1,9 +1,8 @@
 import { Button } from "react-bootstrap";
 
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/AuthContext";
-import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { Form, Formik } from "formik";
 import { ColorRing } from "react-loader-spinner";
 import { AiFillDelete } from "react-icons/ai";
@@ -11,98 +10,69 @@ import gatherService from "../../services/gather.service";
 import EditGatherModal from "../EditGatherModal";
 import { LocalStorageContext } from "../../context/LocalStorageContext";
 import GatherDetails from "./GatherDetails";
+import "../../styles/toast-container.css";
+import { isJoinedFunction } from "../../functions/isJoinedFunction";
 
-const GatherItem = ({ teams, players, onGoing, _id, map, maxPlayers }) => {
+const GatherItem = ({
+  finished,
+  teams,
+  players,
+  onGoing,
+  _id,
+  map,
+  maxPlayers,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errMessage, setErrMessage] = useState(undefined);
   const [maxPlayersInput, setMaxPlayersInput] = useState(10);
   const [mapInput, setMapInput] = useState("");
-  const [scorePicture, setScorePicture] = useState(null);
+
   const [playersArray, setPlayersArray] = useState(players);
+  const [isJoined, setIsJoined] = useState();
+  const [isStarted, setIsStarted] = useState(onGoing);
+  const [isFinished, setIsFinished] = useState(finished);
+  const [matchScoreImageUploadFile, setMatchScoreImageUploadFile] =
+    useState(null);
   const formInitialValues = [10, "Ascent"];
+
   const { isAdminState, isModerator } = useContext(AuthContext);
+
   // Local Storage Context HERE->>
   const { adminOptionState, toggleAdminOptionState } =
     useContext(LocalStorageContext);
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-    const formData = new FormData();
-    formData.append("file", file);
-    const response = await axios.post("/upload", formData);
-    console.log(response.data);
+  useEffect(() => {
+    isJoinedFunction(setIsJoined, playersArray);
+  }, []);
+  useEffect(() => {
+    setIsStarted((state) => !state);
+  }, [onGoing]);
+
+  const handleSubmitMatchPicture = (event) => {
+    gatherService.finishGather(event, _id, matchScoreImageUploadFile);
+    setIsFinished((state) => !state);
   };
 
   // Add to queue Function is here ///
   const handleJoinButton = async () => {
-    const url = `http://localhost:3001/api/gather/add`;
-    try {
-      const response = await axios(`${url}/${_id}`, {
-        method: "POST",
-        headers: { Authorization: localStorage.getItem("token") },
-      });
-      if (response.data.message) {
-        toast.success(response.data.message);
-      } else {
-        toast.error(response.data.error);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    gatherService.join(_id);
+    setIsJoined((state) => !state);
   };
 
   // Leave queue function is here //
   const handleLeaveButton = async () => {
-    try {
-      const url = `http://localhost:3001/api/gather/leavequeue`;
-      const response = await axios(`${url}/${_id}`, {
-        method: "DELETE",
-        headers: { Authorization: localStorage.getItem("token") },
-      });
-      if (response.data.message) {
-        toast.success(response.data.message);
-      } else {
-        toast.error(response.data.error);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    gatherService.leaveQueue(_id);
+    setIsJoined((state) => !state);
   };
 
   // Delete single gather is here // -- Only For Mod/Admin
-  const handleDeleteButton = async () => {
-    try {
-      const url = `http://localhost:3001/api/moderator/gather/delete`;
-      const response = await axios(`${url}/${_id}`, {
-        method: "DELETE",
-        headers: { Authorization: localStorage.getItem("token") },
-      });
-      if (response.data.message) {
-        toast.success(response.data.message);
-      } else {
-        toast.error(response.data.error);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const handleDeleteGather = async () => {
+    gatherService.deleteGather(_id);
   };
 
   // Delete player from queue function // Only for Mod/Admin
   const handleDeletePlayerButton = async (userId, id) => {
-    try {
-      const url = `http://localhost:3001/api/admin/gather/deletePlayerFromQueue`;
-      const response = await axios(`${url}/${id}/${userId}`, {
-        method: "DELETE",
-        headers: { Authorization: localStorage.getItem("token") },
-      });
-      if (response.data.message) {
-        toast.success(response.data.message);
-      } else {
-        toast.error(response.data.error);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    gatherService.removePlayerFromQueue(_id, userId);
   };
 
   // Edit Max Players function is here // only for mod/admin
@@ -111,12 +81,8 @@ const GatherItem = ({ teams, players, onGoing, _id, map, maxPlayers }) => {
 
     gatherService
       .editMaxPlayers(maxPlayersInput, _id)
-      .then((res) => {
-        console.log(res);
-      })
+      .then((res) => {})
       .catch((e) => {
-        console.log(e);
-        alert(e); //swal //modal
         setErrMessage(JSON.stringify(e.response.data));
       })
       .finally(() => {
@@ -149,12 +115,8 @@ const GatherItem = ({ teams, players, onGoing, _id, map, maxPlayers }) => {
 
     gatherService
       .handleStatus(false, _id)
-      .then((res) => {
-        console.log(res);
-      })
+      .then((res) => {})
       .catch((e) => {
-        console.log(e);
-        alert(e); //swal //modal
         setErrMessage(JSON.stringify(e.response.data));
       })
       .finally(() => {
@@ -167,12 +129,8 @@ const GatherItem = ({ teams, players, onGoing, _id, map, maxPlayers }) => {
 
     gatherService
       .handleStatus(true, _id)
-      .then((res) => {
-        console.log(res);
-      })
+      .then((res) => {})
       .catch((e) => {
-        console.log(e);
-        alert(e); //swal //modal
         setErrMessage(JSON.stringify(e.response.data));
       })
       .finally(() => {
@@ -184,8 +142,6 @@ const GatherItem = ({ teams, players, onGoing, _id, map, maxPlayers }) => {
   const handleHideAdminOptions = () => {
     toggleAdminOptionState();
   };
-
-  console.log(`teams:`, Object.keys(teams).length);
 
   return (
     <>
@@ -215,25 +171,39 @@ const GatherItem = ({ teams, players, onGoing, _id, map, maxPlayers }) => {
           </Button>
         )}
         {/* Players list Here */}
-        Players:{" "}
-        {players?.map((item) => (
+        {isStarted === false && isFinished === false && (
           <>
-            <span className="card bg-dark" key={item.userId}>
-              {item.userName}
-              {(isAdminState || isModerator) && adminOptionState === true && (
-                <span>
-                  <AiFillDelete
-                    size={27}
-                    style={{ color: "white" }}
-                    onClick={() => handleDeletePlayerButton(item.userId, _id)}
-                  />
+            Players: {players.length}/{maxPlayers}{" "}
+            {players?.map((item) => (
+              <>
+                <span className="card bg-dark" key={item.userId}>
+                <p className="h6">  {item.userName}</p>
+                  {(isAdminState || isModerator) &&
+                    adminOptionState === true && (
+                      <span>
+                        <AiFillDelete
+                          size={27}
+                          style={{ color: "white" }}
+                          onClick={() =>
+                            handleDeletePlayerButton(item.userId, _id)
+                          }
+                        />
+                      </span>
+                    )}
                 </span>
-              )}
-            </span>
+              </>
+            ))}
+            <br />
           </>
-        ))}
-        <br />
-        {/* Teams [Team A , Team B] Are HERE --- >>> */}
+        )}
+        {/* Teams [Team A , Team B] Are HERE --- >>> */}{" "}
+        <span className="shadow bg-info h5 span mt-1 mb-1">
+          {isFinished === false ? (
+            <>Gather is started!</>
+          ) : (
+            <>Gather is Ended!</>
+          )}
+        </span>
         {Object.keys(teams).length !== 0 && (
           <>
             <span className="card text-black bg-success">
@@ -241,32 +211,40 @@ const GatherItem = ({ teams, players, onGoing, _id, map, maxPlayers }) => {
               {teams[0][0].TeamA.map((item) => (
                 <>
                   {" "}
-                  <p className="card bg-dark h5"> {item.userName}</p>{" "}
+                  <p className="card bg-dark h6"> {item.userName}</p>{" "}
                 </>
               ))}
             </span>{" "}
-            <span className="card  text-black bg-success">
+            <span className="card mt-1 text-black bg-success">
               <p className="h4"> Team A:</p> <br />
               {teams[0][0].TeamB.map((item) => (
                 <>
                   {" "}
-                  <p className="card bg-dark h5"> {item.userName}</p>{" "}
+                  <p className="card bg-dark h6"> {item.userName}</p>{" "}
                 </>
               ))}
             </span>
             <br />
-            <form onSubmit="{handleFormSubmit}">
-              <input
-                type="file"
-                onChange={(e) => setScorePicture(e.target.files[0])}
-              />
-              <button type="submit">Submit</button>
-            </form>
+            {adminOptionState === true && isFinished === false && (
+              <form className="mb-3" onSubmit={handleSubmitMatchPicture}>
+                <span className="h5">Upload match score picture file</span>
+                <br />
+                <input
+                  type="file"
+                  onChange={(e) =>
+                    setMatchScoreImageUploadFile(e.target.files[0])
+                  }
+                />
+                <button className="btn btn-light" type="submit">
+                  Upload
+                </button>
+              </form>
+            )}
           </>
         )}
         {/* Map IS here  */}
-        <span className="card mb-1 bg-dark">
-          <p className="h4">
+        <span className=" bg-dark">
+          <p className="h6">
             {" "}
             Map:
             {map}{" "}
@@ -293,8 +271,8 @@ const GatherItem = ({ teams, players, onGoing, _id, map, maxPlayers }) => {
           )}{" "}
         </span>
         {/* Max Players IS here  */}
-        <span className="card bg-dark mt-1 text-center ">
-          <p className="h4"> Max Players: {maxPlayers} </p>
+        <span className=" bg-dark mt-1 ">
+          <p className="h6"> Max Players: {maxPlayers} </p>
           <p>
             {(isModerator || isAdminState) && adminOptionState === true && (
               <EditGatherModal titleOpen="Edit max players">
@@ -322,41 +300,56 @@ const GatherItem = ({ teams, players, onGoing, _id, map, maxPlayers }) => {
         </span>
         <br />
         {/* Status of Gather IS HERE-->  */}
-        Status:
-        {onGoing ? (
+        {isFinished === false && (
           <>
-            <span className="bg-success p-1" style={{ color: "white" }}>
-              On{" "}
-              {(isModerator || isAdminState) && adminOptionState === true && (
-                <Button onClick={handleTurnOffGather}> Turn off </Button>
-              )}
-            </span>
-          </>
-        ) : (
-          <>
-            <span className="bg-dark" style={{ color: "red" }}>
-              Off{" "}
-              {(isModerator || isAdminState) && adminOptionState === true && (
-                <Button onClick={handleTurnOnGather}> Turn on </Button>
-              )}
-            </span>
+            Status:
+            {onGoing ? (
+              <>
+                <span className="bg-success p-1" style={{ color: "white" }}>
+                  On{" "}
+                  {(isModerator || isAdminState) &&
+                    adminOptionState === true && (
+                      <Button onClick={handleTurnOffGather}> Turn off </Button>
+                    )}
+                </span>
+              </>
+            ) : (
+              <>
+                <span className="bg-dark" style={{ color: "red" }}>
+                  Off{" "}
+                  {(isModerator || isAdminState) &&
+                    adminOptionState === true && (
+                      <Button onClick={handleTurnOnGather}> Turn on </Button>
+                    )}
+                </span>
+              </>
+            )}
           </>
         )}
         {/* Add And Leave Gather Buttons ARE here  */}
-        <Button onClick={handleJoinButton} variant="success">
-          Join Now
-        </Button>
-        <Button onClick={handleLeaveButton} variant="danger">
-          Leave Queue
-        </Button>
+        {isFinished === false && (
+          <>
+            {isJoined === false ? (
+              <>
+                <Button onClick={handleJoinButton} variant="success">
+                  Join Now
+                </Button>
+              </>
+            ) : (
+              <Button onClick={handleLeaveButton} variant="danger">
+                Leave Queue
+              </Button>
+            )}
+          </>
+        )}
         {/* Delete Gather is HERE -- ONly for admin/moderator  */}
         {(isAdminState || isModerator) && adminOptionState === true && (
-          <Button onClick={handleDeleteButton} variant="danger">
+          <Button onClick={handleDeleteGather} variant="danger">
             Delete Gather
           </Button>
         )}
         <GatherDetails />
-        <ToastContainer className="toast__gather" />
+        <ToastContainer />
       </div>
     </>
   );
