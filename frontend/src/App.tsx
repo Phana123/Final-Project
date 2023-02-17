@@ -23,7 +23,7 @@ function App() {
       >
         <Container fluid className="w-100 text-center">
           <Header />
-          <div className="app-container mb-1 card bg-dark mt-1 p-4 ">
+          <div className="app-container card bg-dark mt-1 p-4 ">
             {/* Routes */}
             <Routes>
               <Route path="/" element={<Home />} />

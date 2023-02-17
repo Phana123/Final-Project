@@ -57,6 +57,7 @@ router.post(
       players: [],
       teams: [],
       finished: false,
+      waitingForPlayers: true,
     });
 
     try {
@@ -208,25 +209,64 @@ router.post(
   //moderator/insertScore/gatherId
   "/gather/insertScore/:gatherId/",
   validateToken,
-  isAdmin,
+
   async (req, res) => {
     try {
-      for (let player of req.body) {
-        await User.findOneAndUpdate(
-          { username: player.userName },
-          {
-            $inc: {
-              "score.kill": player.kill,
-              "score.death": player.death,
-              "score.assist": player.assist,
-              "score.points": player.points,
-            },
-          }
-        );
-      }
+      const body = _.pick(req.body, "userId", "kill", "death", "assist");
+      const gatherId = req.params.gatherId
+      const gather = await Gather.findOne({_id: gatherId})
+   if(gather.players.length === gather.maxPlayers){
+    
+   }
+       const updateUser = await User.findOneAndUpdate(
+         { _id: body.userId },
+         {
+           $inc: {
+             "score.kill": body.kill,
+             "score.death": body.death,
+             "score.assist": body.assist,
+             "score.points": 22,
+           },
+         }
+       );
+       res.json({
+         message: `User ${updateUser.username} updated successfully!`,
+       });
+      return nodeEvents.emit("update");
     } catch (error) {
       console.log(error);
     }
+  }
+);
+
+// <<------------------- Gather Score when End ---------------->>
+router.post(
+  //moderator/insertScore/gatherId
+  "/gather/submitGather/:gatherId/",
+  validateToken,
+  async (req, res) => {
+    try {
+      const gatherId = req.params.gatherId;
+      const filter = { _id: gatherId };
+      const update = {
+        $push: { score: req.body },
+        finished: true,
+        onGoing: false,
+      };
+      const options = { new: true }; // This option returns the updated document
+
+      await Gather.findOneAndUpdate(filter, update)
+        .then((updatedDocument) => {
+          console.log(updatedDocument);
+          res.json({ message: `Success, gather is ended` });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+    return nodeEvents.emit("update");
   }
 );
 

@@ -12,9 +12,11 @@ import { LocalStorageContext } from "../../context/LocalStorageContext";
 import GatherDetails from "./GatherDetails";
 import "../../styles/toast-container.css";
 import { isJoinedFunction } from "../../functions/isJoinedFunction";
-import ScoreUpdate from "./matchScore";
+import ScoreUpdate from "./UpdateScore";
+import SubmitGather from "./SubmitGather";
 
 const GatherItem = ({
+  waitingForPlayers,
   finished,
   teams,
   players,
@@ -29,54 +31,65 @@ const GatherItem = ({
   const [mapInput, setMapInput] = useState("");
 
   const [playersArray, setPlayersArray] = useState(players);
-  const [isJoined, setIsJoined] = useState();
   const [isStarted, setIsStarted] = useState(onGoing);
   const [isFinished, setIsFinished] = useState(finished);
   const [matchScoreImageUploadFile, setMatchScoreImageUploadFile] =
     useState(null);
-  const formInitialValues = [10, "Ascent"];
+  const [showSubmitForm, setShowSubmitForm] = useState(false);
+  const [matchScoreInputs, setMatchScoreInputs] = useState({});
 
-  const { isAdminState, isModerator } = useContext(AuthContext);
+  const { isAdminState, isModerator, isManager } = useContext(AuthContext);
 
-  // Local Storage Context HERE->>
-  const { adminOptionState, toggleAdminOptionState } =
-    useContext(LocalStorageContext);
+  //---------- Local Storage Context HERE->>-----
+  const {
+    toggleIsJoinedState,
+    isJoinedState,
+    adminOptionState,
+    toggleAdminOptionState,savedUserCount
+  } = useContext(LocalStorageContext);
 
   useEffect(() => {
-    isJoinedFunction(setIsJoined, playersArray);
+    isJoinedFunction(toggleIsJoinedState, playersArray);
   }, []);
   useEffect(() => {
     setIsStarted((state) => !state);
   }, [onGoing]);
+
+  const formInitialValues = [10, "Ascent"];
+
+  const handleMatchScoresInput = (newstate) => {
+    let state = matchScoreInputs;
+    setMatchScoreInputs({ state, newstate });
+  };
 
   const handleSubmitMatchPicture = (event) => {
     gatherService.finishGather(event, _id, matchScoreImageUploadFile);
     setIsFinished((state) => !state);
   };
 
-  // Add to queue Function is here ///
+  // <<-----------------Add to queue Function is here ///----------->>
   const handleJoinButton = async () => {
     gatherService.join(_id);
-    setIsJoined((state) => !state);
+    toggleIsJoinedState(true);
   };
 
-  // Leave queue function is here //
+  //<<------------------- Leave queue function is here //-------------->>
   const handleLeaveButton = async () => {
     gatherService.leaveQueue(_id);
-    setIsJoined((state) => !state);
+    toggleIsJoinedState(false);
   };
 
-  // Delete single gather is here // -- Only For Mod/Admin
+  //<<----------- Delete single gather is here // -- Only For Mod/Admin-------->>
   const handleDeleteGather = async () => {
     gatherService.deleteGather(_id);
   };
 
-  // Delete player from queue function // Only for Mod/Admin
+  // <<-----------Delete player from queue function // Only for Mod/Admin---------->>
   const handleDeletePlayerButton = async (userId, id) => {
     gatherService.removePlayerFromQueue(_id, userId);
   };
 
-  // Edit Max Players function is here // only for mod/admin
+  // <<----------Edit Max Players function is here // only for mod/admin---------->>
   const handleEditMaxPlayersButton = async () => {
     setIsLoading(true);
 
@@ -91,7 +104,7 @@ const GatherItem = ({
       });
   };
 
-  // Edit map function is here // Only for Mod/Admin
+  // <<------------Edit map function is here // Only for Mod/Admin----------->>
   const handleEditMapButton = async () => {
     setIsLoading(true);
 
@@ -110,7 +123,7 @@ const GatherItem = ({
       });
   };
 
-  // Turn Off Gather Status Function // Only for Mod/Admin
+  // <<--------------Turn Off Gather Status Function // Only for Mod/Admin-------------->>
   const handleTurnOffGather = async () => {
     setIsLoading(true);
 
@@ -124,7 +137,7 @@ const GatherItem = ({
         setIsLoading(false);
       });
   };
-  // Turn Off Gather Status Function // Only for Mod/Admin
+  //<<-------------- Turn Off Gather Status Function // Only for Mod/Admin-------------->>
   const handleTurnOnGather = async () => {
     setIsLoading(true);
 
@@ -139,15 +152,20 @@ const GatherItem = ({
       });
   };
 
-  // Button Of Hide Admin/Moderator Options HERE -->>
+  // <<--------------Button Of Hide Admin/Moderator Options HERE ---------------->>
   const handleHideAdminOptions = () => {
     toggleAdminOptionState();
+  };
+
+  // <<-------------------- Handle show Submit Gather Button -------------------->>
+  const handleShowSubmitButton = () => {
+    setShowSubmitForm((state) => !state);
   };
 
   return (
     <>
       <div className="btn card mb-1 bg-secondary gatherlist-item">
-        {/* Error && IsLoading Components HERE */}
+        {/* <<---------------Error && IsLoading Components HERE-------------->> */}
         {errMessage && <div>${errMessage}</div>}
         {isLoading && (
           <div className="mx-auto w-25">
@@ -162,16 +180,17 @@ const GatherItem = ({
             />
           </div>
         )}
-        {/* Hide / Show admin options --> */}
-        {(isAdminState || isModerator) && (
+        {/* <<---------------Hide / Show admin options ----------------->> */}
+        {(isAdminState || isModerator || isManager) && (
           <Button onClick={handleHideAdminOptions}>
             {adminOptionState === true
               ? `Hide admin options`
               : `Show admin options`}
           </Button>
         )}
-        {/* Players list Here */}
-        {isStarted === false && isFinished === false && (
+        {savedUserCount}
+        {/* <<----------------------Players list Here------------------->> */}
+        {waitingForPlayers === true && isFinished === false && (
           <>
             Players: {players.length}/{maxPlayers}
             {players?.map((item) => (
@@ -196,7 +215,7 @@ const GatherItem = ({
             <br />
           </>
         )}
-        {/* Teams [Team A , Team B] Are HERE --- >>> */}
+        {/*------------------------ Teams [Team A , Team B] Are HERE --------------- >>> */}
         <span className="shadow bg-info h5 span mt-1 mb-1">
           {isFinished === false ? (
             <>Gather is started!</>
@@ -211,16 +230,34 @@ const GatherItem = ({
               {teams[0][0].TeamA.map((item) => (
                 <>
                   <p className="card bg-dark h6"> {item.userName} </p>
-                  <ScoreUpdate players={players} item={item} />
+                  {/*------------------------ Score Update IsFinished = true ?----------------- */}
+                  {isFinished === true && onGoing === false && (
+                    <ScoreUpdate
+                      handleInputs={handleMatchScoresInput}
+                      gatherId={_id}
+                      players={players}
+                      item={item}
+                    />
+                  )}
                 </>
               ))}
             </span>
             <span className="card mt-1 text-black bg-success">
-              <p className="h4"> Team A:</p> <br />
+              <p className="h4"> Team B:</p> <br />
               {teams[0][0].TeamB.map((item) => (
                 <>
                   <p className="card bg-dark h6"> {item.userName}</p>
-                  <ScoreUpdate players={players} item={item} />
+
+                  {/*------------------------ Score Update IsFinished = true ?----------------- */}
+                  {isFinished === true && (
+                    <ScoreUpdate
+                      maxPlayers={maxPlayers}
+                      handleInputs={handleMatchScoresInput}
+                      gatherId={_id}
+                      players={players}
+                      item={item}
+                    />
+                  )}
                 </>
               ))}
             </span>
@@ -242,7 +279,7 @@ const GatherItem = ({
             )}
           </>
         )}
-        {/* Map IS here  */}
+        {/* ----------Map IS here ---------- */}
         <span className=" bg-dark">
           <p className="h6">
             Map:
@@ -269,7 +306,7 @@ const GatherItem = ({
             </EditGatherModal>
           )}
         </span>
-        {/* Max Players IS here  */}
+        {/*------------------ Max Players IS here  -------------*/}
         <span className=" bg-dark mt-1 ">
           <p className="h6"> Max Players: {maxPlayers} </p>
           <p>
@@ -298,14 +335,21 @@ const GatherItem = ({
           </p>
         </span>
         <br />
-        {/* Status of Gather IS HERE-->  */}
+        {/* <<------------------- Submit gather here -------------->> */}
+        <SubmitGather
+          isFinished={isFinished}
+          show={showSubmitForm}
+          submitToggle={handleShowSubmitButton}
+          gatherId={_id}
+        />
+        {/*<<-------------------- Status of Gather IS HERE------------>>  */}
         {isFinished === false && (
           <>
             Status:
-            {onGoing ? (
+            {waitingForPlayers ? (
               <>
                 <span className="bg-success p-1" style={{ color: "white" }}>
-                  On
+                  off - Waiting for players...
                   {(isModerator || isAdminState) &&
                     adminOptionState === true && (
                       <Button onClick={handleTurnOffGather}> Turn off </Button>
@@ -325,10 +369,10 @@ const GatherItem = ({
             )}
           </>
         )}
-        {/* Add And Leave Gather Buttons ARE here  */}
+        {/* ---------------Add And Leave Gather Buttons ARE here --------------- */}
         {isFinished === false && (
           <>
-            {isJoined === false ? (
+            {isJoinedState === false ? (
               <>
                 <Button onClick={handleJoinButton} variant="success">
                   Join Now
@@ -341,7 +385,7 @@ const GatherItem = ({
             )}
           </>
         )}
-        {/* Delete Gather is HERE -- ONly for admin/moderator  */}
+        {/* --------------------Delete Gather is HERE ------- ONly for admin/moderator  ----*/}
         {(isAdminState || isModerator) && adminOptionState === true && (
           <Button onClick={handleDeleteGather} variant="danger">
             Delete Gather

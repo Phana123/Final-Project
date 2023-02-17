@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const baseUrl = "http://localhost:3001/api/admin/gather";
-
+// ---------------Create Gathers Here!!! -------------->>>>
 const create = async (map, maxPlayers) => {
   try {
     const response = await axios(`${baseUrl}/create`, {
@@ -19,10 +19,12 @@ const create = async (map, maxPlayers) => {
   }
 };
 
+// <<--------------- When we have 10 players start Gather --------------->>
 const startGather = async (id) => {
   return axios.post(`http://localhost:3001/api/gather/startGather/${id}`);
 };
 
+// <<--------------- finish Gather Here ------------------ >>
 const finishGather = async (event, id, file) => {
   //http://localhost:3001/api/gather/finishGather/gatherId
   const url = `http://localhost:3001/api/admin/gather/finishGather`;
@@ -37,6 +39,7 @@ const finishGather = async (event, id, file) => {
     .catch(() => console.log(`first`));
 };
 
+// <<--------------- Edit Max Players here --------------->>
 const editMaxPlayers = async (maxPlayers, gatherId) => {
   //gatherId
   try {
@@ -57,6 +60,8 @@ const editMaxPlayers = async (maxPlayers, gatherId) => {
     console.log(error);
   }
 };
+
+// <<------------------ Edit Map Here ------------------->>
 const editMap = async (map, gatherId) => {
   //gatherId
   try {
@@ -77,7 +82,7 @@ const editMap = async (map, gatherId) => {
     console.log(error);
   }
 };
-
+// <<---------------- handle Status Here ------------------>>>
 const handleStatus = async (status, gatherId) => {
   //gatherId
   try {
@@ -99,6 +104,7 @@ const handleStatus = async (status, gatherId) => {
   }
 };
 
+// << ------------------- Add to gather is here -------------->>
 const join = async (id, message) => {
   // `http://localhost:3001/api/gather/add/gatherId`;
   const url = `http://localhost:3001/api/gather/add`;
@@ -119,6 +125,8 @@ const join = async (id, message) => {
 
     .catch((e) => toast.error(`User is already in queue`));
 };
+
+// ------------------------ Leave gather here  ------------------->>
 const leaveQueue = async (id) => {
   // `http://localhost:3001/api/gather/leavequeue/gatherId`;
   const url = `http://localhost:3001/api/gather/leavequeue`;
@@ -139,6 +147,8 @@ const leaveQueue = async (id) => {
 
     .catch((e) => toast.error(`User is not in queue`));
 };
+
+// << ----------------- Delete Button [Only For High Role] ------------------>>
 const deleteGather = async (id) => {
   // `http://localhost:3001/api/moderator//gather/deletea/gatherId`;
   const url = `http://localhost:3001/api/moderator/gather/delete`;
@@ -159,6 +169,8 @@ const deleteGather = async (id) => {
 
     .catch((e) => toast.error(`User is not in queue`));
 };
+
+// << -------------------- Remove player from queue here ----------->>
 const removePlayerFromQueue = async (id, userId) => {
   // `http://localhost:3001/api/moderator//gather/deletea/gatherId`;
   const url = `http://localhost:3001/api/admin/gather/deletePlayerFromQueue`;
@@ -180,19 +192,28 @@ const removePlayerFromQueue = async (id, userId) => {
     .catch((e) => toast.error(`User is not in queue`));
 };
 
-
-const scoreUpdate = async (id,data) => {
+// <<---------------------- Score push here ----------------->>
+const scoreUpdate = async (gatherId, data) => {
   //gatherId
-  try {
-    const url = `http://localhost:3001/api/admin/gather/insertScore/${id}`;
-    const response = await axios(url, {
-      method: "POST",
-      headers: { Authorization: localStorage.getItem("token") },
-      data: data,
-    });
-  } catch (error) {
-    console.log(error);
-  }
+
+  const url = `http://localhost:3001/api/admin/gather/insertScore/${gatherId}`;
+  return await axios(url, {
+    method: "POST",
+    headers: { Authorization: localStorage.getItem("token") },
+    data: data,
+  });
+};
+
+// <<---------------------- End gather here ----------------->>
+const endGather = async (gatherId, data) => {
+  //gatherId
+
+  const url = `http://localhost:3001/api/admin/gather/submitGather/${gatherId}`;
+  return await axios(url, {
+    method: "POST",
+    headers: { Authorization: localStorage.getItem("token") },
+    data: data,
+  });
 };
 
 export {
@@ -207,6 +228,7 @@ export {
   deleteGather,
   removePlayerFromQueue,
   scoreUpdate,
+  endGather,
 };
 
 const gatherService = {
@@ -221,5 +243,6 @@ const gatherService = {
   deleteGather,
   removePlayerFromQueue,
   scoreUpdate,
+  endGather,
 };
 export default gatherService;

@@ -12,16 +12,14 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWU0YzcyZDBmZGUy
 ]
 
 ### POST score push :
-POST http://localhost:3001/api/moderator/gather/insertScore/63ee2ad573a9bb747a2ab292
+POST http://localhost:3001/api/admin/gather/insertScore/63ee2ad573a9bb747a2ab292
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWU0YzcyZDBmZGUyODdiNDE0YmM1ZSIsImlhdCI6MTY3NjYxOTE2NywiZXhwIjoxNjc5MjExMTY3fQ.K-_S74sarVuZyouo27fex0BGyjQZDwk0_kv2j5fJKm4
 
-[
+
 {"userId": "63ef55dfe9e65c3302ca7128",
-"kill": 20,"death":10,"assist": 5,"points":20},
-{"userId": "63ef55dce9e65c3302ca7123",
-"kill": 20,"death":10,"assist": 5,"points":20}
-]
+"kill": 20,"death":10,"assist": 5}
+
 
 ###DELETE ALL Users :
 DELETE http://localhost:3001/api/auth/deleteAll
@@ -32,8 +30,8 @@ POST http://localhost:3001/api/auth/signup
 Content-Type: application/json
 
 {
-    "username":"matan21", 
-    "email":"invidts2e2rv@gmail.com",
+    "username":"Homo", 
+    "email":"ine2222222222222rv@gmail.com",
     "password":"123123ssSS@@",
     "score": {
         "kill":0,
@@ -49,7 +47,7 @@ POST http://localhost:3001/api/auth/signin
 Content-Type: application/json
 
 {
-    "email":"inviteserv@gmail.com",
+    "email":"invidts2erv@gmail.com",
     "password":"123123ssSS@@"
 }
 
@@ -179,21 +177,21 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRm
 ## host/api/gather/pushTestPlayers/gatherId
 POST http://localhost:3001/api/moderator/gather/pushTestPlayers/63ee2ad573a9bb747a2ab292
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWY1MjRjYWRkZWVkMDRkZGYwOGUyMyIsImlhdCI6MTY3NjYyODgzNiwiZXhwIjoxNjc5MjIwODM2fQ.el-ZelVj53a3nK1MeGOWYsTgjKouuC_tAb-f6NW0NjI
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWY1NWRjZTllNjVjMzMwMmNhNzEyMyIsImlhdCI6MTY3NjY0Mjk4MywiZXhwIjoxNjc5MjM0OTgzfQ.19Pnwb9mv1sO6Pl6NXsAQN4a0R1zWpaQfkFUN4yQovE
 
 {
  "body":
 [
-   {"userId": "sadasdasdas534das56y6hdas","userName":"Bang0"},
-   {"userId": "sadasdasdasdus114erIdasdas","userName":"Bulbul"},
-   {"userId": "sadasdas634534dasd2asxczxzsdas","userName":"Mpabe"},
-   {"userId": "sadasda11s534543dasduserIdasdas","userName":"Ronaldo"},
-   {"userId": "sadasdasda3434634sd11asdas","userName":"Jacky Chan"},
-   {"userId": "sadasdauserIvcbcvd2sdasdasdas","userName":"Hole Nefesh"},
-   {"userId": "sadasdasdaete4353ruserIdsdasdas","userName":"Benzema"},
-   {"userId": "sadasdasd44askkdasdas","userName":"Caravaliho"},
-   {"userId": "sadasdas11fghfdagfmtysdasdas","userName":"Bulbul2"},
-   {"userId": "sadasdasdcver444asdasdas","userName":"Homo"}
+   {"userId": "63ef8978755bee8a8c37356c","userName":"Homo"},
+   {"userId": "63ef8971755bee8a8c373567","userName":"Bulbul2"},
+   {"userId": "63ef896b755bee8a8c373562","userName":"Caravaliho"},
+   {"userId": "63ef8965755bee8a8c37355d","userName":"Benzema"},
+   {"userId": "63ef8958755bee8a8c373558","userName":"Hole Nefesh"},
+   {"userId": "63ef8922755bee8a8c37353e","userName":"Bang0"},
+   {"userId": "sadasdasdaete4353ruserIdsdasdas","userName":"Jacky Chan"},
+   {"userId": "63ef893f755bee8a8c37354d","userName":"Ronaldo"},
+   {"userId": "63ef8935755bee8a8c373548","userName":"Mpabe"},
+   {"userId": "63ef8925755bee8a8c373543","userName":"Bulbul"}
    ]
 }
 

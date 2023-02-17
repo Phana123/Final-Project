@@ -13,6 +13,7 @@ const AuthContext = createContext<AuthContextType>(initialState);
 const AuthContextProvider = ({ children }: ChildProps) => {
   const [isAdminState, setIsAdminState] = useState(false);
   const [isModerator, setIsModerator] = useState(false);
+  const [isManager, setIsManager] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState<string | undefined>(undefined);
   const [email, setEmail] = useState<string | undefined>(undefined);
@@ -28,18 +29,23 @@ const AuthContextProvider = ({ children }: ChildProps) => {
       const roles = user.roles;
 
       login(username, email, token);
-      //isAdminTest = false/true
+      //isAdminTest  ??
       let isAdminTest: boolean = isAdmin("ROLE_ADMIN", roles);
 
       if (isAdminTest) {
         setIsAdminState(true);
-       
       }
+      // isModerator ???
       let isModeratorTest: boolean = isAdmin("ROLE_MODERATOR", roles);
 
       if (isModeratorTest) {
         setIsModerator(true);
-        
+      }
+      // isModerator ???
+      let isManagerTest: boolean = isAdmin("ROLE_MANAGER", roles);
+
+      if (isManagerTest) {
+        setIsManager(true);
       }
     }
   }, []);
@@ -69,6 +75,7 @@ const AuthContextProvider = ({ children }: ChildProps) => {
     logout,
     isModerator,
     isAdminState,
+    isManager,
   };
   return (
     <AuthContext.Provider value={contextValues}>

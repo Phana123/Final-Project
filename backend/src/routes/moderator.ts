@@ -109,7 +109,7 @@ router.post("/gather/pushRandomScoreTest/:gatherId", async (req, res) => {
         { _id: user.userId },
         { $set: { score: scoreObject } }
       );
-      console.log(scoreObject);
+
     }
   } catch (error) {
     console.log(error);
