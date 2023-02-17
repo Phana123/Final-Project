@@ -12,6 +12,7 @@ import { LocalStorageContext } from "../../context/LocalStorageContext";
 import GatherDetails from "./GatherDetails";
 import "../../styles/toast-container.css";
 import { isJoinedFunction } from "../../functions/isJoinedFunction";
+import ScoreUpdate from "./matchScore";
 
 const GatherItem = ({
   finished,
@@ -145,7 +146,6 @@ const GatherItem = ({
 
   return (
     <>
-      {" "}
       <div className="btn card mb-1 bg-secondary gatherlist-item">
         {/* Error && IsLoading Components HERE */}
         {errMessage && <div>${errMessage}</div>}
@@ -173,11 +173,11 @@ const GatherItem = ({
         {/* Players list Here */}
         {isStarted === false && isFinished === false && (
           <>
-            Players: {players.length}/{maxPlayers}{" "}
+            Players: {players.length}/{maxPlayers}
             {players?.map((item) => (
               <>
                 <span className="card bg-dark" key={item.userId}>
-                <p className="h6">  {item.userName}</p>
+                  <p className="h6"> {item.userName}</p>
                   {(isAdminState || isModerator) &&
                     adminOptionState === true && (
                       <span>
@@ -196,7 +196,7 @@ const GatherItem = ({
             <br />
           </>
         )}
-        {/* Teams [Team A , Team B] Are HERE --- >>> */}{" "}
+        {/* Teams [Team A , Team B] Are HERE --- >>> */}
         <span className="shadow bg-info h5 span mt-1 mb-1">
           {isFinished === false ? (
             <>Gather is started!</>
@@ -210,17 +210,17 @@ const GatherItem = ({
               <p className="h4"> Team A:</p> <br />
               {teams[0][0].TeamA.map((item) => (
                 <>
-                  {" "}
-                  <p className="card bg-dark h6"> {item.userName}</p>{" "}
+                  <p className="card bg-dark h6"> {item.userName} </p>
+                  <ScoreUpdate players={players} item={item} />
                 </>
               ))}
-            </span>{" "}
+            </span>
             <span className="card mt-1 text-black bg-success">
               <p className="h4"> Team A:</p> <br />
               {teams[0][0].TeamB.map((item) => (
                 <>
-                  {" "}
-                  <p className="card bg-dark h6"> {item.userName}</p>{" "}
+                  <p className="card bg-dark h6"> {item.userName}</p>
+                  <ScoreUpdate players={players} item={item} />
                 </>
               ))}
             </span>
@@ -245,9 +245,8 @@ const GatherItem = ({
         {/* Map IS here  */}
         <span className=" bg-dark">
           <p className="h6">
-            {" "}
             Map:
-            {map}{" "}
+            {map}
           </p>
           {(isModerator || isAdminState) && adminOptionState === true && (
             <EditGatherModal titleOpen="Edit map">
@@ -268,7 +267,7 @@ const GatherItem = ({
                 </Form>
               </Formik>
             </EditGatherModal>
-          )}{" "}
+          )}
         </span>
         {/* Max Players IS here  */}
         <span className=" bg-dark mt-1 ">
@@ -306,7 +305,7 @@ const GatherItem = ({
             {onGoing ? (
               <>
                 <span className="bg-success p-1" style={{ color: "white" }}>
-                  On{" "}
+                  On
                   {(isModerator || isAdminState) &&
                     adminOptionState === true && (
                       <Button onClick={handleTurnOffGather}> Turn off </Button>
@@ -316,7 +315,7 @@ const GatherItem = ({
             ) : (
               <>
                 <span className="bg-dark" style={{ color: "red" }}>
-                  Off{" "}
+                  Off
                   {(isModerator || isAdminState) &&
                     adminOptionState === true && (
                       <Button onClick={handleTurnOnGather}> Turn on </Button>

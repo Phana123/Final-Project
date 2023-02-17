@@ -203,6 +203,31 @@ router.post(
   }
 );
 
-
+//When admin update score after finish
+router.post(
+  //moderator/insertScore/gatherId
+  "/gather/insertScore/:gatherId/",
+  validateToken,
+  isAdmin,
+  async (req, res) => {
+    try {
+      for (let player of req.body) {
+        await User.findOneAndUpdate(
+          { username: player.userName },
+          {
+            $inc: {
+              "score.kill": player.kill,
+              "score.death": player.death,
+              "score.assist": player.assist,
+              "score.points": player.points,
+            },
+          }
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 
 export { router as adminRouter };

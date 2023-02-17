@@ -1,16 +1,4 @@
 
-### POST insertScore :
-POST http://localhost:3001/api/admin/gather/insertScore/63e963a9af9a14425b95551f
-Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTcxMDI5NDZiNjk0MDEyM2U4YTIzZSIsImlhdCI6MTY3NjU2MDU3NCwiZXhwIjoxNjc5MTUyNTc0fQ.tMHY8SjoT3dAreTyjNofQyrJXEXhYJkcxd8Mkg2JX6I
-
-[
-{"userId": "63ee4c72d0fde287b414bc5e",
-"kill": "20","death":"10","assist": "5"},
-{"userId": "63ee4b159db8e7dba5dbd2ef",
-"kill": "20","death":"10","assist": "5"}
-]
-
 ### POST Random score push test :
 POST http://localhost:3001/api/moderator/gather/pushRandomScoreTest/63e963a9af9a14425b95551f
 Content-Type: application/json
@@ -24,14 +12,14 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWU0YzcyZDBmZGUy
 ]
 
 ### POST score push :
-POST http://localhost:3001/api/moderator/gather/insertScore/63e963a9af9a14425b95551f
+POST http://localhost:3001/api/moderator/gather/insertScore/63ee2ad573a9bb747a2ab292
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWU0YzcyZDBmZGUyODdiNDE0YmM1ZSIsImlhdCI6MTY3NjYxOTE2NywiZXhwIjoxNjc5MjExMTY3fQ.K-_S74sarVuZyouo27fex0BGyjQZDwk0_kv2j5fJKm4
 
 [
-{"userId": "63ef39317bc23715b3e4d957",
+{"userId": "63ef55dfe9e65c3302ca7128",
 "kill": 20,"death":10,"assist": 5,"points":20},
-{"userId": "63ef393f7bc23715b3e4d95c",
+{"userId": "63ef55dce9e65c3302ca7123",
 "kill": 20,"death":10,"assist": 5,"points":20}
 ]
 
@@ -44,8 +32,8 @@ POST http://localhost:3001/api/auth/signup
 Content-Type: application/json
 
 {
-    "username":"matan1", 
-    "email":"invidts2erv@gmail.com",
+    "username":"matan21", 
+    "email":"invidts2e2rv@gmail.com",
     "password":"123123ssSS@@",
     "score": {
         "kill":0,
@@ -189,9 +177,9 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRm
 
 ### POST Push test players for testing :
 ## host/api/gather/pushTestPlayers/gatherId
-POST http://localhost:3001/api/moderator/gather/pushTestPlayers/63eddba3852611403ff9e331
+POST http://localhost:3001/api/moderator/gather/pushTestPlayers/63ee2ad573a9bb747a2ab292
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWRhYjkwMzllMTE1Nzk3OTBlNjU4YSIsImlhdCI6MTY3NjUyMzAzNCwiZXhwIjoxNjc5MTE1MDM0fQ.OCvIK40zV8TpVMmDmQJIDzzxhj2kQy-DNhPtIubGpsA
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWY1MjRjYWRkZWVkMDRkZGYwOGUyMyIsImlhdCI6MTY3NjYyODgzNiwiZXhwIjoxNjc5MjIwODM2fQ.el-ZelVj53a3nK1MeGOWYsTgjKouuC_tAb-f6NW0NjI
 
 {
  "body":

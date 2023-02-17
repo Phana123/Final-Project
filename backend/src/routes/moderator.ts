@@ -67,77 +67,54 @@ const checkIfExistPlayer = (string, arr) => {
   return isTrue;
 };
 
-router.post("/gather/pushTestPlayers/:gatherId", validateToken, isManager, async (req, res) => {
-  try {
-    const gatherId = req.params.gatherId;
-    const playersArray = [];
-    req.body?.body.forEach((value) => {
-      playersArray.push(value);
-    });
-    Gather.findByIdAndUpdate(
-      gatherId,
-      { $push: { players: { $each: playersArray } } },
-      (err, doc) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log(doc);
-        }
-      }
-    );
-
-    res.json({ message: `Gather started!` });
-    return nodeEvents.emit("update");
-  } catch (error) {
-    console.log(error.message);
-  }
-});
-router.post("/gather/pushRandomScoreTest/:gatherId", async (req, res) => {
-  try {
-
-    // let scoreObject = {kill:null,death:null,assist:null}
-    let scoreObject = { kill: null, death: null, assist: null }
-    for (let user of req.body) {
-      scoreObject.kill = user.kill
-      scoreObject.death = user.death
-      scoreObject.assist = user.assist
-      const updatedUser = await User.updateOne({ _id: user.userId },
-        { $set: { score: scoreObject } }
-      )
-      console.log(scoreObject)
-    }
-
-
-  } catch (error) {
-    console.log(error)
-  }
-});
-
-//When admin update score after finish
 router.post(
-  //moderator/insertScore/gatherId
-  "/gather/insertScore/:gatherId/",
+  "/gather/pushTestPlayers/:gatherId",
   validateToken,
-  async (req, res, next) => {
-    let DBScoreObject = {}
-    let requestScoreObject = {}
-
-
-
-
+  isManager,
+  async (req, res) => {
     try {
-      for (let player of req.body) {
-        const user = await User.findOne({ _id: player.userId })
-        DBScoreObject = { ...user.score }
-        requestScoreObject = { ...player }
-        // DBScoreObject.kill = DBScoreObject.kill -= requestScoreObject.kill
-        // console.log(DBScoreObject.kill)
+      const gatherId = req.params.gatherId;
+      const playersArray = [];
+      req.body?.body.forEach((value) => {
+        playersArray.push(value);
+      });
+      Gather.findByIdAndUpdate(
+        gatherId,
+        { $push: { players: { $each: playersArray } } },
+        (err, doc) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(doc);
+          }
+        }
+      );
 
-      }
-      // console.log(usersArray[0].assist)
+      res.json({ message: `Gather started!` });
+      return nodeEvents.emit("update");
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   }
 );
+router.post("/gather/pushRandomScoreTest/:gatherId", async (req, res) => {
+  try {
+    // let scoreObject = {kill:null,death:null,assist:null}
+    let scoreObject = { kill: null, death: null, assist: null };
+    for (let user of req.body) {
+      scoreObject.kill = user.kill;
+      scoreObject.death = user.death;
+      scoreObject.assist = user.assist;
+      const updatedUser = await User.updateOne(
+        { _id: user.userId },
+        { $set: { score: scoreObject } }
+      );
+      console.log(scoreObject);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
 export { router as moderatorRouter };

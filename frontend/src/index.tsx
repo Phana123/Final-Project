@@ -21,10 +21,9 @@ const container = document.getElementById("root")!;
 const root = createRoot(container);
 
 root.render(
-  <React.StrictMode>
-   <ToastContainer/>
+  <>
+    <ToastContainer />
     <BrowserRouter>
-    
       <LocalStorageProvider>
         <AuthContextProvider>
           <DarkModeContextProvider>
@@ -35,7 +34,7 @@ root.render(
         </AuthContextProvider>
       </LocalStorageProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  </>
 );
 
 reportWebVitals();

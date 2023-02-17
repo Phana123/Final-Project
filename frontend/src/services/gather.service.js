@@ -77,6 +77,7 @@ const editMap = async (map, gatherId) => {
     console.log(error);
   }
 };
+
 const handleStatus = async (status, gatherId) => {
   //gatherId
   try {
@@ -179,6 +180,21 @@ const removePlayerFromQueue = async (id, userId) => {
     .catch((e) => toast.error(`User is not in queue`));
 };
 
+
+const scoreUpdate = async (id,data) => {
+  //gatherId
+  try {
+    const url = `http://localhost:3001/api/admin/gather/insertScore/${id}`;
+    const response = await axios(url, {
+      method: "POST",
+      headers: { Authorization: localStorage.getItem("token") },
+      data: data,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export {
   startGather,
   create,
@@ -190,6 +206,7 @@ export {
   leaveQueue,
   deleteGather,
   removePlayerFromQueue,
+  scoreUpdate,
 };
 
 const gatherService = {
@@ -203,5 +220,6 @@ const gatherService = {
   leaveQueue,
   deleteGather,
   removePlayerFromQueue,
+  scoreUpdate,
 };
 export default gatherService;
