@@ -1,16 +1,72 @@
 
 ### POST insertScore :
-POST http://localhost:3001/api/admin/gather/insertScore/63ee2ad573a9bb747a2ab292
+POST http://localhost:3001/api/admin/gather/insertScore/63e963a9af9a14425b95551f
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI3NTgxNywiZXhwIjoxNjc4ODY3ODE3fQ.W0Gc1co9uEFMclmyCauLZGWkcLyQSYFAGnD83VfFcx0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTcxMDI5NDZiNjk0MDEyM2U4YTIzZSIsImlhdCI6MTY3NjU2MDU3NCwiZXhwIjoxNjc5MTUyNTc0fQ.tMHY8SjoT3dAreTyjNofQyrJXEXhYJkcxd8Mkg2JX6I
 
 [
-{"userId": "63edab9039e11579790e658a",
+{"userId": "63ee4c72d0fde287b414bc5e",
 "kill": "20","death":"10","assist": "5"},
-{"userId": "63ee351d635aa0da8d617d9c",
+{"userId": "63ee4b159db8e7dba5dbd2ef",
 "kill": "20","death":"10","assist": "5"}
 ]
 
+### POST Random score push test :
+POST http://localhost:3001/api/moderator/gather/pushRandomScoreTest/63e963a9af9a14425b95551f
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWU0YzcyZDBmZGUyODdiNDE0YmM1ZSIsImlhdCI6MTY3NjYxOTE2NywiZXhwIjoxNjc5MjExMTY3fQ.K-_S74sarVuZyouo27fex0BGyjQZDwk0_kv2j5fJKm4
+
+[
+{"userId": "63ef39317bc23715b3e4d957",
+"kill": "20","death":"10","assist": "5"},
+{"userId": "63ef393f7bc23715b3e4d95c",
+"kill": "20","death":"10","assist": "5"}
+]
+
+### POST score push :
+POST http://localhost:3001/api/moderator/gather/insertScore/63e963a9af9a14425b95551f
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWU0YzcyZDBmZGUyODdiNDE0YmM1ZSIsImlhdCI6MTY3NjYxOTE2NywiZXhwIjoxNjc5MjExMTY3fQ.K-_S74sarVuZyouo27fex0BGyjQZDwk0_kv2j5fJKm4
+
+[
+{"userId": "63ef39317bc23715b3e4d957",
+"kill": 20,"death":10,"assist": 5,"points":20},
+{"userId": "63ef393f7bc23715b3e4d95c",
+"kill": 20,"death":10,"assist": 5,"points":20}
+]
+
+###DELETE ALL Users :
+DELETE http://localhost:3001/api/auth/deleteAll
+
+
+###POST to add user:
+POST http://localhost:3001/api/auth/signup
+Content-Type: application/json
+
+{
+    "username":"matan1", 
+    "email":"invidts2erv@gmail.com",
+    "password":"123123ssSS@@",
+    "score": {
+        "kill":0,
+        "death":0,
+        "assist":0,
+        "points":0
+    }
+}
+
+
+###POST to sign in user:
+POST http://localhost:3001/api/auth/signin
+Content-Type: application/json
+
+{
+    "email":"inviteserv@gmail.com",
+    "password":"123123ssSS@@"
+}
+
+###GET All Users :
+GET http://localhost:3001/api/auth/
 
 
 ###GET ALL Gather :
@@ -33,31 +89,6 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRm
 
 ###POST when gather is started:
 POST http://localhost:3001/api/gather/startGather/63ec2012c8eb5ac8fc6b1d4f
-
-###POST to add user:
-POST http://localhost:3001/api/auth/signup
-Content-Type: application/json
-
-{
-    "username":"matan", 
-    "email":"daneles2711@gmail.com",
-    "password":"123123ssSS@@"
-}
-
-
-###POST to sign in user:
-POST http://localhost:3001/api/auth/signin
-Content-Type: application/json
-
-{
-    "email":"inviteserv@gmail.com",
-    "password":"123123ssSS@@"
-}
-
-###GET All Users :
-GET http://localhost:3001/api/auth/
-
-
 
 ###
 GET http://localhost:3001/api/books/all
@@ -101,9 +132,6 @@ Content-Type: application/json
     "email":"Batman@Batcave.com"
 }
 
-
-###DELETE ALL Users :
-DELETE http://localhost:3001/api/auth/deleteAll
 
 
 
@@ -180,3 +208,5 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWRhYjkwMzllMTE1
    {"userId": "sadasdasdcver444asdasdas","userName":"Homo"}
    ]
 }
+
+

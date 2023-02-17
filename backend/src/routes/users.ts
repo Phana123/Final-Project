@@ -41,14 +41,15 @@ router.get("/", (req, res) => {
 
 //api/auth/signup
 router.post("/signup", validateSignUp, userAlreadyExists, async (req, res) => {
-  const body = _.pick(req.body, "username", "email", "password");
 
-  body.password = await bcrypt.hash(body.password, 12);
-  const user = new User(body);
-
-  //before saving the user:
 
   try {
+    const body = _.pick(req.body, "username", "email", "password", "score");
+
+    body.password = await bcrypt.hash(body.password, 12);
+    const user = new User(body);
+
+    //before saving the user:
     //for each user -> save the role id of user
     user.roles = [(await Role.findOne({ name: "user" }))._id];
 

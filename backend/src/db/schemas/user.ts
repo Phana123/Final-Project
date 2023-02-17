@@ -1,17 +1,17 @@
 import { Schema } from "mongoose";
 
 const scoreDocumentSchema = new Schema({
-  Kill: Number,
-  Death: Number,
-  Assist: Number,
+  kill: Number,
+  death: Number,
+  assist: Number,
+  points: Number
 });
 
 const userSchema = new Schema({
   username: String,
   email: String,
   password: String,
-  score: { scoreDocumentSchema },
-  points: String,
+  score: Object,
   /*
         user has roles:
     */

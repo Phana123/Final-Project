@@ -5,6 +5,7 @@ import nodeEvents from "../nodeEvents/nodeEvents.js";
 import { validateToken } from "../middleware/user/validateToken.js";
 import { isModerator } from "../middleware/roles/isModerator.js";
 import { isManager } from "../middleware/roles/isManager.js";
+import { User } from "../db/models/user.js";
 
 const router = Router();
 const maps = [
@@ -66,7 +67,7 @@ const checkIfExistPlayer = (string, arr) => {
   return isTrue;
 };
 
-router.post("/gather/pushTestPlayers/:gatherId",validateToken,isManager, async (req, res) => {
+router.post("/gather/pushTestPlayers/:gatherId", validateToken, isManager, async (req, res) => {
   try {
     const gatherId = req.params.gatherId;
     const playersArray = [];
@@ -91,6 +92,52 @@ router.post("/gather/pushTestPlayers/:gatherId",validateToken,isManager, async (
     console.log(error.message);
   }
 });
+router.post("/gather/pushRandomScoreTest/:gatherId", async (req, res) => {
+  try {
+
+    // let scoreObject = {kill:null,death:null,assist:null}
+    let scoreObject = { kill: null, death: null, assist: null }
+    for (let user of req.body) {
+      scoreObject.kill = user.kill
+      scoreObject.death = user.death
+      scoreObject.assist = user.assist
+      const updatedUser = await User.updateOne({ _id: user.userId },
+        { $set: { score: scoreObject } }
+      )
+      console.log(scoreObject)
+    }
 
 
+  } catch (error) {
+    console.log(error)
+  }
+});
+
+//When admin update score after finish
+router.post(
+  //moderator/insertScore/gatherId
+  "/gather/insertScore/:gatherId/",
+  validateToken,
+  async (req, res, next) => {
+    let DBScoreObject = {}
+    let requestScoreObject = {}
+
+
+
+
+    try {
+      for (let player of req.body) {
+        const user = await User.findOne({ _id: player.userId })
+        DBScoreObject = { ...user.score }
+        requestScoreObject = { ...player }
+        // DBScoreObject.kill = DBScoreObject.kill -= requestScoreObject.kill
+        // console.log(DBScoreObject.kill)
+
+      }
+      // console.log(usersArray[0].assist)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 export { router as moderatorRouter };

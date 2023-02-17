@@ -7,6 +7,12 @@ Content-Type: application/json
     "username":"matan", 
     "email":"inviteserv@gmail.com",
     "password":"123123ssSS@@"
+    "score": {
+        "kill":0,
+        "death":0,
+        "assist":0,
+        "points":0
+    }
 }
 
 

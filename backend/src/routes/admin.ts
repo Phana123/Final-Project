@@ -203,30 +203,6 @@ router.post(
   }
 );
 
-//When admin update score after finish
-router.post(
-  //moderator/insertScore/gatherId
-  "/gather/insertScore/:gatherId/",
-  validateToken,
 
-  async (req, res, next) => {
-    try {
-      const usersArray = [];
-      for (let user of req.body) {
-        usersArray.push(user);
-        let scoreArray = [];
-        const foundUser = await User.findOne({ _id: user.userId });
-        scoreArray.push(foundUser.score);
-        for (let [key, value] of Object.entries(scoreArray)) {
-          console.log(`${key}: ${value}`);
-        }
-      }
-
-      // console.log(usersArray[0].assist)
-    } catch (error) {
-      console.log(error);
-    }
-  }
-);
 
 export { router as adminRouter };
