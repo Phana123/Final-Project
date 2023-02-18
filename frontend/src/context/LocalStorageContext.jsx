@@ -7,6 +7,8 @@ const LocalStorageContext = createContext({
   isJoinedState: true,
   toggleIsJoinedState: () => {},
   savedUserCount: true,
+  savedUsersObject: true,
+  saveUserInObjectFunc: () => {},
   plusSavedUserCount: () => {},
   minusSavedUserCount: () => {},
   clearSavedCountLocalStorage: () => {},
@@ -17,10 +19,16 @@ const LocalStorageProvider = ({ children }) => {
   const [adminOptionState, setAdminOptionState] = useState(false);
   const [isJoinedState, setIsJoinedState] = useState(false);
   const [savedUserCount, setSavedUserCount] = useState(0);
+  const [savedUsersObject, setSavedUsersObject] = useState({});
   const adminOptionStateLocalStorage = localStorage.getItem("hideAdminOptions");
   const isJoinedToGatherLocalStorage = localStorage.getItem("isJoined");
   const savedUserCountLocalStorage = localStorage.getItem("savedUserCount");
+  const savedUsersObjectLocalStorage = localStorage.getItem("savedUsersObject");
 
+  // <<-------------------- toggle Admin Options State here ------------------>>
+  const saveUserInObjectFunc = (id) => {
+    localStorage.setItem("savedUsersObject", [id]);
+  };
   // <<-------------------- toggle Admin Options State here ------------------>>
   const toggleAdminOptionState = () => {
     if (adminOptionStateLocalStorage === "true") {
@@ -41,16 +49,13 @@ const LocalStorageProvider = ({ children }) => {
     }
   };
   // <<------------------- Saved Count Plus+Minus Function's here ---------------------->>
-  console.log(savedUserCountLocalStorage);
   const plusSavedUserCount = (maxPlayers) => {
-    console.log(maxPlayers);
     if (savedUserCountLocalStorage < maxPlayers) {
       setSavedUserCount((state) => (state += 1));
 
       const newValue = Number(savedUserCountLocalStorage) + 1;
       localStorage.setItem("savedUserCount", newValue);
     } else if (savedUserCountLocalStorage === null) {
-      console.log(`work`);
       setSavedUserCount((state) => (state += 1));
 
       const newValue = Number(savedUserCountLocalStorage) + 1;
@@ -80,6 +85,10 @@ const LocalStorageProvider = ({ children }) => {
     } else {
       setIsJoinedState(false);
     }
+
+    const newValueSavedCount = Number(savedUserCountLocalStorage);
+
+    setSavedUserCount(newValueSavedCount);
   }, []);
   return (
     <>
@@ -93,6 +102,8 @@ const LocalStorageProvider = ({ children }) => {
           plusSavedUserCount,
           minusSavedUserCount,
           clearSavedCountLocalStorage,
+          saveUserInObjectFunc,
+          savedUsersObject,
         }}
       >
         {children}

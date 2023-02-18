@@ -11,14 +11,14 @@ const isManager: RequestHandler = async (req, res, next) => {
     //user.roles = ['63e1fb4ff70ed483ab2fe1ad']
 
     //~populate
-  const roles = await Role.find({ _id: { $in: user.roles } });
+    const roles = await Role.find({ _id: { $in: user.roles } });
 
-  for (let role of roles) {
-    console.log(`work`)
-    if (role.name === "manager") {
-      return next();
+    for (let role of roles) {
+      console.log(`work`)
+      if (role.name === "manager") {
+        return next();
+      }
     }
-  }
     return res.status(403).json({ message: "Requires Manager Role" });
   } catch (e) {
     return res.status(500).json({ message: "Requires Manager Role", error: e });

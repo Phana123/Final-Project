@@ -196,7 +196,10 @@ router.post(
       const gatherId = req.params.gatherId;
       const gather = await Gather.findOneAndUpdate(
         { _id: gatherId },
-        { finished: true }
+        {
+          finished: true,
+          onGoing: false
+        }
       );
     } catch (error) {
       console.log(`something wrong here`);
@@ -214,24 +217,24 @@ router.post(
     try {
       const body = _.pick(req.body, "userId", "kill", "death", "assist");
       const gatherId = req.params.gatherId
-      const gather = await Gather.findOne({_id: gatherId})
-   if(gather.players.length === gather.maxPlayers){
-    
-   }
-       const updateUser = await User.findOneAndUpdate(
-         { _id: body.userId },
-         {
-           $inc: {
-             "score.kill": body.kill,
-             "score.death": body.death,
-             "score.assist": body.assist,
-             "score.points": 22,
-           },
-         }
-       );
-       res.json({
-         message: `User ${updateUser.username} updated successfully!`,
-       });
+      const gather = await Gather.findOne({ _id: gatherId })
+      if (gather.players.length === gather.maxPlayers) {
+
+      }
+      const updateUser = await User.findOneAndUpdate(
+        { _id: body.userId },
+        {
+          $inc: {
+            "score.kill": body.kill,
+            "score.death": body.death,
+            "score.assist": body.assist,
+            "score.points": 22,
+          },
+        }
+      );
+      res.json({
+        message: `User ${updateUser.username} updated successfully!`,
+      });
       return nodeEvents.emit("update");
     } catch (error) {
       console.log(error);

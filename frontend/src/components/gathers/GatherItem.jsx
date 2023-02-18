@@ -45,7 +45,8 @@ const GatherItem = ({
     toggleIsJoinedState,
     isJoinedState,
     adminOptionState,
-    toggleAdminOptionState,savedUserCount
+    toggleAdminOptionState,
+    savedUserCount,
   } = useContext(LocalStorageContext);
 
   useEffect(() => {
@@ -233,6 +234,7 @@ const GatherItem = ({
                   {/*------------------------ Score Update IsFinished = true ?----------------- */}
                   {isFinished === true && onGoing === false && (
                     <ScoreUpdate
+                      maxPlayers={maxPlayers}
                       handleInputs={handleMatchScoresInput}
                       gatherId={_id}
                       players={players}
@@ -263,10 +265,16 @@ const GatherItem = ({
             </span>
             <br />
             {adminOptionState === true && isFinished === false && (
-              <form className="mb-3" onSubmit={handleSubmitMatchPicture}>
-                <span className="h5">Upload match score picture file</span>
+              <form
+                className="upload__form bg-dark card my_center p-3 rounded"
+                onSubmit={handleSubmitMatchPicture}
+              >
+                <span className="h5  w-100 text-danger bg-light p-2 rounded">
+                  Upload match score picture file
+                </span>
                 <br />
                 <input
+                  className="bg-light w-100 p-1 text-secondary rounded"
                   type="file"
                   onChange={(e) =>
                     setMatchScoreImageUploadFile(e.target.files[0])
@@ -370,7 +378,7 @@ const GatherItem = ({
           </>
         )}
         {/* ---------------Add And Leave Gather Buttons ARE here --------------- */}
-        {isFinished === false && (
+        {isFinished === false && isStarted === true && (
           <>
             {isJoinedState === false ? (
               <>

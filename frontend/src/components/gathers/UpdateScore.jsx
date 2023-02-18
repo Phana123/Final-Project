@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import gatherService from "../../services/gather.service";
 import { LocalStorageContext } from "../../context/LocalStorageContext";
-import AuthContext from "../../context/AuthContext";
+import isAdmin from "../../functions/isAdmin.model";
 
 const ScoreUpdate = ({ maxPlayers, handleInputs, item, players, gatherId }) => {
   const [killsInput, setKillsInput] = useState(0);
@@ -14,12 +14,15 @@ const ScoreUpdate = ({ maxPlayers, handleInputs, item, players, gatherId }) => {
     (state) => (state += maxPlayers)
   );
   const [show, setShow] = useState(true);
+  let finishPlayersArray = [];
+
   const formInitialValues = [0];
   const {
     adminOptionState,
     plusSavedUserCount,
     savedUserCount,
     clearSavedCountLocalStorage,
+    saveUserInObjectFunc,
   } = useContext(LocalStorageContext);
 
   useEffect(() => {
@@ -55,25 +58,26 @@ const ScoreUpdate = ({ maxPlayers, handleInputs, item, players, gatherId }) => {
     handleInputs(obj);
   }
 
-  // <<-------------- Handle Axios Button Here ---------------->>
-  const handleScoreUpdateButton = (event) => {
+  // <<-------------- Handle Submit Axios Button Here ---------------->>
+  const handleScoreUpdateButton = async () => {
     gatherService.scoreUpdate(gatherId, playersData);
     setShow((state) => !state);
     plusSavedUserCount(maxPlayers);
+    saveUserInObjectFunc(item.userId);
   };
-  console.log(maxPlayersState);
+  console.log(finishPlayersArray);
 
   return (
     <>
       {show === true && adminOptionState === true && (
         <>
-          <div className="col">
+          <div className="update_score_form col">
             <Formik
               initialValues={formInitialValues[0]}
               onSubmit={handleScoreUpdateButton}
             >
               <Form>
-                <label className="text-white h6">
+                <label className="text-white ">
                   You can update it only one time!
                 </label>
                 <input
@@ -98,7 +102,7 @@ const ScoreUpdate = ({ maxPlayers, handleInputs, item, players, gatherId }) => {
                   placeholder="Assist's"
                 />
                 <Button className="btn btn-warning" type="submit">
-                  Send the score's
+                  Send the score
                 </Button>
               </Form>
             </Formik>

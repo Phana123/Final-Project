@@ -30,8 +30,8 @@ POST http://localhost:3001/api/auth/signup
 Content-Type: application/json
 
 {
-    "username":"Homo", 
-    "email":"ine2222222222222rv@gmail.com",
+    "username":"Bulbul", 
+    "email":"ine232122513rv@gmail.com",
     "password":"123123ssSS@@",
     "score": {
         "kill":0,
@@ -124,7 +124,7 @@ Content-Type: application/json
 ###POST to Create Gather :
 POST http://localhost:3001/api/admin/gather/create
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWRhYjkwMzllMTE1Nzk3OTBlNjU4YSIsImlhdCI6MTY3NjUyMTE1NCwiZXhwIjoxNjc5MTEzMTU0fQ.VQO7kAn7xvVaZzXT8a_2w26mblbWWFVs-3RpybCphqc
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWYzOTNmN2JjMjM3MTViM2U0ZDk1YyIsImlhdCI6MTY3NjY2ODQ5MCwiZXhwIjoxNjc5MjYwNDkwfQ.v9U3SwcmBlL_njPk23UNnJFbPYb294flHZOYDfcGZIM
 
 {
     "map":"Ascent",
@@ -175,23 +175,23 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRm
 
 ### POST Push test players for testing :
 ## host/api/gather/pushTestPlayers/gatherId
-POST http://localhost:3001/api/moderator/gather/pushTestPlayers/63ee2ad573a9bb747a2ab292
+POST http://localhost:3001/api/moderator/gather/pushTestPlayers/63efeeb538272fa9b87a0755
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWY1NWRjZTllNjVjMzMwMmNhNzEyMyIsImlhdCI6MTY3NjY0Mjk4MywiZXhwIjoxNjc5MjM0OTgzfQ.19Pnwb9mv1sO6Pl6NXsAQN4a0R1zWpaQfkFUN4yQovE
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWYzOTNmN2JjMjM3MTViM2U0ZDk1YyIsImlhdCI6MTY3NjY2ODEzOCwiZXhwIjoxNjc5MjYwMTM4fQ.0Cxe--XPfxrwCHXJ6KFY508V9n-4GGp6mSb60jzfRvI
 
 {
  "body":
 [
-   {"userId": "63ef8978755bee8a8c37356c","userName":"Homo"},
-   {"userId": "63ef8971755bee8a8c373567","userName":"Bulbul2"},
-   {"userId": "63ef896b755bee8a8c373562","userName":"Caravaliho"},
-   {"userId": "63ef8965755bee8a8c37355d","userName":"Benzema"},
-   {"userId": "63ef8958755bee8a8c373558","userName":"Hole Nefesh"},
-   {"userId": "63ef8922755bee8a8c37353e","userName":"Bang0"},
-   {"userId": "sadasdasdaete4353ruserIdsdasdas","userName":"Jacky Chan"},
-   {"userId": "63ef893f755bee8a8c37354d","userName":"Ronaldo"},
-   {"userId": "63ef8935755bee8a8c373548","userName":"Mpabe"},
-   {"userId": "63ef8925755bee8a8c373543","userName":"Bulbul"}
+   {"userId": "63efed3063ea52753fbea819","userName":"Homo"},
+   {"userId": "63efed4963ea52753fbea81e","userName":"Bulbul2"},
+   {"userId": "63efed5463ea52753fbea823","userName":"Caravaliho"},
+   {"userId": "63efed5d63ea52753fbea828","userName":"Benzema"},
+   {"userId": "63efed6a63ea52753fbea82d","userName":"Hole Nefesh"},
+   {"userId": "63efed7663ea52753fbea832","userName":"Bang0"},
+   {"userId": "63efed8363ea52753fbea837","userName":"Jacky Chan"},
+   {"userId": "63efed8f63ea52753fbea83c","userName":"Ronaldo"},
+   {"userId": "63efed9763ea52753fbea842","userName":"Mpabe"},
+   {"userId": "63efeda263ea52753fbea847","userName":"Bulbul"}
    ]
 }
 
