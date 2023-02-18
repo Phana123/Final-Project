@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import GatherItem from "./GatherItem";
 
@@ -7,6 +7,7 @@ import { ColorRing } from "react-loader-spinner";
 import { NavLink } from "react-router-dom";
 
 import { io } from "socket.io-client";
+import AuthContext from "../../context/AuthContext";
 const socket = io("http://localhost:3001", {
   withCredentials: true,
 });
@@ -15,7 +16,6 @@ const GatherList = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [gatherList, setGatherList] = useState([]);
   const [isButtonClicked, setIsButtonClicked] = useState(false);
-
   const url = `http://localhost:3001/api/gather`;
   const getAllGathers = async () => {
     try {
@@ -40,10 +40,11 @@ const GatherList = () => {
   }, []);
 
   return (
-    <>
+    <div key="container">
       {isLoading && (
-        <div className="mx-auto w-25">
+        <div className="mx-auto w-25" key="div-color-ring">
           <ColorRing
+            key="color-ring"
             visible={true}
             height="80"
             width="80"
@@ -54,17 +55,21 @@ const GatherList = () => {
           />
         </div>
       )}
-      <h1 className="h1 card bg-dark p-1">
+      <h1 className="h1 card bg-dark p-1" key="h1">
         Gather List <hr />
       </h1>
-      <div className="row">
-        <div className="col">
-          {" "}
+      <div className="row" key="row">
+        <div className="col" key="col">
           <NavLink
+            key="btn-create-gtr-link"
             style={{ textDecoration: "none", color: "whitesmoke" }}
             to="/gather/create"
           >
-            <Button onClick={handleCreateButton} className={`p-1 mb-2`}>
+            <Button
+              key="btn-create-gtr"
+              onClick={handleCreateButton}
+              className={`p-1 mb-2`}
+            >
               Create a gather
             </Button>{" "}
           </NavLink>
@@ -75,7 +80,7 @@ const GatherList = () => {
           <GatherItem {...item} key={item._id} />
         </>
       ))}
-    </>
+    </div>
   );
 };
 

@@ -42,7 +42,7 @@ const GatherItem = ({
   const [showSubGather, setShowSubGather] = useState(false);
   const [showAdminOptionsButton, setShowAdminOptionsButton] = useState(true);
   const [matchScoreInputs, setMatchScoreInputs] = useState({});
-  const [adminOptionState, , setAdminOptionState] = useState(false);
+  const [adminOptionState, setAdminOptionState] = useState(false);
 
   const { isAdminState, isModerator, isManager } = useContext(AuthContext);
 
@@ -264,7 +264,7 @@ const GatherItem = ({
             <span className="card text-black bg-success">
               <p className="h4"> Team A:</p> <br />
               {teams[0][0].TeamA.map((item) => (
-                <>
+                <div key={item.userId}>
                   <p className="card bg-dark h6"> {item.userName} </p>
                   {/*------------------------ Score Update IsFinished = true ?----------------- */}
                   {isFinished === true && onGoing === false && (
@@ -276,14 +276,17 @@ const GatherItem = ({
                       item={item}
                     />
                   )}
-                </>
+                </div>
               ))}
             </span>
             <span className="card mt-1 text-black bg-success">
               <p className="h4"> Team B:</p> <br />
               {teams[0][0].TeamB.map((item) => (
-                <>
-                  <p className="card bg-dark h6"> {item.userName}</p>
+                <div key={item.userId}>
+                  <p key={item.userId} className="card bg-dark h6">
+                    {" "}
+                    {item.userName}
+                  </p>
 
                   {/*------------------------ Score Update IsFinished = true ?----------------- */}
                   {adminOptionState === true && isFinished === true && (
@@ -295,7 +298,7 @@ const GatherItem = ({
                       item={item}
                     />
                   )}
-                </>
+                </div>
               ))}
             </span>
             <br />
@@ -356,26 +359,12 @@ const GatherItem = ({
               </p>
             </span>
             <br />
-            {/* <<------------------- Submit gather here -------------->> */}
-            {adminOptionState === true &&
-              isFinished === false &&
-              isOnGoing === false &&
-              waitingForPlayers === false && (
-                <div>
-                  <SubmitGather
-                    isFinished={isFinished}
-                    show={showSubmitForm}
-                    submitToggle={handleShowSubmitButton}
-                    gatherId={_id}
-                  />
-                </div>
-              )}
             {/* <<----------------- Upload Form Here ------------------->> */}
-            {adminOptionState ? "213123" : "ssssss2"}
-            <br />
+
             {adminOptionState === true &&
               isFinished === false &&
-              isOnGoing === true && (
+              isOnGoing === true &&
+              waitingForPlayers === false && (
                 <form
                   className="upload__form bg-dark card my_center p-3 rounded"
                   onSubmit={handleSubmitMatchPicture}
@@ -398,6 +387,21 @@ const GatherItem = ({
               )}
           </>
         )}
+        {/* <<------------------- Submit gather here -------------->> */}
+        {adminOptionState === true &&
+          isFinished === false &&
+          isOnGoing === false &&
+          waitingForPlayers === false && (
+            <div>
+              <SubmitGather
+                isFinished={isFinished}
+                show={showSubmitForm}
+                submitToggle={handleShowSubmitButton}
+                gatherId={_id}
+              />
+            </div>
+          )}
+
         {/*<<-------------------- Status of Gather IS HERE------------>>  */}
         {isFinished === false && (
           <>

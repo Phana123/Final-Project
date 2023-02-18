@@ -34,9 +34,11 @@ const SubmitGather = ({ isFinished, gatherId, submitToggle, show }) => {
   return (
     <>
       {isFinished === true ? (
-        <></>
+        <>Gather is Finished</>
       ) : (
         <div className="col">
+          Gather is not finished yet
+          <br />
           <Button onClick={submitToggle}>Submit gather here</Button>
           <div className={show ? "" : "hide_class"}>
             <Formik
