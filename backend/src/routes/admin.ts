@@ -58,6 +58,7 @@ router.post(
       teams: [],
       finished: false,
       waitingForPlayers: true,
+      isUpdatedGather: false,
     });
 
     try {
@@ -185,41 +186,41 @@ router.post(
   }
 );
 
-//When gather is finished
-router.post(
-  "/gather/finishGather/:gatherId",
-  upload.single("image"),
-  validateToken,
-  isAdmin,
-  async (req, res, next) => {
-    try {
-      const gatherId = req.params.gatherId;
-      const gather = await Gather.findOneAndUpdate(
-        { _id: gatherId },
-        {
-          finished: true,
-          onGoing: false
-        }
-      );
-    } catch (error) {
-      console.log(`something wrong here`);
+upload.single("image"),
+  //When gather is finished
+  // upload.single("image"),
+  router.post(
+    "/gather/finishGather/:gatherId",
+    upload.single("image"),
+    validateToken,
+    isAdmin,
+    async (req, res, next) => {
+      try {
+        const gatherId = req.params.gatherId;
+        const gather = await Gather.findOneAndUpdate(
+          { _id: gatherId },
+          {
+            onGoing: false,
+          }
+        );
+      } catch (error) {
+        console.log(`something wrong here`);
+      }
     }
-  }
-);
+  );
 
 //When admin update score after finish
 router.post(
-  //moderator/insertScore/gatherId
+  //moderator/insertScore/gatherId  --> SubmitGather Component
   "/gather/insertScore/:gatherId/",
   validateToken,
 
   async (req, res) => {
     try {
       const body = _.pick(req.body, "userId", "kill", "death", "assist");
-      const gatherId = req.params.gatherId
-      const gather = await Gather.findOne({ _id: gatherId })
+      const gatherId = req.params.gatherId;
+      const gather = await Gather.findOne({ _id: gatherId });
       if (gather.players.length === gather.maxPlayers) {
-
       }
       const updateUser = await User.findOneAndUpdate(
         { _id: body.userId },
@@ -230,6 +231,7 @@ router.post(
             "score.assist": body.assist,
             "score.points": 22,
           },
+          finished: true,
         }
       );
       res.json({
@@ -244,7 +246,7 @@ router.post(
 
 // <<------------------- Gather Score when End ---------------->>
 router.post(
-  //moderator/insertScore/gatherId
+  //moderator/submitGather/gatherId
   "/gather/submitGather/:gatherId/",
   validateToken,
   async (req, res) => {
@@ -266,6 +268,35 @@ router.post(
         .catch((error) => {
           console.log(error);
         });
+    } catch (error) {
+      console.log(error);
+    }
+    return nodeEvents.emit("update");
+  }
+);
+// <<------------------- When Everything is Done - Update isUpdatedGather in database ---------------->>
+router.post(
+  //moderator/submitGather/gatherId
+  "/gather/finalUpdate/:gatherId/",
+  validateToken,isAdmin,
+  async (req, res) => {
+    try {
+      const gatherId = req.params.gatherId;
+      const filter = { _id: gatherId };
+      const update = {
+        isUpdatedGather: true,
+      };
+      const options = { new: true }; // This option returns the updated document
+
+      await Gather.findOneAndUpdate(filter, update)
+        .then((updatedDocument) => {
+          console.log(updatedDocument);
+          res.json({ message: `Success, gather is ended` });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+          return nodeEvents.emit("update");
     } catch (error) {
       console.log(error);
     }

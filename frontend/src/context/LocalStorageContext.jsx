@@ -2,42 +2,27 @@ import { createContext, useEffect, useState } from "react";
 
 //create the context:
 const LocalStorageContext = createContext({
-  adminOptionState: true,
-  toggleAdminOptionState: () => {},
   isJoinedState: true,
   toggleIsJoinedState: () => {},
-  savedUserCount: true,
-  savedUsersObject: true,
-  saveUserInObjectFunc: () => {},
-  plusSavedUserCount: () => {},
-  minusSavedUserCount: () => {},
+  saveUserInArrayFunc: () => {},
   clearSavedCountLocalStorage: () => {},
+  savedUsersArrayLocalStorage: [],
 });
 
 const LocalStorageProvider = ({ children }) => {
   //state: shared with all the app:
-  const [adminOptionState, setAdminOptionState] = useState(false);
   const [isJoinedState, setIsJoinedState] = useState(false);
-  const [savedUserCount, setSavedUserCount] = useState(0);
-  const [savedUsersObject, setSavedUsersObject] = useState({});
-  const adminOptionStateLocalStorage = localStorage.getItem("hideAdminOptions");
   const isJoinedToGatherLocalStorage = localStorage.getItem("isJoined");
-  const savedUserCountLocalStorage = localStorage.getItem("savedUserCount");
-  const savedUsersObjectLocalStorage = localStorage.getItem("savedUsersObject");
-
+  const savedUsersArrayLocalStorage =
+    JSON.parse(localStorage.getItem("savedUsersArray")) || [];
   // <<-------------------- toggle Admin Options State here ------------------>>
-  const saveUserInObjectFunc = (id) => {
-    localStorage.setItem("savedUsersObject", [id]);
-  };
-  // <<-------------------- toggle Admin Options State here ------------------>>
-  const toggleAdminOptionState = () => {
-    if (adminOptionStateLocalStorage === "true") {
-      localStorage.setItem("hideAdminOptions", "false");
-      setAdminOptionState(false);
-    } else {
-      localStorage.setItem("hideAdminOptions", "true");
-      setAdminOptionState(true);
-    }
+  const saveUserInArrayFunc = (userId) => {
+    const newItem = userId;
+    savedUsersArrayLocalStorage.push(newItem);
+    localStorage.setItem(
+      "savedUsersArray",
+      JSON.stringify(savedUsersArrayLocalStorage)
+    );
   };
   // <<--------------------- toggle is Joined to Gather? State here ------------------>>
   const toggleIsJoinedState = (state) => {
@@ -48,62 +33,28 @@ const LocalStorageProvider = ({ children }) => {
       localStorage.setItem("isJoined", "false");
     }
   };
-  // <<------------------- Saved Count Plus+Minus Function's here ---------------------->>
-  const plusSavedUserCount = (maxPlayers) => {
-    if (savedUserCountLocalStorage < maxPlayers) {
-      setSavedUserCount((state) => (state += 1));
-
-      const newValue = Number(savedUserCountLocalStorage) + 1;
-      localStorage.setItem("savedUserCount", newValue);
-    } else if (savedUserCountLocalStorage === null) {
-      setSavedUserCount((state) => (state += 1));
-
-      const newValue = Number(savedUserCountLocalStorage) + 1;
-      localStorage.setItem("savedUserCount", newValue);
-    }
-  };
-  const minusSavedUserCount = () => {
-    if (savedUserCountLocalStorage > 0) {
-      setSavedUserCount((state) => (state -= 1));
-      const newValue = Number(savedUserCountLocalStorage) - 1;
-      localStorage.setItem("savedUserCount", newValue);
-    }
-  };
   // <<------------------ Clear the Local Storage when Admin finish to Update ------------------>>
   const clearSavedCountLocalStorage = () => {
-    localStorage.removeItem("savedUserCount");
+    localStorage.removeItem("savedUsersArray");
   };
 
   useEffect(() => {
-    if (adminOptionStateLocalStorage === "true") {
-      setAdminOptionState(true);
-    } else {
-      setAdminOptionState(false);
-    }
     if (isJoinedToGatherLocalStorage === "true") {
       setIsJoinedState(true);
     } else {
       setIsJoinedState(false);
     }
-
-    const newValueSavedCount = Number(savedUserCountLocalStorage);
-
-    setSavedUserCount(newValueSavedCount);
   }, []);
   return (
     <>
       <LocalStorageContext.Provider
         value={{
-          adminOptionState,
-          toggleAdminOptionState,
           isJoinedState,
           toggleIsJoinedState,
-          savedUserCount,
-          plusSavedUserCount,
-          minusSavedUserCount,
+
           clearSavedCountLocalStorage,
-          saveUserInObjectFunc,
-          savedUsersObject,
+          saveUserInArrayFunc,
+          savedUsersArrayLocalStorage,
         }}
       >
         {children}

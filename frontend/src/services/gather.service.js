@@ -215,6 +215,16 @@ const endGather = async (gatherId, data) => {
     data: data,
   });
 };
+// <<---------------------- When Everything is Done - Update isUpdatedGather in database ----------------->>
+const finallyFinishUpdatedGather = async (gatherId) => {
+  //gatherId
+
+  const url = `http://localhost:3001/api/admin/gather/finalUpdate/${gatherId}`;
+  return await axios(url, {
+    method: "POST",
+    headers: { Authorization: localStorage.getItem("token") },
+  });
+};
 
 export {
   startGather,
@@ -229,6 +239,7 @@ export {
   removePlayerFromQueue,
   scoreUpdate,
   endGather,
+  finallyFinishUpdatedGather,
 };
 
 const gatherService = {
@@ -244,5 +255,6 @@ const gatherService = {
   removePlayerFromQueue,
   scoreUpdate,
   endGather,
+  finallyFinishUpdatedGather,
 };
 export default gatherService;

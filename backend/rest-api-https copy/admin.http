@@ -1,0 +1,61 @@
+
+
+###POST to Create Gather :
+POST http://localhost:3001/api/admin/gather/create
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWMxYjIwMTJiYzRmMTg3ZTFlODFlYiIsImlhdCI6MTY3NjQxNzg5MywiZXhwIjoxNjc5MDA5ODkzfQ.9YJDbXDbzvN-H8IRIKiwDgK1kvaQFeUnuWEAB-Jb8tE
+
+{
+    "map":"Ascent",
+    "maxPlayers":"5",
+    "date":"21-05-1995"
+}
+
+
+
+###POST Admin to DELETE Player from Queue :
+## host/api/admin/deletePlayerFromQueue/gatherId/userId
+DELETE http://localhost:3001/api/admin/gather/deletePlayerFromQueue/63ea2578c2af8bd9e9913907/
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI5MzcwNywiZXhwIjoxNjc4ODg1NzA3fQ.MMu4eWEpgsC71Rh6AkglkGbPK9TNBwQQbsB55cdbZ98
+
+
+###POST Admin to EDIT The map OF Gather :
+## host/api/admin/updateMap/gatherid
+POST http://localhost:3001/api/admin/gather/updateMap/63ea2578c2af8bd9e9913907
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI5MzcwNywiZXhwIjoxNjc4ODg1NzA3fQ.MMu4eWEpgsC71Rh6AkglkGbPK9TNBwQQbsB55cdbZ98
+
+{
+    "map":"Icebox"
+}
+
+###POST Admin to EDIT The Max Players Of Gather :
+## host/api/admin/updateMap/gatherid
+POST http://localhost:3001/api/admin/gather/updateMaxPlayers/63ea2578c2af8bd9e9913907
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI5MzcwNywiZXhwIjoxNjc4ODg1NzA3fQ.MMu4eWEpgsC71Rh6AkglkGbPK9TNBwQQbsB55cdbZ98
+
+{
+    "maxPlayers":6
+}
+
+
+###POST Admin to EDIT The Status Of Gather :
+## host/api/admin/updateMap/gatherid
+POST http://localhost:3001/api/admin/gather/updateStatus/63ea3dd11b9115773c9b019e
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRmYzVkMzZlZDUwYSIsImlhdCI6MTY3NjI5MzcwNywiZXhwIjoxNjc4ODg1NzA3fQ.MMu4eWEpgsC71Rh6AkglkGbPK9TNBwQQbsB55cdbZ98
+
+{
+    "status":false
+}
+
+###POST Admin when gather is finished :
+## host/api/admin/finishGather/gatherid
+POST http://localhost:3001/api/admin/gather/updateStatus/63ed0158172282d284bd15b4
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWQwMTFkMTcyMjgyZDI4NGJkMTVhZCIsImlhdCI6MTY3NjQ3NjczOCwiZXhwIjoxNjc5MDY4NzM4fQ.bzvU9zJREfGtwg3WJEUQp_rjMyu_FPhD5MXmcURzEsY
+
+{
+    "status":false
+}

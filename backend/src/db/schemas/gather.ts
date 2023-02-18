@@ -9,7 +9,8 @@ const gatherSchema = new Schema({
   teams: Array,
   finished: Boolean,
   score: Array,
-  waitingForPlayers:Boolean
+  waitingForPlayers:Boolean,
+  isUpdatedGather: Boolean
 });
 
 export { gatherSchema };

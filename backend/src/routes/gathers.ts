@@ -73,11 +73,7 @@ const shouldGameStart = async (id) => {
       const teams = [{ TeamA: teamA, TeamB: teamB }];
       const updatedGather = await Gather.findOneAndUpdate(
         { _id: id },
-        { $push: { teams: teams } }
-      );
-      const updateOnGoing = await Gather.findByIdAndUpdate(
-        { _id: id },
-        { onGoing: true }
+        { $push: { teams: teams }, onGoing: true, waitingForPlayers: false }
       );
       return nodeEvents.emit("update");
     } catch (error) {

@@ -4,27 +4,30 @@ import { Button } from "react-bootstrap";
 import gatherService from "../../services/gather.service";
 import { LocalStorageContext } from "../../context/LocalStorageContext";
 import isAdmin from "../../functions/isAdmin.model";
+import { toast } from "react-toastify";
 
 const ScoreUpdate = ({ maxPlayers, handleInputs, item, players, gatherId }) => {
   const [killsInput, setKillsInput] = useState(0);
   const [deathInput, setDeathInput] = useState(0);
   const [assistInput, setAssistInput] = useState(0);
   const [playersData, setPlayerData] = useState({});
+  const [showScoreForm, setShowScoreForm] = useState();
   const [maxPlayersState, setMaxPlayersState] = useState(
     (state) => (state += maxPlayers)
   );
   const [show, setShow] = useState(true);
-  let finishPlayersArray = [];
 
   const formInitialValues = [0];
   const {
     adminOptionState,
-    plusSavedUserCount,
-    savedUserCount,
+    savedUsersArrayLocalStorage,
     clearSavedCountLocalStorage,
-    saveUserInObjectFunc,
+    saveUserInArrayFunc,
   } = useContext(LocalStorageContext);
-
+  const checkIfUserAlreadyUpdated = isAdmin(
+    item.userId,
+    savedUsersArrayLocalStorage
+  );
   useEffect(() => {
     setPlayerData({
       userId: item.userId,
@@ -32,6 +35,12 @@ const ScoreUpdate = ({ maxPlayers, handleInputs, item, players, gatherId }) => {
       death: deathInput,
       assist: assistInput,
     });
+
+    if (checkIfUserAlreadyUpdated === true) {
+      setShowScoreForm(false);
+    } else {
+      setShowScoreForm(true);
+    }
   }, [killsInput, assistInput, deathInput]);
 
   // <<-------------- Handle Kills Input Here ---------------->>
@@ -60,16 +69,23 @@ const ScoreUpdate = ({ maxPlayers, handleInputs, item, players, gatherId }) => {
 
   // <<-------------- Handle Submit Axios Button Here ---------------->>
   const handleScoreUpdateButton = async () => {
-    gatherService.scoreUpdate(gatherId, playersData);
-    setShow((state) => !state);
-    plusSavedUserCount(maxPlayers);
-    saveUserInObjectFunc(item.userId);
+    try {
+      if (checkIfUserAlreadyUpdated === false) {
+        gatherService.scoreUpdate(gatherId, playersData);
+        setShow((state) => !state);
+
+        saveUserInArrayFunc(item.userId);
+        toast.success(`User score updated!`);
+      } else {
+      }
+    } catch (error) {
+      toast.error(`This user is already updated`);
+    }
   };
-  console.log(finishPlayersArray);
 
   return (
     <>
-      {show === true && adminOptionState === true && (
+      {show === true && adminOptionState === true && showScoreForm === true && (
         <>
           <div className="update_score_form col">
             <Formik
