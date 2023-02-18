@@ -153,4 +153,38 @@ router.delete("/leaveQueue/:gatherId", validateToken, async (req, res) => {
   }
 });
 
+// <------------- api/gather/isJoined ? ------------->
+router.get("/isJoined/:gatherId/:userName", async (req, res) => {
+  try {
+    const userName = req.params.userName
+    const gatherId = req.params.gatherId
+
+    const gather = await Gather.findOne({ _id: gatherId })
+    const isJoined = gather.players.some(item => item.userName === userName)
+    res.json({ isJoined: isJoined })
+    return nodeEvents.emit("update");
+  } catch (error) {
+    console.log(error)
+  }
+})
+// <-------------- api/gather/isFinished ? --------------->
+router.get("/isFinished/:gatherId", async (req, res) => {
+  try {
+    const gatherId = req.params.gatherId
+    let isFinished = false;
+    const gather = await Gather.findOne({ _id: gatherId })
+    if (gather.finished === true) {
+      isFinished = true
+    } else if (gather.finished === false) {
+      isFinished = false
+    } else {
+      console.log(`There is no isFinished key in gather database`)
+    }
+    res.json({ isFinished: isFinished })
+    return nodeEvents.emit("update");
+  } catch (error) {
+    console.log(error)
+  }
+})
+
 export { router as gatherRouter };

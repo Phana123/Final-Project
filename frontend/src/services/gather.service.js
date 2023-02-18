@@ -226,6 +226,32 @@ const finallyFinishUpdatedGather = async (gatherId) => {
   });
 };
 
+// <------------ Check if Is Joined! --------------->
+const isFinishedCheck = async (gatherId) => {
+  try {
+    const url = `http://localhost:3001/api/gather/isFinished/${gatherId}`;
+
+    return await axios(url, {
+      method: "GET",
+      headers: { Authorization: localStorage.getItem("token") },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+// <------------ Check if Is Joined! --------------->
+const isJoinedCheck = async (gatherId, userName) => {
+  try {
+    const url = `http://localhost:3001/api/gather/isJoined/${gatherId}/${userName}`;
+
+    return await axios(url, {
+      method: "GET",
+      headers: { Authorization: localStorage.getItem("token") },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 export {
   startGather,
   create,
@@ -240,6 +266,8 @@ export {
   scoreUpdate,
   endGather,
   finallyFinishUpdatedGather,
+  isJoinedCheck,
+  isFinishedCheck,
 };
 
 const gatherService = {
@@ -256,5 +284,7 @@ const gatherService = {
   scoreUpdate,
   endGather,
   finallyFinishUpdatedGather,
+  isJoinedCheck,
+  isFinishedCheck,
 };
 export default gatherService;

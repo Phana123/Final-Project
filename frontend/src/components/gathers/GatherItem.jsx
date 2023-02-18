@@ -33,7 +33,7 @@ const GatherItem = ({
 
   const [playersArray, setPlayersArray] = useState(players);
   const [isOnGoing, setIsOnGoing] = useState(onGoing);
-  const [isFinished, setIsFinished] = useState(finished);
+  const [isFinished, setIsFinished] = useState();
   const [isUpdatedGatherState, setIsUpdatedGatherState] =
     useState(isUpdatedGather);
   const [matchScoreImageUploadFile, setMatchScoreImageUploadFile] =
@@ -44,7 +44,8 @@ const GatherItem = ({
   const [matchScoreInputs, setMatchScoreInputs] = useState({});
   const [adminOptionState, setAdminOptionState] = useState(false);
 
-  const { isAdminState, isModerator, isManager } = useContext(AuthContext);
+  const { username, isAdminState, isModerator, isManager } =
+    useContext(AuthContext);
 
   //---------- Local Storage Context HERE->>-----
   const {
@@ -59,18 +60,15 @@ const GatherItem = ({
     if (isUpdatedGatherState === true) {
       setShowAdminOptionsButton(false);
     }
+    isJoinedCheckFunction();
+
+    isFinishedCheckFunction();
   }, []);
   useEffect(() => {
     setIsOnGoing((state) => !state);
   }, [onGoing]);
-
   const formInitialValues = [10, "Ascent"];
-
-  const toggleAdminOptionState = () => {
-    setAdminOptionState((state) => !state);
-  };
-
-  // <<------------- When Everything is Done - Update isUpdatedGather in database ----------------------->>
+  // <<------------ When Everything is Done - Update isUpdatedGather in database ------------------>>
   if (
     savedUsersArrayLocalStorage.length >= maxPlayers &&
     isUpdatedGatherState === false
@@ -83,15 +81,32 @@ const GatherItem = ({
       .catch((e) => console.log(e));
   } else if (isUpdatedGatherState === true) {
   }
+
+  // <-------------- isJoined Check Function with Axios!!------------------------>
+  const isFinishedCheckFunction = () => {
+    gatherService
+      .isFinishedCheck(_id)
+      .then((res) => console.log(res.data.isFinished))
+      .catch((e) => console.log(e));
+  };
+  // <-------------- isJoined Check Function with Axios!!------------------------>
+  const isJoinedCheckFunction = () => {
+    gatherService
+      .isJoinedCheck(_id, username)
+      .then((res) => res)
+      .catch((e) => console.log(e));
+  };
+  // <----------------- toggle Show Submit Gather - Team Score Component --------------->
   const toggleShowSubmitGather = () => {
     setShowSubGather((state) => !state);
   };
-
+  // <---------------- handleMatchScoresInput Function----------------------->
   const handleMatchScoresInput = (newstate) => {
     let state = matchScoreInputs;
     setMatchScoreInputs({ state, newstate });
   };
 
+  // <------------------- handleSubmitMatchPicture ------------------>
   const handleSubmitMatchPicture = (event) => {
     gatherService
       .finishGather(event, _id, matchScoreImageUploadFile)
@@ -106,12 +121,14 @@ const GatherItem = ({
   const handleJoinButton = async () => {
     gatherService.join(_id);
     toggleIsJoinedState(true);
+    isJoinedCheckFunction();
   };
 
   //<<------------------- Leave queue function is here //-------------->>
   const handleLeaveButton = async () => {
     gatherService.leaveQueue(_id);
     toggleIsJoinedState(false);
+    isJoinedCheckFunction();
   };
 
   //<<----------- Delete single gather is here // -- Only For Mod/Admin-------->>
@@ -149,37 +166,6 @@ const GatherItem = ({
         console.log(res);
       })
       .catch((e) => {
-        console.log(e);
-        alert(e); //swal //modal
-        setErrMessage(JSON.stringify(e.response.data));
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
-
-  // <<--------------Turn Off Gather Status Function // Only for Mod/Admin-------------->>
-  const handleTurnOffGather = async () => {
-    setIsLoading(true);
-
-    gatherService
-      .handleStatus(false, _id)
-      .then((res) => {})
-      .catch((e) => {
-        setErrMessage(JSON.stringify(e.response.data));
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
-  //<<-------------- Turn Off Gather Status Function // Only for Mod/Admin-------------->>
-  const handleTurnOnGather = async () => {
-    setIsLoading(true);
-
-    gatherService
-      .handleStatus(true, _id)
-      .then((res) => {})
-      .catch((e) => {
         setErrMessage(JSON.stringify(e.response.data));
       })
       .finally(() => {
@@ -189,14 +175,13 @@ const GatherItem = ({
 
   // <<--------------Button Of Hide Admin/Moderator Options HERE ---------------->>
   const handleHideAdminOptions = () => {
-    toggleAdminOptionState();
+    setAdminOptionState((state) => !state);
   };
 
   // <<-------------------- Handle show Submit Gather Button -------------------->>
   const handleShowSubmitButton = () => {
     setShowSubmitForm((state) => !state);
   };
-
   return (
     <>
       <div className="btn card mb-1 bg-secondary gatherlist-item">
@@ -233,7 +218,7 @@ const GatherItem = ({
               <>
                 <span className="card bg-dark" key={item.userId}>
                   <p className="h6"> {item.userName}</p>
-                  {(isAdminState || isModerator) &&
+                  {(isAdminState || isModerator || isManager) &&
                     adminOptionState === true && (
                       <span>
                         <AiFillDelete
@@ -267,7 +252,7 @@ const GatherItem = ({
                 <div key={item.userId}>
                   <p className="card bg-dark h6"> {item.userName} </p>
                   {/*------------------------ Score Update IsFinished = true ?----------------- */}
-                  {isFinished === true && onGoing === false && (
+                  {isFinished === true && onGoing === false ? (
                     <ScoreUpdate
                       maxPlayers={maxPlayers}
                       handleInputs={handleMatchScoresInput}
@@ -275,6 +260,8 @@ const GatherItem = ({
                       players={players}
                       item={item}
                     />
+                  ) : (
+                    "asdasdasda"
                   )}
                 </div>
               ))}
@@ -309,45 +296,19 @@ const GatherItem = ({
                 Map:
                 {map}
               </p>
-              {(isModerator || isAdminState) && adminOptionState === true && (
-                <EditGatherModal titleOpen="Edit map">
-                  <Formik
-                    initialValues={formInitialValues[1]}
-                    onSubmit={handleEditMapButton}
-                  >
-                    <Form>
-                      <input
-                        onChange={(e) => setMapInput(e.currentTarget.value)}
-                        type="text"
-                        required
-                        placeholder="One of real maps"
-                      />
-                      <Button className="btn btn-warning" type="submit">
-                        Finish click here
-                      </Button>
-                    </Form>
-                  </Formik>
-                </EditGatherModal>
-              )}
-            </span>
-            {/*------------------ Max Players IS here  -------------*/}
-            <span className=" bg-dark mt-1 ">
-              <p className="h6"> Max Players: {maxPlayers} </p>
-              <p>
-                {(isModerator || isAdminState) && adminOptionState === true && (
-                  <EditGatherModal titleOpen="Edit max players">
+              {(isAdminState || isModerator || isManager) &&
+                adminOptionState === true && (
+                  <EditGatherModal titleOpen="Edit map">
                     <Formik
-                      initialValues={formInitialValues[0]}
-                      onSubmit={handleEditMaxPlayersButton}
+                      initialValues={formInitialValues[1]}
+                      onSubmit={handleEditMapButton}
                     >
                       <Form>
                         <input
-                          onChange={(e) =>
-                            setMaxPlayersInput(e.currentTarget.value)
-                          }
-                          type="number"
+                          onChange={(e) => setMapInput(e.currentTarget.value)}
+                          type="text"
                           required
-                          placeholder="2-10 players"
+                          placeholder="One of real maps"
                         />
                         <Button className="btn btn-warning" type="submit">
                           Finish click here
@@ -356,6 +317,34 @@ const GatherItem = ({
                     </Formik>
                   </EditGatherModal>
                 )}
+            </span>
+            {/*------------------ Max Players IS here  -------------*/}
+            <span className=" bg-dark mt-1 ">
+              <p className="h6"> Max Players: {maxPlayers} </p>
+              <p>
+                {(isAdminState || isModerator || isManager) &&
+                  adminOptionState === true && (
+                    <EditGatherModal titleOpen="Edit max players">
+                      <Formik
+                        initialValues={formInitialValues[0]}
+                        onSubmit={handleEditMaxPlayersButton}
+                      >
+                        <Form>
+                          <input
+                            onChange={(e) =>
+                              setMaxPlayersInput(e.currentTarget.value)
+                            }
+                            type="number"
+                            required
+                            placeholder="2-10 players"
+                          />
+                          <Button className="btn btn-warning" type="submit">
+                            Finish click here
+                          </Button>
+                        </Form>
+                      </Formik>
+                    </EditGatherModal>
+                  )}
               </p>
             </span>
             <br />
@@ -409,50 +398,43 @@ const GatherItem = ({
             {waitingForPlayers ? (
               <>
                 <span className="bg-success p-1" style={{ color: "white" }}>
-                  off - Waiting for players...
-                  {/* {(isModerator || isAdminState) &&
-                    adminOptionState === true && (
-                      <Button onClick={handleTurnOffGather}> Turn off </Button>
-                    )} */}
+                  Off - Waiting for players...
                 </span>
               </>
             ) : (
               <>
                 <span className="bg-dark" style={{ color: "green" }}>
-                  On
-                  {/* {(isModerator || isAdminState) &&
-                    adminOptionState === true && (
-                      <Button onClick={handleTurnOnGather}> Turn on </Button>
-                    )} */}
+                  On - Gather is running....
                 </span>
               </>
             )}
           </>
         )}
         {/* ---------------Add And Leave Gather Buttons ARE here --------------- */}
-        {isFinished === false &&
-          isOnGoing === false &&
-          waitingForPlayers === true && (
-            <>
-              {isJoinedState === false ? (
-                <>
-                  <Button onClick={handleJoinButton} variant="success">
-                    Join Now
-                  </Button>
-                </>
-              ) : (
+        {waitingForPlayers === true && (
+          <>
+            {isJoinedState === false ? (
+              <>
+                <Button onClick={handleJoinButton} variant="success">
+                  Join Now
+                </Button>
+              </>
+            ) : (
+              <>
                 <Button onClick={handleLeaveButton} variant="danger">
                   Leave Queue
                 </Button>
-              )}
-            </>
-          )}
-        {/* --------------------Delete Gather is HERE ------- ONly for admin/moderator  ----*/}
-        {(isAdminState || isModerator) && adminOptionState === true && (
-          <Button onClick={handleDeleteGather} variant="danger">
-            Delete Gather
-          </Button>
+              </>
+            )}
+          </>
         )}
+        {/* --------------------Delete Gather is HERE ------- ONly for admin/moderator  ----*/}
+        {(isAdminState || isModerator || isManager) &&
+          adminOptionState === true && (
+            <Button onClick={handleDeleteGather} variant="danger">
+              Delete Gather
+            </Button>
+          )}
         <GatherDetails />
         <ToastContainer />
       </div>

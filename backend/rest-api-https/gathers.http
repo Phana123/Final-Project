@@ -21,6 +21,13 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRm
 POST http://localhost:3001/api/gather/startGather/63ec2012c8eb5ac8fc6b1d4f
 
 
+###GET isJoined - true / false
+GET http://localhost:3001/api/gather/isJoined/63f0981cf8411a9506185c32/matan1
+
+
+###GET isFinished - true / false 
+GET http://localhost:3001/api/gather/isFinished/63f0981cf8411a9506185c32
+
 
 
 
