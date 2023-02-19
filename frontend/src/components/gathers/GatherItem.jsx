@@ -14,6 +14,7 @@ import "../../styles/toast-container.css";
 import { isJoinedFunction } from "../../functions/isJoinedFunction";
 import ScoreUpdate from "./UpdateScore";
 import SubmitGather from "./SubmitGather";
+import UploadMatchPicture from "./UploadMatchPicture";
 
 const GatherItem = ({
   isUpdatedGather,
@@ -36,10 +37,9 @@ const GatherItem = ({
   const [isFinished, setIsFinished] = useState();
   const [isUpdatedGatherState, setIsUpdatedGatherState] =
     useState(isUpdatedGather);
-  const [matchScoreImageUploadFile, setMatchScoreImageUploadFile] =
-    useState(null);
+
   const [showSubmitForm, setShowSubmitForm] = useState(false);
-  const [showSubGather, setShowSubGather] = useState(false);
+  const [showSubGather, setShowSubmitGather] = useState(false);
   const [showAdminOptionsButton, setShowAdminOptionsButton] = useState(true);
   const [matchScoreInputs, setMatchScoreInputs] = useState({});
   const [adminOptionState, setAdminOptionState] = useState(false);
@@ -61,14 +61,19 @@ const GatherItem = ({
       setShowAdminOptionsButton(false);
     }
     isJoinedCheckFunction();
-
     isFinishedCheckFunction();
   }, []);
   useEffect(() => {
-    setIsOnGoing((state) => !state);
+    if (onGoing) {
+      setIsOnGoing(true);
+    } else {
+      setIsOnGoing(false);
+    setShowSubmitForm(true)
+    }
   }, [onGoing]);
   const formInitialValues = [10, "Ascent"];
   // <<------------ When Everything is Done - Update isUpdatedGather in database ------------------>>
+
   if (
     savedUsersArrayLocalStorage.length >= maxPlayers &&
     isUpdatedGatherState === false
@@ -81,12 +86,11 @@ const GatherItem = ({
       .catch((e) => console.log(e));
   } else if (isUpdatedGatherState === true) {
   }
-
   // <-------------- isJoined Check Function with Axios!!------------------------>
   const isFinishedCheckFunction = () => {
     gatherService
       .isFinishedCheck(_id)
-      .then((res) => console.log(res.data.isFinished))
+      .then((res) => setIsFinished(res.data.isFinished))
       .catch((e) => console.log(e));
   };
   // <-------------- isJoined Check Function with Axios!!------------------------>
@@ -98,23 +102,12 @@ const GatherItem = ({
   };
   // <----------------- toggle Show Submit Gather - Team Score Component --------------->
   const toggleShowSubmitGather = () => {
-    setShowSubGather((state) => !state);
+    setShowSubmitGather((state) => !state);
   };
   // <---------------- handleMatchScoresInput Function----------------------->
   const handleMatchScoresInput = (newstate) => {
     let state = matchScoreInputs;
     setMatchScoreInputs({ state, newstate });
-  };
-
-  // <------------------- handleSubmitMatchPicture ------------------>
-  const handleSubmitMatchPicture = (event) => {
-    gatherService
-      .finishGather(event, _id, matchScoreImageUploadFile)
-      .then(() => {
-        setIsFinished((state) => !state);
-        toggleShowSubmitGather();
-      })
-      .catch((e) => console.log(e));
   };
 
   // <<-----------------Add to queue Function is here ///----------->>
@@ -211,7 +204,7 @@ const GatherItem = ({
           )}
 
         {/* <<----------------------Players list Here------------------->> */}
-        {waitingForPlayers === true && isFinished === false && (
+        {waitingForPlayers === true && (
           <>
             Players: {players.length}/{maxPlayers}
             {players?.map((item) => (
@@ -237,13 +230,7 @@ const GatherItem = ({
           </>
         )}
         {/*------------------------ Teams [Team A , Team B] Are HERE --------------- >>> */}
-        <span className="shadow bg-info h5 span mt-1 mb-1">
-          {isFinished === false ? (
-            <>Gather is started!</>
-          ) : (
-            <>Gather is Ended!</>
-          )}
-        </span>
+        {/* <span className="shadow bg-info h5 span mt-1 mb-1">*/}
         {Object.keys(teams).length !== 0 && (
           <>
             <span className="card text-black bg-success">
@@ -261,7 +248,7 @@ const GatherItem = ({
                       item={item}
                     />
                   ) : (
-                    "asdasdasda"
+                    ""
                   )}
                 </div>
               ))}
@@ -289,9 +276,8 @@ const GatherItem = ({
               ))}
             </span>
             <br />
-
             {/* ----------Map IS here ---------- */}
-            <span className=" bg-dark">
+            <span className=" bg-dark mt-2 card">
               <p className="h6">
                 Map:
                 {map}
@@ -348,39 +334,26 @@ const GatherItem = ({
               </p>
             </span>
             <br />
-            {/* <<----------------- Upload Form Here ------------------->> */}
-
-            {adminOptionState === true &&
-              isFinished === false &&
-              isOnGoing === true &&
-              waitingForPlayers === false && (
-                <form
-                  className="upload__form bg-dark card my_center p-3 rounded"
-                  onSubmit={handleSubmitMatchPicture}
-                >
-                  <span className="h5  w-100 text-danger bg-light p-2 rounded">
-                    Upload match score picture file
-                  </span>
-                  <br />
-                  <input
-                    className="bg-light w-100 p-1 text-secondary rounded"
-                    type="file"
-                    onChange={(e) =>
-                      setMatchScoreImageUploadFile(e.target.files[0])
-                    }
-                  />
-                  <button className="btn btn-light" type="submit">
-                    Upload
-                  </button>
-                </form>
-              )}
           </>
         )}
+        {/* <<----------------- Upload Form Here ------------------->> */}
+        {adminOptionState === true &&
+          waitingForPlayers === false &&
+          isOnGoing === true && (
+            <>
+              <UploadMatchPicture
+                gatherId={_id}
+                toggleShowSubmitGather={toggleShowSubmitGather}
+                setIsFinished={setIsFinished}
+              />
+            </>
+          )}
         {/* <<------------------- Submit gather here -------------->> */}
         {adminOptionState === true &&
           isFinished === false &&
           isOnGoing === false &&
-          waitingForPlayers === false && (
+          waitingForPlayers === false &&
+          showSubmitForm === true && (
             <div>
               <SubmitGather
                 isFinished={isFinished}
