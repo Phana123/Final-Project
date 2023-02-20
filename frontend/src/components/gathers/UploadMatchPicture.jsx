@@ -9,12 +9,7 @@ const UploadMatchPicture = ({
   const [selectedImage, setSelectedImage] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
   const [showComponent, setShowComponent] = useState(true);
-    const [refresh, setRefresh] = useState(false);
 
-    function handleButtonClick() {
-      // Update the refresh state value to trigger a re-render
-    
-    }
   function handleImageChange(e) {
     const selectedFile = e.target.files[0];
 
@@ -49,7 +44,7 @@ const UploadMatchPicture = ({
     // Here, you can handle the submission of the form and upload the image
     // to your server or cloud storage
     setShowComponent(false);
-    setRefresh((prev) => !prev);
+    window.location.reload();
   }
 
   return (

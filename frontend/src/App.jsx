@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Router } from "react-router-dom";
 import "./App.css";
 
 import AuthContext from "./context/AuthContext";
@@ -12,35 +12,43 @@ import { Container } from "react-bootstrap";
 import Footer from "./components/Footer";
 import Profile from "./routes/Profile";
 import GatherAdd from "./components/gathers/GatherAdd";
+import GatherDetails from "./components/gathers/GatherDetails";
 
 function App() {
-  const { isLoggedIn, isAdminState, isModerator } = useContext(AuthContext);
+  const { isLoggedIn, isAdminState, isModerator, isManager } =
+    useContext(AuthContext);
   return (
     <>
-      <div
-        style={{ backgroundColor: "rgb(251, 251, 251)" }}
-        className="container-fluid"
-      >
-        <Container fluid className="w-100 text-center">
-          <Header />
-          <div className="app-container card bg-dark mt-1 p-4 ">
-            {/* Routes */}
-            <Routes>
+      <Router>
+        <div
+          style={{ backgroundColor: "rgb(251, 251, 251)" }}
+          className="container-fluid"
+        >
+          <Container fluid className="w-100 text-center">
+            <Header />
+            <div className="app-container card bg-dark mt-1 p-4 ">
+              {/* Routes */}
+
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
-              {isLoggedIn && (isAdminState || isModerator) && (
+              {isLoggedIn && (isAdminState || isModerator || isManager) && (
                 <Route path="/gather/create" element={<GatherAdd />} />
               )}
               {!isLoggedIn && <Route path="/login" element={<Login />} />}
               {!isLoggedIn && <Route path="/register" element={<Register />} />}
 
               {isLoggedIn && <Route path="/profile" element={<Profile />} />}
-            </Routes>
-            {/* Routes */}
-          </div>
-          <Footer />
-        </Container>
-      </div>
+              <Route
+                path="/gather/details/:gatherId"
+                component={GatherDetails}
+              />
+
+              {/* Routes */}
+            </div>
+            <Footer />
+          </Container>
+        </div>
+      </Router>
     </>
   );
 }

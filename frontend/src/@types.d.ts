@@ -10,6 +10,7 @@ export type AuthContextType = {
   isLoggedIn: boolean;
   isAdminState?: boolean;
   isModerator?: boolean;
+  isManager?: boolean,
   username?: string;
   email?: string;
   token?: string;

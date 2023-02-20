@@ -13,25 +13,20 @@ import { LocalStorageProvider } from "./context/LocalStorageContext";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-bootstrap";
 
-
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
 root.render(
   <>
     <ToastContainer />
-    <BrowserRouter>
-      <LocalStorageProvider>
-        <AuthContextProvider>
-          <DarkModeContextProvider>
-            <Provider store={store}>
-              <App />
-            </Provider>
-          </DarkModeContextProvider>
-        </AuthContextProvider>
-      </LocalStorageProvider>
-    </BrowserRouter>
+    <LocalStorageProvider>
+      <AuthContextProvider>
+        <DarkModeContextProvider>
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </DarkModeContextProvider>
+      </AuthContextProvider>
+    </LocalStorageProvider>
   </>
 );
-
-

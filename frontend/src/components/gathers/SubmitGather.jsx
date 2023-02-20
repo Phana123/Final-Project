@@ -4,7 +4,13 @@ import { Form } from "formik";
 import { Button } from "react-bootstrap";
 import gatherService from "../../services/gather.service";
 
-const SubmitGather = ({ isFinished, gatherId, submitToggle, show }) => {
+const SubmitGather = ({
+  setShow,
+  isFinished,
+  gatherId,
+  submitToggle,
+  show,
+}) => {
   const [teamAInput, setTeamAInput] = useState(0);
   const [teamBInput, setTeamBInput] = useState(0);
 
@@ -33,13 +39,9 @@ const SubmitGather = ({ isFinished, gatherId, submitToggle, show }) => {
 
   return (
     <>
-      {isFinished === true ? (
-        <>Gather is Finished</>
-      ) : (
+      {isFinished === true && (
         <div className="col">
-          Gather is not finished yet
-          <br />
-          <Button onClick={submitToggle}>Submit gather here</Button>
+          <Button onClick={setShow}>Submit gather here</Button>
           <div className={show ? "" : "hide_class"}>
             <Formik
               initialValues={formInitialValues[0]}

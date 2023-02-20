@@ -6,7 +6,14 @@ import { LocalStorageContext } from "../../context/LocalStorageContext";
 import isAdmin from "../../functions/isAdmin.model";
 import { toast } from "react-toastify";
 
-const ScoreUpdate = ({ maxPlayers, handleInputs, item, players, gatherId }) => {
+const ScoreUpdate = ({
+  adminOptionState,
+  maxPlayers,
+  handleInputs,
+  item,
+  players,
+  gatherId,
+}) => {
   const [killsInput, setKillsInput] = useState(0);
   const [deathInput, setDeathInput] = useState(0);
   const [assistInput, setAssistInput] = useState(0);
@@ -19,7 +26,6 @@ const ScoreUpdate = ({ maxPlayers, handleInputs, item, players, gatherId }) => {
 
   const formInitialValues = [0];
   const {
-    adminOptionState,
     savedUsersArrayLocalStorage,
     clearSavedCountLocalStorage,
     saveUserInArrayFunc,

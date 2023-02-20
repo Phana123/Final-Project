@@ -12,14 +12,17 @@ import { LocalStorageContext } from "../../context/LocalStorageContext";
 import GatherDetails from "./GatherDetails";
 import "../../styles/toast-container.css";
 import { isJoinedFunction } from "../../functions/isJoinedFunction";
-import ScoreUpdate from "./UpdateScore";
+import ScoreUpdate from "./ScoreUpdate";
 import SubmitGather from "./SubmitGather";
 import UploadMatchPicture from "./UploadMatchPicture";
+import { useNavigate, useParams } from "react-router-dom";
 
 const GatherItem = ({
   isUpdatedGather,
   waitingForPlayers,
+  score,
   finished,
+  date,
   teams,
   players,
   onGoing,
@@ -27,23 +30,24 @@ const GatherItem = ({
   map,
   maxPlayers,
 }) => {
+  // <------------------ States Are Here ------------------------>
   const [isLoading, setIsLoading] = useState(false);
   const [errMessage, setErrMessage] = useState(undefined);
   const [maxPlayersInput, setMaxPlayersInput] = useState(10);
   const [mapInput, setMapInput] = useState("");
-
   const [playersArray, setPlayersArray] = useState(players);
   const [isOnGoing, setIsOnGoing] = useState(onGoing);
   const [isFinished, setIsFinished] = useState();
   const [isUpdatedGatherState, setIsUpdatedGatherState] =
     useState(isUpdatedGather);
-
   const [showSubmitForm, setShowSubmitForm] = useState(false);
   const [showSubGather, setShowSubmitGather] = useState(false);
   const [showAdminOptionsButton, setShowAdminOptionsButton] = useState(true);
   const [matchScoreInputs, setMatchScoreInputs] = useState({});
   const [adminOptionState, setAdminOptionState] = useState(false);
 
+  const nav = useNavigate();
+  // <---------------- Auth Context Imports -------------->
   const { username, isAdminState, isModerator, isManager } =
     useContext(AuthContext);
 
@@ -55,6 +59,7 @@ const GatherItem = ({
     clearSavedCountLocalStorage,
   } = useContext(LocalStorageContext);
 
+  // <----------- First Time Up Component UseEffect ------------->
   useEffect(() => {
     isJoinedFunction(toggleIsJoinedState, playersArray);
     if (isUpdatedGatherState === true) {
@@ -63,12 +68,24 @@ const GatherItem = ({
     isJoinedCheckFunction();
     isFinishedCheckFunction();
   }, []);
+  // <-----------  UseEffect When Final isUpdateGather ------------->
+  useEffect(() => {
+    if (isUpdatedGather === true) {
+      setIsUpdatedGatherState(true);
+      localStorage.removeItem("savedUsersArray");
+      localStorage.removeItem("isJoined");
+    } else {
+      setIsUpdatedGatherState(false);
+    }
+  }, [isUpdatedGather]);
+  console.log(isJoinedState);
+  // <----------------- UseEffect When onGoing Change ---------------->
   useEffect(() => {
     if (onGoing) {
       setIsOnGoing(true);
     } else {
       setIsOnGoing(false);
-    setShowSubmitForm(true)
+      setShowSubmitForm(true);
     }
   }, [onGoing]);
   const formInitialValues = [10, "Ascent"];
@@ -175,8 +192,13 @@ const GatherItem = ({
   const handleShowSubmitButton = () => {
     setShowSubmitForm((state) => !state);
   };
+
+  const GeneralDivOnClick = () => {
+    const { gatherId } = useParams();
+    nav(`/gather/${gatherId}`);
+  };
   return (
-    <>
+    <div>
       <div className="btn card mb-1 bg-secondary gatherlist-item">
         {/* <<---------------Error && IsLoading Components HERE-------------->> */}
         {errMessage && <div>${errMessage}</div>}
@@ -234,13 +256,15 @@ const GatherItem = ({
         {Object.keys(teams).length !== 0 && (
           <>
             <span className="card text-black bg-success">
-              <p className="h4"> Team A:</p> <br />
+              <span className="date card">{date}</span>
+              <p className="h4"> Team A: {score[0].teamA}</p> <br />
               {teams[0][0].TeamA.map((item) => (
                 <div key={item.userId}>
                   <p className="card bg-dark h6"> {item.userName} </p>
                   {/*------------------------ Score Update IsFinished = true ?----------------- */}
                   {isFinished === true && onGoing === false ? (
                     <ScoreUpdate
+                      adminOptionState={adminOptionState}
                       maxPlayers={maxPlayers}
                       handleInputs={handleMatchScoresInput}
                       gatherId={_id}
@@ -248,23 +272,23 @@ const GatherItem = ({
                       item={item}
                     />
                   ) : (
-                    ""
+                    "asdasdassadas"
                   )}
                 </div>
               ))}
             </span>
-            <span className="card mt-1 text-black bg-success">
-              <p className="h4"> Team B:</p> <br />
+            <span className="d-flex card mt-1 text-black bg-success">
+              <p className="h4"> Team B: {score[0].teamB}</p> <br />
               {teams[0][0].TeamB.map((item) => (
-                <div key={item.userId}>
-                  <p key={item.userId} className="card bg-dark h6">
-                    {" "}
+                <div className="" key={item.userId}>
+                  <p key={item.userId} className=" card bg-dark h6">
                     {item.userName}
                   </p>
 
                   {/*------------------------ Score Update IsFinished = true ?----------------- */}
                   {adminOptionState === true && isFinished === true && (
                     <ScoreUpdate
+                      adminOptionState={adminOptionState}
                       maxPlayers={maxPlayers}
                       handleInputs={handleMatchScoresInput}
                       gatherId={_id}
@@ -283,7 +307,8 @@ const GatherItem = ({
                 {map}
               </p>
               {(isAdminState || isModerator || isManager) &&
-                adminOptionState === true && (
+                adminOptionState === true &&
+                isFinished === false && (
                   <EditGatherModal titleOpen="Edit map">
                     <Formik
                       initialValues={formInitialValues[1]}
@@ -309,7 +334,8 @@ const GatherItem = ({
               <p className="h6"> Max Players: {maxPlayers} </p>
               <p>
                 {(isAdminState || isModerator || isManager) &&
-                  adminOptionState === true && (
+                  adminOptionState === true &&
+                  isFinished === false && (
                     <EditGatherModal titleOpen="Edit max players">
                       <Formik
                         initialValues={formInitialValues[0]}
@@ -352,11 +378,11 @@ const GatherItem = ({
         {adminOptionState === true &&
           isFinished === false &&
           isOnGoing === false &&
-          waitingForPlayers === false &&
-          showSubmitForm === true && (
+          waitingForPlayers === false && (
             <div>
               <SubmitGather
                 isFinished={isFinished}
+                setShow={handleShowSubmitButton}
                 show={showSubmitForm}
                 submitToggle={handleShowSubmitButton}
                 gatherId={_id}
@@ -386,7 +412,8 @@ const GatherItem = ({
         {/* ---------------Add And Leave Gather Buttons ARE here --------------- */}
         {waitingForPlayers === true && (
           <>
-            {isJoinedState === false ? (
+            {isJoinedState === false ||
+            localStorage.getItem("isJoined") === null ? (
               <>
                 <Button onClick={handleJoinButton} variant="success">
                   Join Now
@@ -411,7 +438,7 @@ const GatherItem = ({
         <GatherDetails />
         <ToastContainer />
       </div>
-    </>
+    </div>
   );
 };
 export default GatherItem;

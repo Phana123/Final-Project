@@ -33,7 +33,7 @@ const maps = [
 // GET all gathers
 router.get("/", async (req, res) => {
   try {
-    const gathers = await Gather.find();
+    const gathers = await Gather.find().sort({ _id: -1 });
     if (!gathers) return;
     res.json(gathers);
   } catch (error) {

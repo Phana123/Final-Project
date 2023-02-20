@@ -4,10 +4,11 @@ import GatherItem from "./GatherItem";
 
 import { Button } from "react-bootstrap";
 import { ColorRing } from "react-loader-spinner";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 import { io } from "socket.io-client";
 import AuthContext from "../../context/AuthContext";
+import GatherDetails from "./GatherDetails";
 const socket = io("http://localhost:3001", {
   withCredentials: true,
 });
@@ -77,7 +78,9 @@ const GatherList = () => {
       </div>
       {gatherList.map((item) => (
         <>
-          <GatherItem {...item} key={item._id} />
+          <Link to={`/gather/details/${item._id}`} key={item._id}>
+            <GatherItem {...item} />
+          </Link>
         </>
       ))}
     </div>
