@@ -63,6 +63,7 @@ const GatherItem = ({
   const [showAdminOptionsButton, setShowAdminOptionsButton] = useState(true);
   const [matchScoreInputs, setMatchScoreInputs] = useState({});
   const [adminOptionState, setAdminOptionState] = useState(false);
+  const [showTeams, setShowTeams] = useState(false);
 
   const nav = useNavigate();
 
@@ -215,6 +216,10 @@ const GatherItem = ({
     const { gatherId } = useParams();
     nav(`/gather/${gatherId}`);
   };
+
+  const toggleShowTeams = () => {
+    setShowTeams((state) => !state);
+  };
   return (
     <div>
       <div className="btn card mb-1 bg-secondary gatherlist-item">
@@ -274,11 +279,24 @@ const GatherItem = ({
         {Object.keys(teams).length !== 0 && (
           <>
             <span className="card text-black bg-success">
-              <span className="date card">{date}</span>
+              <span className="date card">{date}</span>{" "}
+              <Button onClick={toggleShowTeams}>Show Teams </Button>
               <p className="h4"> Team A: {score[0].teamA}</p> <br />
               {teams[0][0].TeamA.map((item) => (
                 <div key={item.userId}>
-                  <p className="card bg-dark h6"> {item.userName} </p>
+                  {onGoing === true ? (
+                    <>
+                      <p className="card bg-dark h6"> {item.userName} </p>
+                    </>
+                  ) : (
+                    <>
+                      <div className={showTeams ? "" : "hide_class"}>
+                        <span className="card ">
+                          <p className="card text-danger h6">{item.userName}</p>
+                        </span>
+                      </div>
+                    </>
+                  )}
                   {/*------------------------ Score Update IsFinished = true ?----------------- */}
                   {isFinished === true && onGoing === false ? (
                     <ScoreUpdate
@@ -290,7 +308,7 @@ const GatherItem = ({
                       item={item}
                     />
                   ) : (
-                    "asdasdassadas"
+                    "sadasdsadsdas"
                   )}
                 </div>
               ))}
@@ -298,10 +316,20 @@ const GatherItem = ({
             <span className="d-flex card mt-1 text-black bg-success">
               <p className="h4"> Team B: {score[0].teamB}</p> <br />
               {teams[0][0].TeamB.map((item) => (
-                <div className="" key={item.userId}>
-                  <p key={item.userId} className=" card bg-dark h6">
-                    {item.userName}
-                  </p>
+                <div key={item.userId}>
+                  {onGoing === true ? (
+                    <>
+                      <p className="card bg-dark h6"> {item.userName} </p>
+                    </>
+                  ) : (
+                    <>
+                      <div className={showTeams ? "" : "hide_class"}>
+                        <span className="card ">
+                          <p className="card text-danger h6">{item.userName}</p>
+                        </span>
+                      </div>
+                    </>
+                  )}
 
                   {/*------------------------ Score Update IsFinished = true ?----------------- */}
                   {adminOptionState === true && isFinished === true && (

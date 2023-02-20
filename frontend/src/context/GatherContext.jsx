@@ -9,10 +9,11 @@ const GatherContext = createContext({});
 
 const GatherContextProvider = ({ children }) => {
   const [gatherList, setGatherList] = useState([]);
+  const [lastGathers, setLastGathers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const url = `http://localhost:3001/api/gather`;
 
   const getAllGathers = async () => {
+    const url = `http://localhost:3001/api/gather`;
     axios
       .get(url)
       .then((response) => {
@@ -24,8 +25,21 @@ const GatherContextProvider = ({ children }) => {
         setLoading(false);
       });
   };
-  console.log(gatherList);
+  const getLastGathers = async () => {
+    const url = `http://localhost:3001/api/gather/getLastGathers`;
+    axios
+      .get(url)
+      .then((response) => {
+        setLastGathers(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  };
   useEffect(() => {
+    getLastGathers();
     getAllGathers();
     socket.on("update", () => {
       getAllGathers();
@@ -37,7 +51,7 @@ const GatherContextProvider = ({ children }) => {
 
   return (
     <>
-      <GatherContext.Provider value={{ gatherList, loading }}>
+      <GatherContext.Provider value={{ lastGathers, gatherList, loading }}>
         {children}
       </GatherContext.Provider>
     </>

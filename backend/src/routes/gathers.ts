@@ -30,6 +30,19 @@ const maps = [
   "Lotus",
 ];
 
+// <-------------- api/gather/isFinished ? --------------->
+router.get("/getLastGathers", async (req, res) => {
+  try {
+    const gathers = await Gather.find({ isUpdatedGather: false })
+    res.json(gathers)
+
+    return nodeEvents.emit("update");
+  }
+  catch (error) {
+    console.log(error)
+  }
+})
+
 // GET all gathers
 router.get("/", async (req, res) => {
   try {
@@ -186,5 +199,7 @@ router.get("/isFinished/:gatherId", async (req, res) => {
     console.log(error)
   }
 })
+
+// <-------------- api/gather/archiveGathers ? --------------->
 
 export { router as gatherRouter };

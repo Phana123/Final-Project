@@ -16,11 +16,11 @@ const socket = io("http://localhost:3001", {
 
 const GatherList = () => {
   const [isLoading, setIsLoading] = useState(false);
-
+  const [showLastGathers, setShowLastGathers] = useState(false);
   const [selectedGather, setSelectedGather] = useState();
   const [isButtonClicked, setIsButtonClicked] = useState(false);
 
-  const { gatherList } = useContext(GatherContext);
+  const { gatherList, lastGathers } = useContext(GatherContext);
   const handleCreateButton = () => {
     setIsButtonClicked((state) => !state);
   };
@@ -28,7 +28,10 @@ const GatherList = () => {
   const handleDetailsClick = (item) => {
     setSelectedGather(item);
   };
-
+  const openLastGathers = () => {
+    setShowLastGathers((state) => !state);
+  };
+  console.log(`lastGathers`, lastGathers);
   return (
     <div key="container">
       {isLoading && (
@@ -69,14 +72,20 @@ const GatherList = () => {
         <>
           {gatherList.map((item) => (
             <>
-              <GatherItem {...item} />{" "}
-              <Link
-                to={{
-                  pathname: `/gather/details/${item._id}`,
-                }}
-              >
-                <Button className="details-button">Details</Button>
-              </Link>
+              <div className="card p-3 bg-">
+                <GatherItem {...item} />{" "}
+                <Link
+                  to={{
+                    pathname: `/gather/details/${item._id}`,
+                  }}
+                >
+                  <Button className="details-button">Details</Button>
+                </Link>
+                <Button onClick={openLastGathers}>Last Gathers</Button>
+                <div className={showLastGathers ? "" : "hide_class"}>
+                  asdasdasdasdasdasdasdasdasdasdasdasdasdas
+                </div>
+              </div>
             </>
           ))}
         </>
