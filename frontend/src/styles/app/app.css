@@ -1,0 +1,6 @@
+.my_app {
+  background-image: linear-gradient(
+    rgb(218, 225, 255),
+    rgb(252, 215, 239)
+  ) !important;
+}

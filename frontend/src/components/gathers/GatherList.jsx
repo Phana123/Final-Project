@@ -5,40 +5,29 @@ import GatherItem from "./GatherItem";
 import { Button } from "react-bootstrap";
 import { ColorRing } from "react-loader-spinner";
 import { Link, NavLink } from "react-router-dom";
-
+import "../../styles/gather/gather-list.css";
 import { io } from "socket.io-client";
 import AuthContext from "../../context/AuthContext";
 import GatherDetails from "./GatherDetails";
+import { GatherContext } from "../../context/GatherContext";
 const socket = io("http://localhost:3001", {
   withCredentials: true,
 });
 
 const GatherList = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [gatherList, setGatherList] = useState([]);
+
+  const [selectedGather, setSelectedGather] = useState();
   const [isButtonClicked, setIsButtonClicked] = useState(false);
-  const url = `http://localhost:3001/api/gather`;
-  const getAllGathers = async () => {
-    try {
-      const data = await axios(url);
-      setGatherList(data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
+  const { gatherList } = useContext(GatherContext);
   const handleCreateButton = () => {
     setIsButtonClicked((state) => !state);
   };
 
-  useEffect(() => {
-    getAllGathers();
-    socket.on("update", () => {
-      getAllGathers();
-    });
-    return () => {
-      socket.off("update");
-    };
-  }, []);
+  const handleDetailsClick = (item) => {
+    setSelectedGather(item);
+  };
 
   return (
     <div key="container">
@@ -78,9 +67,18 @@ const GatherList = () => {
       </div>
       {gatherList.map((item) => (
         <>
-          <Link to={`/gather/details/${item._id}`} key={item._id}>
-            <GatherItem {...item} />
-          </Link>
+          {gatherList.map((item) => (
+            <>
+              <GatherItem {...item} />{" "}
+              <Link
+                to={{
+                  pathname: `/gather/details/${item._id}`,
+                }}
+              >
+                <Button className="details-button">Details</Button>
+              </Link>
+            </>
+          ))}
         </>
       ))}
     </div>

@@ -15,7 +15,8 @@ import { isJoinedFunction } from "../../functions/isJoinedFunction";
 import ScoreUpdate from "./ScoreUpdate";
 import SubmitGather from "./SubmitGather";
 import UploadMatchPicture from "./UploadMatchPicture";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
+import { GatherContext } from "../../context/GatherContext";
 
 const GatherItem = ({
   isUpdatedGather,
@@ -29,7 +30,24 @@ const GatherItem = ({
   _id,
   map,
   maxPlayers,
+  gatherList,
 }) => {
+  const itemObject = {
+    ...{
+      isUpdatedGather,
+      waitingForPlayers,
+      score,
+      finished,
+      date,
+      teams,
+      players,
+      onGoing,
+      _id,
+      map,
+      maxPlayers,
+      gatherList,
+    },
+  };
   // <------------------ States Are Here ------------------------>
   const [isLoading, setIsLoading] = useState(false);
   const [errMessage, setErrMessage] = useState(undefined);
@@ -47,6 +65,7 @@ const GatherItem = ({
   const [adminOptionState, setAdminOptionState] = useState(false);
 
   const nav = useNavigate();
+
   // <---------------- Auth Context Imports -------------->
   const { username, isAdminState, isModerator, isManager } =
     useContext(AuthContext);
@@ -78,7 +97,6 @@ const GatherItem = ({
       setIsUpdatedGatherState(false);
     }
   }, [isUpdatedGather]);
-  console.log(isJoinedState);
   // <----------------- UseEffect When onGoing Change ---------------->
   useEffect(() => {
     if (onGoing) {
@@ -435,7 +453,7 @@ const GatherItem = ({
               Delete Gather
             </Button>
           )}
-        <GatherDetails />
+
         <ToastContainer />
       </div>
     </div>

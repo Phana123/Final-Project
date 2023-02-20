@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Route, Routes, Router } from "react-router-dom";
 import "./App.css";
 
@@ -13,22 +13,23 @@ import Footer from "./components/Footer";
 import Profile from "./routes/Profile";
 import GatherAdd from "./components/gathers/GatherAdd";
 import GatherDetails from "./components/gathers/GatherDetails";
-
+import { GatherContext } from "./context/GatherContext";
+import "./styles/app/app.css";
 function App() {
   const { isLoggedIn, isAdminState, isModerator, isManager } =
     useContext(AuthContext);
+
   return (
     <>
-      <Router>
-        <div
-          style={{ backgroundColor: "rgb(251, 251, 251)" }}
-          className="container-fluid"
-        >
-          <Container fluid className="w-100 text-center">
-            <Header />
-            <div className="app-container card bg-dark mt-1 p-4 ">
-              {/* Routes */}
-
+      <div
+        style={{ backgroundColor: "rgb(251, 251, 251)" }}
+        className="container-fluid my_app"
+      >
+        <Container fluid className="w-100 text-center">
+          <Header />
+          <div className="app-container card bg-dark mt-1 p-4 ">
+            {/* Routes */}
+            <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
               {isLoggedIn && (isAdminState || isModerator || isManager) && (
@@ -40,15 +41,14 @@ function App() {
               {isLoggedIn && <Route path="/profile" element={<Profile />} />}
               <Route
                 path="/gather/details/:gatherId"
-                component={GatherDetails}
+                element={<GatherDetails />}
               />
-
-              {/* Routes */}
-            </div>
-            <Footer />
-          </Container>
-        </div>
-      </Router>
+            </Routes>
+            {/* Routes */}
+          </div>
+          <Footer />
+        </Container>
+      </div>
     </>
   );
 }

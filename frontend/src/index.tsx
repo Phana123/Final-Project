@@ -12,21 +12,26 @@ import "bootstrap/dist/css/bootstrap.css";
 import { LocalStorageProvider } from "./context/LocalStorageContext";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-bootstrap";
+import { GatherContextProvider } from "./context/GatherContext";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
 root.render(
   <>
+    <BrowserRouter>
+      <GatherContextProvider>
+        <LocalStorageProvider>
+          <AuthContextProvider>
+            <DarkModeContextProvider>
+              <Provider store={store}>
+                <App />
+              </Provider>
+            </DarkModeContextProvider>
+          </AuthContextProvider>
+        </LocalStorageProvider>
+      </GatherContextProvider>
+    </BrowserRouter>
     <ToastContainer />
-    <LocalStorageProvider>
-      <AuthContextProvider>
-        <DarkModeContextProvider>
-          <Provider store={store}>
-            <App />
-          </Provider>
-        </DarkModeContextProvider>
-      </AuthContextProvider>
-    </LocalStorageProvider>
   </>
 );
