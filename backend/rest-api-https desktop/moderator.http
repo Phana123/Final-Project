@@ -175,7 +175,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTlkNGQ4M2JjMjRm
 
 ### POST Push test players for testing :
 ## host/api/gather/pushTestPlayers/gatherId
-POST http://localhost:3001/api/moderator/gather/pushTestPlayers/63f1f61d04d8f2915bf3e195
+POST http://localhost:3001/api/moderator/gather/pushTestPlayers/63f2a26acc1be85d09721a63
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZWY1NWRjZTllNjVjMzMwMmNhNzEyMyIsImlhdCI6MTY3NjcwMDE5NiwiZXhwIjoxNjc5MjkyMTk2fQ.v-2PFscSon6fdwXQ1oAL9AmkO5phM0XZnZ2Kg8BBehs
 

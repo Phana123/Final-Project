@@ -31,7 +31,6 @@ const GatherList = () => {
   const openLastGathers = () => {
     setShowLastGathers((state) => !state);
   };
-  console.log(`lastGathers`, lastGathers);
   return (
     <div key="container">
       {isLoading && (

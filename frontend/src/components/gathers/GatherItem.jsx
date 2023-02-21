@@ -281,8 +281,8 @@ const GatherItem = ({
             <span className="card text-black bg-success">
               <span className="date card">{date}</span>{" "}
               <Button onClick={toggleShowTeams}>Show Teams </Button>
-              <p className="h4"> Team A: {score[0].teamA}</p> <br />
-              {teams[0][0].TeamA.map((item) => (
+              <p className="h4"> Team A: {score[0]?.teamA}</p> <br />
+              {teams[0][0]?.TeamA?.map((item) => (
                 <div key={item.userId}>
                   {onGoing === true ? (
                     <>
@@ -314,8 +314,8 @@ const GatherItem = ({
               ))}
             </span>
             <span className="d-flex card mt-1 text-black bg-success">
-              <p className="h4"> Team B: {score[0].teamB}</p> <br />
-              {teams[0][0].TeamB.map((item) => (
+              <p className="h4"> Team B: {score[0]?.teamB}</p> <br />
+              {teams[0][0].TeamB?.map((item) => (
                 <div key={item.userId}>
                   {onGoing === true ? (
                     <>
